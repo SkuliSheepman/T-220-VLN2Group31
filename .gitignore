@@ -234,3 +234,18 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+####### MONODEVELOP #######
+
+# Created by https://www.gitignore.io/api/monodevelop
+
+### MonoDevelop ###
+#User Specific
+*.userprefs
+*.usertasks
+
+#Mono Project Files
+*.pidb
+*.resources
+test-results/
+
