@@ -37,20 +37,38 @@ input[type="search"] {
     }
 }
 
-.logo {
+h1{
+    margin: 0;
+    padding: 0;
+    font-size: 1.5rem;
+}
+
+h1 > a {
     display: inline-block;
     width: 50%;
+    margin-top: 0.8em;
+}
+
+form > div > div > h2{
     font-size: 1.5rem;
 }
 
 @media only screen and (min-width: 993px) {
-    .logo {
+    h1 > a {
         width: 100%;
     }
 }
 
 @media only screen and (min-width: 601px) {
-    .logo {
+    h1{
+        font-size: 2.1rem;
+    }
+
+    h1 > a {
+        margin-top: 0.5em;
+    }
+
+    form > div > div > h2{
         font-size: 2.1rem;
     }
 }
@@ -75,6 +93,10 @@ input[type="search"] {
 
 #avatar-dropdown > li > a{
 
+}
+
+.fill-width{
+    width: 100%;
 }
 
 .testButton{
