@@ -1,0 +1,39 @@
+<div class="switch">
+    <label>
+        <i class="material-icons blue-text text-lighten-3">school</i>
+        <input type="checkbox" />
+        <span class="lever"></span>
+        <i class="material-icons blue-text text-lighten-3">person</i>
+    </label>
+</div>
+
+.switch{
+    display: inline-block;
+    position: relative;
+    top: -0.4em;
+}
+
+/*Overwrite switch colors*/
+.switch label input[type=checkbox]:checked + .lever {
+    background-color: #e3f2fd;
+}
+
+.switch label input[type=checkbox]:checked + .lever:after {
+    background-color: #fff;
+}
+
+.switch label .lever {
+    background-color: #1565c0;
+}
+
+.switch label .lever:after {
+    background-color: #2196f3;
+}
+
+.switch label i{
+    display: inline-block;
+}
+
+.switch label .lever{
+    margin-top: -2em;
+}
