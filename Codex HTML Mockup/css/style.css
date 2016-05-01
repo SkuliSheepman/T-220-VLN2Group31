@@ -167,3 +167,9 @@ input[type="file"] {
 .problems > li > div > .row{
   margin: 0;
 }
+
+/* Radio Buttons */
+.radio_buttons label {
+    margin-right: 2em;
+    padding: 0;
+}

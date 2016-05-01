@@ -26,3 +26,7 @@ $("input:file").change(function (){
 $('a[data-activates="dropdown1"]').click(function(e){
     e.preventDefault();
 });
+
+  $(document).ready(function() {
+    $('select').material_select();
+  });
