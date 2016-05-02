@@ -42,23 +42,12 @@ CREATE TABLE [dbo].[CourseInstances]
     PRIMARY KEY ([CourseId], [Year], [SemesterId])
 )
 
-/* Teachers many-to-many relation between AspNetUsers and CourseInstances */
+/* Teachers many-to-many relation between AspNetUsers and CourseInstances with Assistant Flag */
 CREATE TABLE [dbo].[Teachers]
 (
     [UserId] INT NOT NULL,
     [CourseInstanceId] INT NOT NULL,
-    [Visible] BIT NOT NULL DEFAULT 1,
-    CONSTRAINT [FK_Teachers_AspNetUsers] FOREIGN KEY ([UserID]) REFERENCES [AspNetUsers]([Id]),
-    CONSTRAINT [FK_Teachers_CourseInstances] FOREIGN KEY ([CourseInstanceId]) REFERENCES [CourseInstances]([Id])
-    PRIMARY KEY ([UserId], [CourseInstanceId])
-)
-
-/* Teacher Assistants many-to-many relation between AspNetUsers and CourseInstances */
-CREATE TABLE [dbo].[TeacherAssistants]
-(
-    [UserId] INT NOT NULL,
-    [CourseInstanceId] INT NOT NULL,
-    [Visible] BIT NOT NULL DEFAULT 1,
+    [IsAssistant] BIT DEFAULT 0,
     CONSTRAINT [FK_Teachers_AspNetUsers] FOREIGN KEY ([UserID]) REFERENCES [AspNetUsers]([Id]),
     CONSTRAINT [FK_Teachers_CourseInstances] FOREIGN KEY ([CourseInstanceId]) REFERENCES [CourseInstances]([Id])
     PRIMARY KEY ([UserId], [CourseInstanceId])
@@ -69,7 +58,6 @@ CREATE TABLE [dbo].[Students]
 (
     [UserId] INT NOT NULL,
     [CourseInstanceId] INT NOT NULL,
-    [Visible] BIT NOT NULL DEFAULT 1,
     CONSTRAINT [FK_Students_AspNetUsers] FOREIGN KEY ([UserID]) REFERENCES [AspNetUsers]([Id]),
     CONSTRAINT [FK_Students_CourseInstances] FOREIGN KEY ([CourseInstanceId]) REFERENCES [CourseInstances]([Id])
     PRIMARY KEY ([UserId], [CourseInstanceId])
