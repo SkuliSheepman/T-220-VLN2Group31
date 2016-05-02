@@ -89,9 +89,20 @@ CREATE TABLE [dbo].[Problems]
     [Description] NVARCHAR(MAX),
     [Filetype] NVARCHAR(10) NOT NULL,
     [Language] NVARCHAR(MAX),
+    [Filepath] NVARCHAR(MAX),
     CONSTRAINT [FK_Problems_Courses] FOREIGN KEY ([CourseId]) REFERENCES [Courses]([Id]),
     CONSTRAINT [FK_Problems_Filetypes] FOREIGN KEY ([Filetype]) REFERENCES [Filetypes]([Type])
 )
+
+/*
+CREATE TABLE [dbo].[ProblemFiles]
+(
+    [ProblemId] INT NOT NULL,
+    [Path] NVARCHAR(256) NOT NULL,
+    CONSTRAINT [FK_ProblemFiles_Problems] FOREIGN KEY ([ProblemId]) REFERENCES [Problems]([Id]),
+    PRIMARY KEY ([ProblemId], [Path])
+)
+*/
 
 /* SmallDateTime stores YYYY-MM-DD HH:MM */
 CREATE TABLE [dbo].[Assignments]
