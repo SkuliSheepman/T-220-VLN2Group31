@@ -32,41 +32,44 @@ CREATE TABLE [dbo].[Semesters]
 UNIQUE Id for easy referencing */
 CREATE TABLE [dbo].[CourseInstances]
 (
-    [Id] INT NOT NULL
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[CourseId] INT NOT NULL, 
     [Year] INT NOT NULL, 
     [SemesterId] INT NOT NULL, 
-    CONSTRAINT [AK_CourseInstances_Id] UNIQUE ([Id]),
     CONSTRAINT [FK_CourseInstances_Courses] FOREIGN KEY ([CourseId]) REFERENCES [Courses]([Id]),
-    CONSTRAINT [FK_CourseInstances_Semesters] FOREIGN KEY ([SemesterId]) REFERENCES [Semesters]([Id]), 
-    PRIMARY KEY ([CourseId], [Year], [SemesterId])
+    CONSTRAINT [FK_CourseInstances_Semesters] FOREIGN KEY ([SemesterId]) REFERENCES [Semesters]([Id])
 )
 
 /* Teachers many-to-many relation between AspNetUsers and CourseInstances with Assistant Flag */
 CREATE TABLE [dbo].[Teachers]
 (
-    [UserId] INT NOT NULL,
+    [UserId] NVARCHAR(128) NOT NULL,
     [CourseInstanceId] INT NOT NULL,
     [IsAssistant] BIT DEFAULT 0,
-    CONSTRAINT [FK_Teachers_AspNetUsers] FOREIGN KEY ([UserID]) REFERENCES [AspNetUsers]([Id]),
-    CONSTRAINT [FK_Teachers_CourseInstances] FOREIGN KEY ([CourseInstanceId]) REFERENCES [CourseInstances]([Id])
-    PRIMARY KEY ([UserId], [CourseInstanceId])
+    CONSTRAINT [FK_Teachers_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers]([Id]),
+    CONSTRAINT [FK_Teachers_CourseInstances] FOREIGN KEY ([CourseInstanceId]) REFERENCES [CourseInstances]([Id]),
+    CONSTRAINT [PK_Teachers] PRIMARY KEY ([UserId], [CourseInstanceId])
 )
 
 /* The same for Students */
 CREATE TABLE [dbo].[Students]
 (
-    [UserId] INT NOT NULL,
+    [UserId] NVARCHAR(128) NOT NULL,
     [CourseInstanceId] INT NOT NULL,
-    CONSTRAINT [FK_Students_AspNetUsers] FOREIGN KEY ([UserID]) REFERENCES [AspNetUsers]([Id]),
-    CONSTRAINT [FK_Students_CourseInstances] FOREIGN KEY ([CourseInstanceId]) REFERENCES [CourseInstances]([Id])
-    PRIMARY KEY ([UserId], [CourseInstanceId])
+    CONSTRAINT [FK_Students_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers]([Id]),
+    CONSTRAINT [FK_Students_CourseInstances] FOREIGN KEY ([CourseInstanceId]) REFERENCES [CourseInstances]([Id]),
+    CONSTRAINT [PK_Students] PRIMARY KEY ([UserId], [CourseInstanceId])
 )
 
 CREATE TABLE [dbo].[Filetypes]
 (
-    [Type] NVARCHAR(10) NOT NULL PRIMARY KEY IDENTITY,
+    [Type] NVARCHAR(10) NOT NULL PRIMARY KEY,
     [Description] NVARCHAR(MAX)
+)
+
+CREATE TABLE [dbo].[ProgrammingLanguages]
+(
+    [Language] NVARCHAR(50) NOT NULL PRIMARY KEY
 )
 
 /* Problem is part of an Assignment, what is called Milestones in Centris */
@@ -74,12 +77,14 @@ CREATE TABLE [dbo].[Problems]
 (
     [Id] INT NOT NULL PRIMARY KEY IDENTITY,
     [CourseId] INT NOT NULL,
+    [Name] NVARCHAR(MAX) NOT NULL,
     [Description] NVARCHAR(MAX),
     [Filetype] NVARCHAR(10) NOT NULL,
-    [Language] NVARCHAR(MAX),
-    [Filepath] NVARCHAR(MAX),
+    [Attachment] NVARCHAR(MAX),
+    [Language] NVARCHAR(MAX) NOT NULL,
     CONSTRAINT [FK_Problems_Courses] FOREIGN KEY ([CourseId]) REFERENCES [Courses]([Id]),
-    CONSTRAINT [FK_Problems_Filetypes] FOREIGN KEY ([Filetype]) REFERENCES [Filetypes]([Type])
+    CONSTRAINT [FK_Problems_Filetypes] FOREIGN KEY ([Filetype]) REFERENCES [Filetypes]([Type]),
+    CONSTRAINT [FK_Problems_ProgrammingLanguages] FOREIGN KEY ([Language]) REFERENCES [ProgrammingLanguages]([Language])
 )
 
 /*
@@ -102,6 +107,7 @@ CREATE TABLE [dbo].[Assignments]
     [StartTime] SMALLDATETIME,
     [EndTime] SMALLDATETIME,
     [MaxCollaborators] INT NOT NULL DEFAULT 1,
+    CONSTRAINT [FK_Assignments_CourseInstances] FOREIGN KEY ([CourseInstanceId]) REFERENCES [CourseInstances]([Id])
 )
 
 /* The many-to-many relation between Assignments and Problems */
@@ -113,19 +119,19 @@ CREATE TABLE [dbo].[AssignmentProblems]
     [Weight] TINYINT NOT NULL DEFAULT 0,
     CONSTRAINT [FK_AssignmentProblems_Problems] FOREIGN KEY ([ProblemId]) REFERENCES [Problems]([Id]),
     CONSTRAINT [FK_AssignmentProblems_Assignments] FOREIGN KEY ([AssignmentId]) REFERENCES [Assignments]([Id]),
-    PRIMARY KEY ([ProblemId], [AssignmentId])
+    CONSTRAINT [PK_AssignmentProblems] PRIMARY KEY ([ProblemId], [AssignmentId])
 )
 
 /* When assignments are created, all Students in that course instance are assigned a group.
 Students can then be joined together in a group by editing so they have the same groupNumber for that Assignment. */
 CREATE TABLE [dbo].[AssignmentGroups]
 (
-    [UserId] INT NOT NULL,
+    [UserId] NVARCHAR(128) NOT NULL,
     [AssignmentId] INT NOT NULL,
     [GroupNumber] INT NOT NULL,
     CONSTRAINT [FK_AssignmentGroups_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers]([Id]),
     CONSTRAINT [FK_AssignmentGroups_Assignments] FOREIGN KEY ([AssignmentId]) REFERENCES [Assignments]([Id]),
-    PRIMARY KEY ([UserId], [AssignmentId])
+    CONSTRAINT [PK_AssignmentGroups] PRIMARY KEY ([UserId], [AssignmentId])
 )
 
 /* A student can submit a solution to a Problem in an Assignment, these are called Submissions.
@@ -133,7 +139,7 @@ The amount of possible Submissions can be limited in the AssignmentProblems tabl
 CREATE TABLE [dbo].[Submissions]
 (
     [Id] INT NOT NULL PRIMARY KEY IDENTITY,
-    [StudentId] INT NOT NULL,
+    [StudentId] NVARCHAR(128) NOT NULL,
     [ProblemId] INT NOT NULL,
     [AssignmentId] INT NOT NULL,
     [Time] DATETIME NOT NULL,
@@ -147,7 +153,7 @@ CREATE TABLE [dbo].[SubmissionGrades]
 (
     [SubmissionId] INT NOT NULL,
     [Grade] DECIMAL,
-    [TeacherId] INT NOT NULL,
+    [TeacherId] NVARCHAR(128) NOT NULL,
     [Feedback] NVARCHAR(MAX),
     CONSTRAINT [FK_SubmissionGrades_Submissions] FOREIGN KEY ([SubmissionId]) REFERENCES [Submissions]([Id]),
     CONSTRAINT [FK_SubmissionGrades_AspNetUsers] FOREIGN KEY ([TeacherId]) REFERENCES [AspNetUsers]([Id]),
@@ -171,5 +177,5 @@ CREATE TABLE [dbo].[TestResults]
     [ProgramOutput] NVARCHAR(MAX),
     CONSTRAINT [FK_TestResults_TestCases] FOREIGN KEY ([TestCaseId]) REFERENCES [TestCases]([Id]),
     CONSTRAINT [FK_TestResults_Submissions] FOREIGN KEY ([SubmissionId]) REFERENCES [Submissions]([Id]),
-    PRIMARY KEY ([TestCaseId], [SubmissionId])
+    CONSTRAINT [PK_TestResults] PRIMARY KEY ([TestCaseId], [SubmissionId])
 )
