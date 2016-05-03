@@ -28,8 +28,7 @@ CREATE TABLE [dbo].[Semesters]
     [Name] NVARCHAR(MAX)
 )
 
-/* Primary Key constraint between Course, Year and Semester so there exist no duplicate course on same year, same semester.
-UNIQUE Id for easy referencing */
+/*  */
 CREATE TABLE [dbo].[CourseInstances]
 (
     [Id] INT NOT NULL PRIMARY KEY IDENTITY,
@@ -43,7 +42,7 @@ CREATE TABLE [dbo].[CourseInstances]
 /* Teachers many-to-many relation between AspNetUsers and CourseInstances with Assistant Flag */
 CREATE TABLE [dbo].[Teachers]
 (
-    [Id] INT NOT NULL UNIQUE,
+    [Id] INT NOT NULL UNIQUE IDENTITY,
     [UserId] NVARCHAR(128) NOT NULL,
     [CourseInstanceId] INT NOT NULL,
     [IsAssistant] BIT DEFAULT 0,
@@ -55,7 +54,7 @@ CREATE TABLE [dbo].[Teachers]
 /* The same for Students */
 CREATE TABLE [dbo].[Students]
 (
-    [Id] INT NOT NULL UNIQUE,
+    [Id] INT NOT NULL UNIQUE IDENTITY,
     [UserId] NVARCHAR(128) NOT NULL,
     [CourseInstanceId] INT NOT NULL,
     CONSTRAINT [FK_Students_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers]([Id]),
@@ -65,7 +64,7 @@ CREATE TABLE [dbo].[Students]
 
 CREATE TABLE [dbo].[Filetypes]
 (
-    [Id] INT NOT NULL UNIQUE,
+    [Id] INT NOT NULL UNIQUE IDENTITY,
     [Type] NVARCHAR(10) NOT NULL PRIMARY KEY,
     [Description] NVARCHAR(MAX)
 )
@@ -116,7 +115,7 @@ CREATE TABLE [dbo].[Assignments]
 /* The many-to-many relation between Assignments and Problems */
 CREATE TABLE [dbo].[AssignmentProblems]
 (
-    [Id] INT NOT NULL UNIQUE,
+    [Id] INT NOT NULL UNIQUE IDENTITY,
     [ProblemId] INT NOT NULL,
     [AssignmentId] INT NOT NULL,
     [MaxSubmissions] INT NOT NULL DEFAULT 0,
@@ -130,7 +129,7 @@ CREATE TABLE [dbo].[AssignmentProblems]
 Students can then be joined together in a group by editing so they have the same groupNumber for that Assignment. */
 CREATE TABLE [dbo].[AssignmentGroups]
 (
-    [Id] INT NOT NULL UNIQUE,
+    [Id] INT NOT NULL UNIQUE IDENTITY,
     [UserId] NVARCHAR(128) NOT NULL,
     [AssignmentId] INT NOT NULL,
     [GroupNumber] INT NOT NULL,
@@ -157,7 +156,7 @@ CREATE TABLE [dbo].[Submissions]
 CREATE TABLE [dbo].[SubmissionGrades]
 (
     [Id] INT NOT NULL,
-    [Grade] DECIMAL,
+    [Grade] FLOAT,
     [TeacherId] NVARCHAR(128) NOT NULL,
     [Feedback] NVARCHAR(MAX),
     CONSTRAINT [FK_SubmissionGrades_Submissions] FOREIGN KEY ([Id]) REFERENCES [Submissions]([Id]),
@@ -176,7 +175,7 @@ CREATE TABLE [dbo].[TestCases]
 
 CREATE TABLE [dbo].[TestResults]
 (
-    [Id] INT NOT NULL UNIQUE,
+    [Id] INT NOT NULL UNIQUE IDENTITY,
     [TestCaseId] INT NOT NULL,
     [SubmissionId] INT NOT NULL,
     [Passed] BIT DEFAULT 0,
