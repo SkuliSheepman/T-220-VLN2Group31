@@ -24,12 +24,10 @@ CREATE TABLE [dbo].[Courses]
 
 CREATE TABLE [dbo].[Semesters]
 (
-    [Id] INT NOT NULL PRIMARY KEY IDENTITY,
-    [Name] NVARCHAR(MAX)
+    [Id] INT NOT NULL UNIQUE IDENTITY,
+    [Name] NVARCHAR(50) NOT NULL PRIMARY KEY
 )
 
-/* Primary Key constraint between Course, Year and Semester so there exist no duplicate course on same year, same semester.
-UNIQUE Id for easy referencing */
 CREATE TABLE [dbo].[CourseInstances]
 (
     [Id] INT NOT NULL PRIMARY KEY IDENTITY,
@@ -43,6 +41,7 @@ CREATE TABLE [dbo].[CourseInstances]
 /* Teachers many-to-many relation between AspNetUsers and CourseInstances with Assistant Flag */
 CREATE TABLE [dbo].[Teachers]
 (
+    [Id] INT NOT NULL UNIQUE IDENTITY,
     [UserId] NVARCHAR(128) NOT NULL,
     [CourseInstanceId] INT NOT NULL,
     [IsAssistant] BIT DEFAULT 0,
@@ -51,9 +50,10 @@ CREATE TABLE [dbo].[Teachers]
     CONSTRAINT [PK_Teachers] PRIMARY KEY ([UserId], [CourseInstanceId])
 )
 
-/* The same for Students */
+/* The relation between AspNetUsers and CourseInstances */
 CREATE TABLE [dbo].[Students]
 (
+    [Id] INT NOT NULL UNIQUE IDENTITY,
     [UserId] NVARCHAR(128) NOT NULL,
     [CourseInstanceId] INT NOT NULL,
     CONSTRAINT [FK_Students_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers]([Id]),
@@ -63,16 +63,18 @@ CREATE TABLE [dbo].[Students]
 
 CREATE TABLE [dbo].[Filetypes]
 (
-    [Type] NVARCHAR(10) NOT NULL PRIMARY KEY,
-    [Description] NVARCHAR(MAX)
+    [Id] INT NOT NULL UNIQUE IDENTITY,
+    [Type] NVARCHAR(10) NOT NULL PRIMARY KEY
 )
 
 CREATE TABLE [dbo].[ProgrammingLanguages]
 (
+    [Id] INT NOT NULL UNIQUE IDENTITY,
     [Language] NVARCHAR(50) NOT NULL PRIMARY KEY
 )
 
-/* Problem is part of an Assignment, what is called Milestones in Centris */
+/* Problem is part of an Assignment, what is called Milestones in Centris.
+Problems can be reused and belong to multiple Assignments */
 CREATE TABLE [dbo].[Problems]
 (
     [Id] INT NOT NULL PRIMARY KEY IDENTITY,
@@ -81,21 +83,11 @@ CREATE TABLE [dbo].[Problems]
     [Description] NVARCHAR(MAX),
     [Filetype] NVARCHAR(10) NOT NULL,
     [Attachment] NVARCHAR(MAX),
-    [Language] NVARCHAR(MAX) NOT NULL,
+    [Language] NVARCHAR(50) NOT NULL,
     CONSTRAINT [FK_Problems_Courses] FOREIGN KEY ([CourseId]) REFERENCES [Courses]([Id]),
     CONSTRAINT [FK_Problems_Filetypes] FOREIGN KEY ([Filetype]) REFERENCES [Filetypes]([Type]),
     CONSTRAINT [FK_Problems_ProgrammingLanguages] FOREIGN KEY ([Language]) REFERENCES [ProgrammingLanguages]([Language])
 )
-
-/*
-CREATE TABLE [dbo].[ProblemFiles]
-(
-    [ProblemId] INT NOT NULL,
-    [Path] NVARCHAR(256) NOT NULL,
-    CONSTRAINT [FK_ProblemFiles_Problems] FOREIGN KEY ([ProblemId]) REFERENCES [Problems]([Id]),
-    PRIMARY KEY ([ProblemId], [Path])
-)
-*/
 
 /* SmallDateTime stores YYYY-MM-DD HH:MM */
 CREATE TABLE [dbo].[Assignments]
@@ -113,22 +105,25 @@ CREATE TABLE [dbo].[Assignments]
 /* The many-to-many relation between Assignments and Problems */
 CREATE TABLE [dbo].[AssignmentProblems]
 (
+    [Id] INT NOT NULL UNIQUE IDENTITY,
     [ProblemId] INT NOT NULL,
     [AssignmentId] INT NOT NULL,
     [MaxSubmissions] INT NOT NULL DEFAULT 0,
-    [Weight] TINYINT NOT NULL DEFAULT 0,
+    [Weight] FLOAT NOT NULL DEFAULT 0,
     CONSTRAINT [FK_AssignmentProblems_Problems] FOREIGN KEY ([ProblemId]) REFERENCES [Problems]([Id]),
     CONSTRAINT [FK_AssignmentProblems_Assignments] FOREIGN KEY ([AssignmentId]) REFERENCES [Assignments]([Id]),
     CONSTRAINT [PK_AssignmentProblems] PRIMARY KEY ([ProblemId], [AssignmentId])
 )
 
 /* When assignments are created, all Students in that course instance are assigned a group.
-Students can then be joined together in a group by editing so they have the same groupNumber for that Assignment. */
+Students can then be joined together in a group by updating the groupNumber so it matches the students. */
 CREATE TABLE [dbo].[AssignmentGroups]
 (
+    [Id] INT NOT NULL UNIQUE IDENTITY,
     [UserId] NVARCHAR(128) NOT NULL,
     [AssignmentId] INT NOT NULL,
-    [GroupNumber] INT NOT NULL,
+    [GroupNumber] INT NOT NULL IDENTITY,
+    [AssignmentGrade] FLOAT,
     CONSTRAINT [FK_AssignmentGroups_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers]([Id]),
     CONSTRAINT [FK_AssignmentGroups_Assignments] FOREIGN KEY ([AssignmentId]) REFERENCES [Assignments]([Id]),
     CONSTRAINT [PK_AssignmentGroups] PRIMARY KEY ([UserId], [AssignmentId])
@@ -142,8 +137,9 @@ CREATE TABLE [dbo].[Submissions]
     [StudentId] NVARCHAR(128) NOT NULL,
     [ProblemId] INT NOT NULL,
     [AssignmentId] INT NOT NULL,
-    [Time] DATETIME NOT NULL,
-    [PassedTests] INT,
+    [SubmissionTime] DATETIME NOT NULL,
+    [OriginalFileName] NVARCHAR(256) NOT NULL,
+    [FailedTests] INT,
     CONSTRAINT [FK_Submissions_AspNetUsers] FOREIGN KEY ([StudentId]) REFERENCES [AspNetUsers]([Id]),
     CONSTRAINT [FK_Submissions_Problems] FOREIGN KEY ([ProblemId]) REFERENCES [Problems]([Id]),
     CONSTRAINT [FK_Submissions_Assignments] FOREIGN KEY ([AssignmentId]) REFERENCES [Assignments]([Id]),
@@ -152,7 +148,7 @@ CREATE TABLE [dbo].[Submissions]
 CREATE TABLE [dbo].[SubmissionGrades]
 (
     [SubmissionId] INT NOT NULL,
-    [Grade] DECIMAL,
+    [Grade] FLOAT,
     [TeacherId] NVARCHAR(128) NOT NULL,
     [Feedback] NVARCHAR(MAX),
     CONSTRAINT [FK_SubmissionGrades_Submissions] FOREIGN KEY ([SubmissionId]) REFERENCES [Submissions]([Id]),
@@ -165,12 +161,13 @@ CREATE TABLE [dbo].[TestCases]
     [Id] INT NOT NULL PRIMARY KEY IDENTITY,
     [ProblemId] INT NOT NULL,
     [Input] NVARCHAR(MAX),
-    [Output] NVARCHAR(MAX),
+    [ExpectedOutput] NVARCHAR(MAX),
     CONSTRAINT [FK_TestCases_Problems] FOREIGN KEY ([ProblemId]) REFERENCES [Problems]([Id])
 )
 
 CREATE TABLE [dbo].[TestResults]
 (
+    [Id] INT NOT NULL UNIQUE IDENTITY,
     [TestCaseId] INT NOT NULL,
     [SubmissionId] INT NOT NULL,
     [Passed] BIT DEFAULT 0,
