@@ -1,0 +1,172 @@
+﻿/*Style icons*/
+.icon-block {
+    padding: 0 15px;
+}
+
+.icon-block .material-icons {
+    font-size: inherit;
+}
+
+/*Sticky footer*/
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+/*Search bar fix*/
+
+/*http://stackoverflow.com/questions/18778412/move-an-image-down*/
+
+input[type="search"] {
+    height: 56px !important; /* or height of nav */
+}
+
+/*Navbar responsiveness*/
+
+@media only screen and (min-width: 601px) {
+    input[type="search"] {
+        height: 64px !important; /* or height of nav */
+    }
+}
+
+h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5rem;
+}
+
+h1 > a {
+    display: inline-block;
+    width: 50%;
+    margin-top: 0.8em;
+}
+
+form > div > div > h2 {
+    font-size: 1.5rem;
+}
+
+@media only screen and (min-width: 993px) {
+    h1 > a {
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: 601px) {
+    h1 {
+        font-size: 2.1rem;
+    }
+
+    h1 > a {
+        margin-top: 0.5em;
+    }
+
+    form > div > div > h2 {
+        font-size: 2.1rem;
+    }
+}
+
+#search-col {
+    margin: 0;
+    padding: 0;
+}
+
+nav > div.nav-wrapper > div.row > div:last-child > ul > li:first-child {
+    width: 100%;
+    text-align: center;
+}
+
+#avatar-dropdown > li > a > i {
+    display: inline-block;
+    font-size: 1.5em;
+    position: relative;
+    top: 0.2em;
+    margin-right: 0.3em;
+}
+
+#avatar-dropdown > li > a {
+}
+
+.fill-width {
+    width: 100%;
+}
+
+.testButton {
+    padding: 0 1em;
+    margin: 0;
+}
+
+.testButton i {
+    margin: -0.25em 0 0 0;
+    font-size: 1.2em;
+}
+
+.testButton span {
+    margin-left: 0.5em;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    cursor: pointer;
+    display: inline-block;
+}
+
+.custom-file-upload span {
+    padding: 0;
+    margin: 0;
+}
+
+/*.custom-file-upload span{
+    padding: 0 1em;
+    width: 100%;
+    font-size: 1.2em;
+}*/
+
+.custom-file-upload span i {
+    margin-top: -0.2em;
+    padding: 0;
+}
+
+.problemStatus {
+    /*display: block;
+    float: right;*/
+}
+
+.problemStatus span {
+    position: relative;
+    top: 0.4rem;
+}
+
+#logo-container img {
+    padding: 0.6em 0 0 1em;
+    width: 12%;
+}
+
+.assignment {
+    background-color: #e0e0e0;
+}
+
+.problems {
+    width: 95%;
+    margin: 1em auto;
+    background-color: #fff;
+}
+
+.problems > li > div > .row {
+    margin: 0;
+}
+
+/* Radio Buttons */
+
+.radio_buttons label {
+    margin-right: 2em;
+    padding: 0;
+}
