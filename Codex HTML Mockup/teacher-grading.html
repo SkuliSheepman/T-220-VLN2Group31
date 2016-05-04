@@ -72,94 +72,42 @@
                 <option value="3">Skilaverkefni 2</option>
                 <option value="4">Skilaverkefni 1</option>
             </select>
-        </div>  
+        </div>
 
-        <div class="radio_buttons"> 
-            <form action="#">
-                <p>
-                    <input class="radio" name="group2" type="radio" id="test1" checked="checked" />
-                    <label for="test1">Gagnaskipan</label>
-
-                    <input class="radio" name="group2" type="radio" id="test2" />
-                    <label for="test2">Forritun</label>
-
-                    <input class="radio" name="group2" type="radio" id="test3"  />
-                    <label for="test3">Green</label>
-
-                    <input class="radio" name="group2" type="radio" id="test4" disabled="disabled" />
-                    <label for="test4">Brown</label>
-                </p>
-            </form>
-        </div> 
+        <div class="input-field col s12">
+            <select>
+                <option value="1">Predator Prey</option>
+            </select>
+        </div>
 
         <div class="section">
-            <ul class="collapsible popout" data-collapsible="accordion">
-                <!-- Ass 1 -->
-                <li class="assignment">
-                    <div class="collapsible-header"><i class="material-icons">subject</i>Skilaverkefni 4</div>
-                    <div class="collapsible-body">
-                        <ul class="collapsible problems" data-collapsible="accordion">
-                            <li>
-                                <div class="collapsible-header">
-                                    <div class="row">
-                                        <div class="col m3">
-                                            <i class="material-icons">turned_in</i>
-                                            PredatorPrey
-                                        </div>
-                                        <div class="col m2">
-                                            <div class="grey-text center-align">
-                                                <span>100%</span>
-                                            </div>
-                                        </div>
-                                        <div class="col m2">
-                                            <div class="grey-text center-align">
-                                                <span>Submissions: 4</span>
-                                            </div>
-                                        </div>
-                                        <div class="col m3 center">
-                                            <form action="#" method="post">
-                                                <label for="predator" class="custom-file-upload">
-                                                    <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
-                                                        <i class="material-icons">insert_drive_file</i>
-                                                    </span>
-                                                </label>
-                                                <input id="predator" type="file"/>
-                                                <button class="btn-flat waves-effect waves-teal white testButton teal-text" type="submit" name="action">
-                                                    <span>Submit</span>
-                                                    <i class="material-icons right">send</i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                        <div class="col m2 right-align">
-                                            <a class="green-text problemStatus" href="#">Accepted <span class="material-icons">done</span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+            <ul class="collapsible" data-collapsible="accordion">
                 <!-- Ass 2 -->
                 <li class="assignment">
                     <div class="collapsible-header">
                         <div class="row">
                             <div class="col s3 truncate">
                                 <i class="material-icons">subject</i>
-                                Skilaverkefni 5 - Recursion
+                                Hilmar Tryggvason
                             </div>
                             <div class="col s2">
-                                <span class="tooltipped" data-position="top" data-delay="50" data-tooltip="05/05/2016">
-                                    6 days left
-                                </span>
+                                <a class="waves-effect waves-light btn">View All</a>
                             </div>
                             <div class="col s2">
-                                <span>
-                                    Gagnaskipan
-                                </span>
+                                <a class="waves-effect waves-light btn">Download</a>
                             </div>
                             <div class="col s2 right-align">
-                                <a class="red-text problemStatus" href="#">Unfinished <span class="material-icons">clear</span></a>
+                                <a class="green-text problemStatus" href="#">Accepted <span class="material-icons">done</span></a>
+                            </div>
+                            <div class="col s3">
+                                <form action="#" class="row">
+                                    <div class="col s6">
+                                        <input id="last_name" type="text" class="validate">
+                                    </div>
+                                    <button class="btn waves-effect waves-light col s6" type="submit" name="action">
+                                        Grade
+                                    </button>
+                                </form>
                             </div>
                         </div>
 
