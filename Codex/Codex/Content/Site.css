@@ -150,11 +150,11 @@ input[type="file"] {
     width: 12%;
 }
 
-.assignment {
+.collapsible-level1 {
     background-color: #e0e0e0;
 }
 
-.problems {
+.collapsible-body-container {
     width: 95%;
     margin: 1em auto;
     background-color: #fff;
@@ -165,8 +165,13 @@ input[type="file"] {
 }
 
 /* Radio Buttons */
-
 .radio_buttons label {
     margin-right: 2em;
     padding: 0;
+}
+
+/* Fixed action button */
+.fixed-action-btn {
+    bottom: 45px;
+    right: 24px;
 }

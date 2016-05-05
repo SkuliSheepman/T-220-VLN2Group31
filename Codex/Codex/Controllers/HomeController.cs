@@ -9,7 +9,7 @@ namespace Codex.Controllers
     public class HomeController : Controller
     {
         public ActionResult Index() {
-            ViewBag.UserName = "Hilmar";
+            ViewBag.UserName = User.Identity.Name;
             return View();
         }
 
