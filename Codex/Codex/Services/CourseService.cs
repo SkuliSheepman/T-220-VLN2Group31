@@ -37,6 +37,8 @@ namespace Codex.Models
                 SemesterId = newCourseViewModel.Semester
             };
 
+            _db.CourseInstances.Add(newCourseInstance);
+
             try
             {
 
