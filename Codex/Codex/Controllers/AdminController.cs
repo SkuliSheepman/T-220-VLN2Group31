@@ -26,8 +26,8 @@ namespace Codex.Controllers
             return Json(testJson);
         }
 
-        public ActionResult CreateCourse(NewCourseViewModel NewCourse) {
-            return null;
+        public ActionResult CreateCourse(NewCourseViewModel newCourse) {
+            return Json(newCourse);
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿$(document).ready(function () {
     // Initialization
     $(".modal-trigger").leanModal();
-    $(".tab > a").unbind("click");
+    $(".tab > a").click(function() {
+        $(this).unbind("click");
+    });
 
     // Admin - Create new user form
     $("#create-user-form").on("submit", function() {
@@ -40,13 +42,10 @@
         var form = $(this);
 
         var formData = {
-            "Name": $("#NewUserModel_Name").val(),
-            "Email": $("#NewUserModel_Email").val(),
-            "UserCourses": [
-                {
-
-                }
-            ]
+            "Name": $("#NewCourseModel_Name").val(),
+            "Description": $("#NewCourseModel_Description").val(),
+            "Semester": $("input[type='radio'][name='NewCourseModel.Semester']:checked").val(),
+            "Year": $("#NewCourseModel_Year").val()
         }
 
         $.ajax({
@@ -54,7 +53,10 @@
             data: formData,
             method: "POST",
             success: function (responseData) {
-                console.log(responseData);
+                Materialize.toast("The course " + formData.Name + " has been created", 4000);
+            },
+            error: function() {
+                // TODO
             }
         });
         return false;

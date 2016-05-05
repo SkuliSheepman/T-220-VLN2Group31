@@ -5,15 +5,11 @@
 }
 
 <div class="row">
-    <div class="col s12 l6 offset-l3">
-        <ul class="tabs">
-            <li class="tab col s6">
-                @Html.ActionLink("Users", "Users", "Admin");
-            </li>
-            <li class="tab col s6">
-                @Html.ActionLink("Courses", "Courses", "Admin", new { @class = "active" });
-            </li>
-        </ul>
+    <div class="col s6 l3 offset-l3">
+        @Html.ActionLink("Users", "Users", "Admin", null, new { @class = "waves-effect waves-light btn fill-width center-align" })
+    </div>
+    <div class="col s6 l3">
+        @Html.ActionLink("Courses", "Courses", "Admin", null, new { @class = "waves-effect waves-light btn-flat fill-width center-align" })
     </div>
 </div>
 
@@ -89,7 +85,7 @@
                 </div>
 
                 <div class="input-field col s6">
-                    @Html.TextBoxFor(m => m.NewCourseModel.Year, new { Value = DateTime.Now.Year })
+                    @Html.TextBoxFor(m => m.NewCourseModel.Year, new { Value = DateTime.Now.Year, @type = "number", min = 2000 })
                     @Html.LabelFor(m => m.NewCourseModel.Year)
                 </div>
             </div>
