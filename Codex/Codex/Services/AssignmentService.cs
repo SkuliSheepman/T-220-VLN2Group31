@@ -20,6 +20,17 @@ namespace Codex.Services
 
         }
 
+        // <summary>
+        // creates an assignment
+        // </summary>
+        public void CreateAssignment(AssignmentCreationViewModel nu) {
+
+
+        }
+
+        // <summary>
+        // gets an assignment and it's related problems by assignment id
+        // </summary>
         public AssignmentViewModel GetAssignmentById(int Id)
         {
 

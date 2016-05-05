@@ -15,4 +15,12 @@ namespace Codex.Models
 
     }
 
+    public class AssignmentCreationViewModel
+    {
+
+        // NICHT FINISHED
+        //public int max { get; set; }
+
+    }
+
 }
