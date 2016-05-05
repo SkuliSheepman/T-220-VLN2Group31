@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Codex.Models;
+using Codex.Services;
 
 namespace Codex.Controllers
 {
@@ -22,11 +23,18 @@ namespace Codex.Controllers
         }
 
         public ActionResult CreateUser(NewUserViewModel newUser) {
-            var testJson = new { cakeName = newUser.Name, cakeEmail = newUser.Email };
-            return Json(testJson);
+            UserService userService = new UserService();
+
+            userService.CreateUser(newUser);
+
+            return Json(newUser);
         }
 
         public ActionResult CreateCourse(NewCourseViewModel newCourse) {
+            CourseService courseService = new CourseService();
+
+            courseService.CreateCourse(newCourse);
+
             return Json(newCourse);
         }
     }
