@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Codex</title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+
+    <nav class="blue">
+        <div class="nav-wrapper">
+            <div class="row">
+                <div class="col s3 l2 center-align">
+                    <a href="#" class="button-collapse hide-on-large-only" data-activates="slide-out"><i class="material-icons">menu</i></a>
+                    <h1>
+                        <a href="#" class="logo">Codex</a>
+                    </h1>
+                </div>
+
+                <div id="search-col" class="col s9 l8">
+                    <form class="blue lighten-2">
+                        <div class="input-field">
+                            <input id="search" type="search" required>
+                            <label for="search"><i class="material-icons">search</i></label>
+                            <i class="material-icons">close</i>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col l2 hide-on-med-and-down">
+                    <ul id="nav-mobile" class="hide-on-med-and-down">
+                        <li>
+                            <a href="#" class="valign-wrapper dropdown-button" data-activates="avatar-dropdown" data-beloworigin="true">
+                                <img src="images/cat.jpeg" class="circle responsive-img avatar" alt="Kitten">
+                                <span class="truncate">Cat Kittenstein</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Sidenav -->
+            <ul id="slide-out" class="side-nav hide-on-large-only">
+                <li><a href="#!"><i class="material-icons">school</i> Teacher Inbox</a></li>
+                <li><a href="#!"><i class="material-icons">person</i> Student Inbox</a></li>
+                <li class="divider"></li>
+                <li><a href="#!"><i class="material-icons">power_settings_new</i> Logout</a></li>
+            </ul>
+
+            <!-- Dropdown Structure -->
+            <ul id="avatar-dropdown" class="dropdown-content">
+                <li><a href="#!"><i class="material-icons">school</i> Teacher Inbox</a></li>
+                <li><a href="#!"><i class="material-icons">person</i> Student Inbox</a></li>
+                <li class="divider"></li>
+                <li><a href="#!"><i class="material-icons">power_settings_new</i> Logout</a></li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <!-- Admin Buttons -->
+        <div class="admin-buttons">
+                <a class="waves-effect waves-light btn">Users</a>
+                <a class="waves-effect waves-light btn">Courses</a>
+        </div>
+
+        <!-- User Information | Name | Email | Change Password and Change Email nav -->
+        <ul class="collapsible popout" data-collapsible="accordion">
+            <li>
+                <div class="collapsible-header">
+                    <input type="checkbox" id="Alan" />
+                        <label for="Alan">Alan Turing</label>
+                            <span class="space">
+                                alantur@hr.is
+                            </span>
+                            <span class="align-right">
+                                <a class='dropdown-button' href='#' data-activates='dropdown1'>
+                                    <i class="material-icons">more_vert</i>
+                                </a>
+                            </span>
+                    <ul id='dropdown1' data-alignment='right' class='dropdown-content'>
+                        <li>
+                            <a class="waves-effect waves-light modal-trigger" href="#modal1">
+                                Change Password
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="waves-effect waves-light modal-trigger" href="#modal2">
+                                Delete
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Update Username | Update Password | Add Course | Add User Role -->
+                <div class="collapsible-body">
+                    <ul class="edit-user" data-collapsible="accordion">
+                        <li>
+                            <form class="col s12">
+                                <div class="row">
+                                    <div class="input-field col s4">
+                                        <input value="Alan Turing" id="first_name2" type="text" class="validate">
+                                        <label class="active" for="first_name2">Alan Turing</label>
+                                    </div>
+                                    <div class="input-field col s2">
+                                        <a class="waves-effect waves-light btn">Update</a>
+                                    </div>
+                                    <div class="input-field col s4">
+                                        <input id="last_name" type="text" class="validate">
+                                        <label for="last_name">alantur@hi.is</label>
+                                    </div>
+                                    <div class="input-field col s2">
+                                        <a class="waves-effect waves-light btn">Update</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s4">
+                                        <select>
+                                            <option value="1">Forritun</option>
+                                            <option value="2">Forritun</option>
+                                            <option value="3">Forritun</option>
+                                        </select>
+                                        <label>Course</label>
+                                    </div>
+                                    <div class="input-field col s6">
+                                        <input name="group1" type="radio" id="test1" />
+                                        <label for="test1">Studying</label>
+                                        <input name="group1" type="radio" id="test2" />
+                                        <label for="test2">Teaching</label>
+                                        <input class="with-gap" name="group1" type="radio" id="test3" />
+                                        <label for="test3">Assistant</label>
+                                    </div>
+                                    <div class="input-field col s2">
+                                        <a class="waves-effect waves-light btn">Add</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+
+                    
+                    <!-- Course | Year | Semester | Position | Remove -->
+                    <div class="section-table">
+                        <table class="striped bordered responsive-table">
+                            <thead>
+                                <tr><th>Course</th><th>Year</th><th>Semester</th><th>Position</th><th>Remove</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Gagnaskipan</td><td>2016</td><td>Spring</td><td>Student</td><td><i class="material-icons"><a href="#">clear</a></i></td></tr>
+                                <tr><td>Gagnaskipan</td><td>2016</td><td>Spring</td><td>Student</td><td><i class="material-icons">clear</i></td></tr>
+                                <tr><td>Gagnaskipan</td><td>2016</td><td>Spring</td><td>Student</td><td><i class="material-icons">clear</i></td></tr>
+                            </tbody>
+                        </table>    
+                    </div>
+                    </div>
+            </li>
+        </ul>
+                    <!-- Fixed Action Button -->
+                    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+                        <a class="btn-floating btn-large red">
+                            <i class="large material-icons">mode_edit</i>
+                        </a>
+                        <ul>
+                            <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+                            <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+                            <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+                            <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+                        </ul>
+                    </div>
+</main>
+
+    <!--Footer-->
+    <footer class="page-footer orange">
+        <div class="row">
+            <div class="col s12 center-align">
+                <p>&copy; Codex Team - Group 31</p>
+            </div>
+        </div>
+    </footer>
+
+    <!--  Scripts-->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="js/materialize.js"></script>
+    <script src="js/init.js"></script>
+
+    <!-- Modal Structure - Modal 1 -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Change Password</h4>
+        Change password for <b>Alan Turing</b>
+          <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="password" type="text" class="validate">
+                        <label for="new-password">New Password</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="repeatpassword" type="text" class="validate">
+                        <label for="repeat password">Repeat new password</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Change Password</a>
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+    </div>
+  </div>
+
+      <!-- Modal Structure - Modal 2 -->
+  <div id="modal2" class="modal">
+    <div class="modal-content">
+      <h4>Delete User</h4>
+      <p>Are you sure you want to delete user?</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Delete User</a>
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+    </div>
+  </div>
+
+</body>
+</html>
