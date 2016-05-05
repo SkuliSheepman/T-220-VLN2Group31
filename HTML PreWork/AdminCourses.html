@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <title>Codex</title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+</head>
+<body>
+
+    <nav class="blue">
+        <div class="nav-wrapper">
+            <div class="row">
+                <div class="col s3 l2 center-align">
+                    <a href="#" class="button-collapse hide-on-large-only" data-activates="slide-out"><i class="material-icons">menu</i></a>
+                    <h1>
+                        <a href="#" class="logo">Codex</a>
+                    </h1>
+                </div>
+
+                <div id="search-col" class="col s9 l8">
+                    <form class="blue lighten-2">
+                        <div class="input-field">
+                            <input id="search" type="search" required>
+                            <label for="search"><i class="material-icons">search</i></label>
+                            <i class="material-icons">close</i>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col l2 hide-on-med-and-down">
+                    <ul id="nav-mobile" class="hide-on-med-and-down">
+                        <li>
+                            <a href="#" class="valign-wrapper dropdown-button" data-activates="avatar-dropdown" data-beloworigin="true">
+                                <img src="images/cat.jpeg" class="circle responsive-img avatar" alt="Kitten">
+                                <span class="truncate">Cat Kittenstein</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Sidenav -->
+            <ul id="slide-out" class="side-nav hide-on-large-only">
+                <li><a href="#!"><i class="material-icons">school</i> Teacher Inbox</a></li>
+                <li><a href="#!"><i class="material-icons">person</i> Student Inbox</a></li>
+                <li class="divider"></li>
+                <li><a href="#!"><i class="material-icons">power_settings_new</i> Logout</a></li>
+            </ul>
+
+            <!-- Dropdown Structure -->
+            <ul id="avatar-dropdown" class="dropdown-content">
+                <li><a href="#!"><i class="material-icons">school</i> Teacher Inbox</a></li>
+                <li><a href="#!"><i class="material-icons">person</i> Student Inbox</a></li>
+                <li class="divider"></li>
+                <li><a href="#!"><i class="material-icons">power_settings_new</i> Logout</a></li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <!-- Admin Buttons -->
+        <div class="admin-buttons">
+            <a class="waves-effect waves-light btn">Users</a>
+            <a class="waves-effect waves-light btn">Courses</a>
+        </div>
+
+        <!-- User Information | Name | Email | Change Password and Change Email nav -->
+        <ul class="collapsible popout" data-collapsible="accordion">
+            <li>
+                <div class="collapsible-header">
+                    <span class="course-title">
+                        Forritun
+                    </span>
+                    <span class="space">
+                        2016
+                    </span>
+                    <span class="space">
+                        Spring
+                    </span>
+                    <span class="space">
+                        2 techers
+                    </span>
+                    <span class="space">
+                        3 assistance
+                    </span>
+                    <span class="space">
+                        241 students
+                    </span>
+                    <span class="align-right">
+                        <a class='dropdown-button' href='#' data-activates='dropdown1'>
+                            <i class="material-icons">more_vert</i>
+                        </a>
+                    </span>
+                    <ul id='dropdown1' data-alignment='right' class='dropdown-content'>
+                        <li>
+                            <a class="waves-effect waves-light modal-trigger" href="#modal1">
+                                Delete
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Update Username | Update Password | Add Course | Add User Role -->
+                <div class="collapsible-body">
+                    <ul class="edit-user" data-collapsible="accordion">
+                        <li>
+                            <form class="col s12">
+                                <div class="row">
+                                    <div class="input-field col s4">
+                                        <input value="Forritun" id="first_name2" type="text" class="validate">
+                                        <label class="active" for="first_name2">Forritun</label>
+                                    </div>
+
+                                    <div class="input-field col s4">
+                                        <input name="group1" type="radio" id="test1" />
+                                        <label for="test1">Fall</label>
+                                        <input name="group1" type="radio" id="test2" />
+                                        <label for="test2">Spring</label>
+                                        <input class="with-gap" name="group1" type="radio" id="test3" />
+                                        <label for="test3">Summer</label>
+                                    </div>
+
+                                    <div class="input-field col s4">
+                                        <select>
+                                            <option value="1">2016</option>
+                                            <option value="2">2015</option>
+                                            <option value="3">2014</option>
+                                        </select>
+                                        <label>Year</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <form class="col s12">
+                                            <div class="input-field col s12">
+                                                <textarea id="textarea1" class="materialize-textarea"></textarea>
+                                                <label for="textarea1">Description</label>
+                                            </div>
+                                    </form> 
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s2">
+                                        <a class="waves-effect waves-light btn">Update</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+
+
+                    <!-- Teacher | email | Role | Remove -->
+                    <div class="section-table">
+                        <form action="#">
+                            <table class="striped bordered responsive-table">
+                                <thead>
+                                    <tr><th>Name</th><th>email</th><th>Position</th><th>Remove</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Hrafn Loftsson</td><td>hrafn@ru.is</td><td>Teaching</td><td><i class="material-icons"><input type="checkbox" id="test5" /><label for="test5"></label></td></tr>
+                                    <tr><td>Hrafn Loftsson</td><td>hrafn@ru.is</td><td>Teaching</td><td><i class="material-icons"><input type="checkbox" id="test5" /><label for="test5"></label></td></tr>
+                                    <tr><td>Hrafn Loftsson</td><td>hrafn@ru.is</td><td>Teaching</td><td><i class="material-icons"><input type="checkbox" id="test5" /><label for="test5"></label></td></tr>
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <!-- Fixed Action Button -->
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+            <a class="btn-floating btn-large red">
+                <i class="large material-icons">mode_edit</i>
+            </a>
+            <ul>
+                <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+                <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+                <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+                <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+            </ul>
+        </div>
+    </main>
+
+    <!--Footer-->
+    <footer class="page-footer orange">
+        <div class="row">
+            <div class="col s12 center-align">
+                <p>&copy; Codex Team - Group 31</p>
+            </div>
+        </div>
+    </footer>
+
+    <!--  Scripts-->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="js/materialize.js"></script>
+    <script src="js/init.js"></script>
+
+    <!-- Modal Structure - Modal 1 -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Delete Course</h4>
+            Are you sure you want to delete <b>Gagnaskipan</b>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Delete</a>
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+        </div>
+    </div>
+
+    <!-- Modal Structure - Modal 2 -->
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <h4>Delete User</h4>
+            <p>Are you sure you want to delete user?</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Delete User</a>
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+        </div>
+    </div>
+
+</body>
+</html>

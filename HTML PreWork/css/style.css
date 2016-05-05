@@ -184,6 +184,12 @@ input[type="file"] {
 .space {
     padding-left: 4em;
 }
+
+.course-title {
+    padding-left: 2em;
+    font-weight: bold;
+}
+
 .align-right {
   float: right;
 }
