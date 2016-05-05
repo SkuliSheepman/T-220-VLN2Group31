@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>@ViewBag.Title</title>
+
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="blue">
+        <div class="row">
+            <div class="col s12 center-align">
+                <a href="#">Codex</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main -->
+    <main class="container">
+        <div class="row section">
+            @RenderBody()
+        </div>
+    </main>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/materialize")
+    @Scripts.Render("~/bundles/codex")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
