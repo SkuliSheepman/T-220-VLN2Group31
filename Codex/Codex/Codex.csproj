@@ -80,6 +80,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -199,6 +201,26 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="DAL\AspNetRole.cs" />
+    <Compile Include="DAL\AspNetUser.cs" />
+    <Compile Include="DAL\AspNetUserClaim.cs" />
+    <Compile Include="DAL\AspNetUserLogin.cs" />
+    <Compile Include="DAL\Assignment.cs" />
+    <Compile Include="DAL\AssignmentGroup.cs" />
+    <Compile Include="DAL\AssignmentProblem.cs" />
+    <Compile Include="DAL\Course.cs" />
+    <Compile Include="DAL\CourseInstance.cs" />
+    <Compile Include="DAL\C__MigrationHistory.cs" />
+    <Compile Include="DAL\Database.cs" />
+    <Compile Include="DAL\Filetype.cs" />
+    <Compile Include="DAL\Problem.cs" />
+    <Compile Include="DAL\ProgrammingLanguage.cs" />
+    <Compile Include="DAL\Semester.cs" />
+    <Compile Include="DAL\Submission.cs" />
+    <Compile Include="DAL\SubmissionGrade.cs" />
+    <Compile Include="DAL\Teacher.cs" />
+    <Compile Include="DAL\TestCase.cs" />
+    <Compile Include="DAL\TestResult.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
