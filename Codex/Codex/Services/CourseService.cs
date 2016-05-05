@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Codex.DAL;
 using Codex.Models;
+using Codex.Models.AdminHelperModels;
 
 namespace Codex.Models
 {
@@ -49,6 +50,25 @@ namespace Codex.Models
                 // halp
                 return;
             }
+
+        }
+
+        public List<CourseHelperModel> GetAllCourseInstances()
+        {
+
+            var courseInstances = (from _courseInstance in _db.CourseInstances
+                                   join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
+                                   select new { _courseInstance, _course }).Select(_coursePair => new CourseHelperModel
+                                   {
+                                       Id          = _coursePair._courseInstance.Id,
+                                       Name        = _coursePair._course.Name,
+                                       Description = _coursePair._course.Description,
+                                       Year        = _coursePair._courseInstance.Year,
+                                       Semester    = _coursePair._courseInstance.SemesterId
+
+                                   }).ToList();
+
+            return courseInstances;
 
         }
 
