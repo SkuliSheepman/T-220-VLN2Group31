@@ -1,0 +1,103 @@
+﻿@model Codex.Models.CourseViewModel
+@{
+    ViewBag.Title = "Admin - Courses";
+    ViewBag.UserName = "Admin Man";
+}
+
+<div class="row">
+    <div class="col s12 l6 offset-l3">
+        <ul class="tabs">
+            <li class="tab col s6">
+                @Html.ActionLink("Users", "Users", "Admin");
+            </li>
+            <li class="tab col s6">
+                @Html.ActionLink("Courses", "Courses", "Admin", new { @class = "active" });
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="s12">
+        <ul class="collapsible popout" data-collapsible="accordion">
+            <li class="collapsible-level1">
+                <div class="collapsible-header">
+                    <i class="material-icons">account_box</i> User 1
+                </div>
+                <div class="collapsible-body">
+                    <div class="card-panel collapsible-body-container">
+
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large red">
+        <i class="large material-icons">mode_edit</i>
+    </a>
+    <ul>
+        <li>
+            <a class="modal-trigger btn-floating blue tooltipped" href="#new-course-modal" data-position="left" data-delay="50" data-tooltip="New course">
+                <i class="material-icons">book</i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div id="new-course-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4 class="center-align">New Course</h4>
+        <div class="divider"></div>
+
+        @using (Html.BeginForm("CreateCourse", "Admin", FormMethod.Post, new { @id = "create-course-form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">title</i>
+                    @Html.TextBoxFor(m => m.NewCourseModel.Name, new { @class = "validate" })
+                    @Html.ValidationMessageFor(m => m.NewCourseModel.Name, "", new { @class = "text-danger" })
+                    @Html.LabelFor(m => m.NewCourseModel.Name)
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">description</i>
+                    @Html.TextAreaFor(m => m.NewCourseModel.Description, new { @class = "validate materialize-textarea" })
+                    @Html.ValidationMessageFor(m => m.NewCourseModel.Description, "", new { @class = "text-danger" })
+                    @Html.LabelFor(m => m.NewCourseModel.Description)
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s6">
+                    <span>Semester</span>
+                    @Html.RadioButtonFor(m => m.NewCourseModel.Semester, 1, new {@id = "semester-fall", @checked = true})
+                    @Html.Label("semester-fall", "Fall")
+
+                    @Html.RadioButtonFor(m => m.NewCourseModel.Semester, 2, new {@id = "semester-spring"})
+                    @Html.Label("semester-spring", "Spring")
+
+                    @Html.RadioButtonFor(m => m.NewCourseModel.Semester, 3, new {@id = "semester-summer"})
+                    @Html.Label("semester-summer", "Summer")
+                </div>
+
+                <div class="input-field col s6">
+                    @Html.TextBoxFor(m => m.NewCourseModel.Year, new { Value = DateTime.Now.Year })
+                    @Html.LabelFor(m => m.NewCourseModel.Year)
+                </div>
+            </div>
+        }
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+        <a href="#" id="create-course-button" class="waves-effect waves-green btn-flat">Create</a>
+    </div>
+</div>
