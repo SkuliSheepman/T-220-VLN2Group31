@@ -11,7 +11,7 @@ namespace Codex.Models.AdminHelperModels
         public string Name { get; set; }
         public string Description { get; set; }
         public int Year { get; set; }
-        public string Semester { get; set; }
+        public int Semester { get; set; }
         public int StudentsCount { get; set; }
         public List<CourseTeacherHelperModel> Teachers { get; set; }
 
