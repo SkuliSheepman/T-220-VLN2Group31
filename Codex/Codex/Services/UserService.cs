@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Codex.Controllers;
 using Codex.DAL;
 using Codex.Models;
-using Codex.Models.AdminHelperModels;
+using Codex.Models.AdminModels.AdminHelperModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;

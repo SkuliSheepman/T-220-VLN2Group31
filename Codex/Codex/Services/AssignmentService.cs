@@ -6,14 +6,14 @@ using System.Web.Mvc;
 using Codex.DAL;
 using Codex.Models;
 using Codex.Services;
-/*
+
 namespace Codex.Services
 {
 
     public class AssignmentService
     {
 
-        private Database _db;
+        /*private Database _db;
 
         public AssignmentService()
         {
@@ -134,8 +134,7 @@ namespace Codex.Services
         {
             // Some Error message
         }
-    }
+    } */
 
    }
 }
-*/
