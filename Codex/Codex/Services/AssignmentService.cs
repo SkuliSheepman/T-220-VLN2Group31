@@ -16,12 +16,14 @@ namespace Codex.Services
 
         private Database _db;
         private ProblemService _problemService;
+        
 
         public AssignmentService()
         {
 
             _db = new Database();
             _problemService = new ProblemService();
+            
 
         }
 
@@ -72,26 +74,41 @@ namespace Codex.Services
 
         }
 
-        public void GetAssignment(int assignmentId)
+        public List<ApplicationUser> GetAssignmentCollaborators(int Id)
         {
 
+            var collaborators = (from _relation in _db.AssignmentGroups
+                                 join _users in _db.AspNetUsers on _relation.UserId equals _users.Id
+                                 where _relation.AssignmentId == Id
+                                 select _users).Select(_users => new ApplicationUser
+                                 {
+                                     Id = _users.Id
+                                 }).ToList();
+
+            return collaborators;
+
+        }
+
+        public AssignmentViewModel GetAssignment(int assignmentId)
+        {
+            var assignment = _db.Assignments.SingleOrDefault(x => x.Id == assignmentId);
+            return new AssignmentViewModel
+            {
+                Id = assignment.Id,
+                Name = assignment.Name,
+                Description = assignment.Description,
+                CourseInstanceId = assignment.CourseInstanceId,
+                StartTIme = assignment.StartTime,
+                EndTIme = assignment.EndTime,
+                MaxCollaborators = assignment.MaxCollaborators,
+                AssignmentProblems = _problemService.GetAllProblemsInAssignment(assignmentId),
+                AssignmentCollaborators = GetAssignmentCollaborators(assignmentId)
+            };
 
 
         }
        
-        /*public List<ApplicationUser> GetAssignmentCollaborators(int Id)
-        {
-
-            var collabrators = (from _assignment in _db.Assignments
-                                join _relation in _db.AssignmentGroups on _assignment.Id equals _relation.AssignmentId
-                                join _users in _db.AspNetUsers on _relation.UserId equals _users.Id
-                                select _users).Select(_users => new ApplicationUser
-                                {
-                                    Id = _users.Id;
-                                    
-                                }).ToList();
         
-        }
         
         /// <summary>
         /// gets an assignment and it's related problems by assignment id
@@ -139,7 +156,7 @@ namespace Codex.Services
         ///</summary>
         public List<AssignmentViewModel> GetAssignmentsInCourseInstance(int Id)
         {
-            ProblemService prob = new ProblemService();
+            
 
 
             var assignments = (from _courseInstance in _db.CourseInstances
@@ -151,22 +168,22 @@ namespace Codex.Services
                                    CourseInstanceId = _assignment.CourseInstanceId,
                                    Name = _assignment.Name,
                                    Description = _assignment.Description,
-                                   AssignmentProblems = prob.GetAllProblemsInAssignment(Id),
-                                   AssignmentCollaborators = GetAssignmentCollaborators(Id);
+                                   AssignmentProblems = _problemService.GetAllProblemsInAssignment(Id),
+                                   AssignmentCollaborators = GetAssignmentCollaborators(Id)
 
 
 
-        }).ToList();
+                               }).ToList();
             return assignments;
-        
 
+        }
     /// <summary>
     /// Removes all problems from the marked assignment and the then deletes it
     /// </summary>
     public void DeleteAssignmentById(int Id)
     {
-        ProblemService prob = new ProblemService();
-        prob.RemoveProblemsFromAssignment(Id);
+        
+        _problemService.RemoveProblemsFromAssignment(Id);
 
         var assignment = _db.Assignments.Where(x => x.Id == Id).FirstOrDefault();
 
@@ -182,7 +199,7 @@ namespace Codex.Services
         {
             // Some Error message
         }
-    }*/
+    }
 
    }
 }
