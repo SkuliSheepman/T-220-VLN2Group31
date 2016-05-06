@@ -94,9 +94,7 @@ namespace Codex.Services
             var relations = _db.AssignmentProblems.Where(x => x.ProblemId == problemId);
 
             foreach (var _relation in relations)
-            {
                 _db.AssignmentProblems.Remove(_relation);
-            }
 
             try
             {
