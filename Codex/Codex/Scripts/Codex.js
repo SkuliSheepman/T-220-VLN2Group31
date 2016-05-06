@@ -1,6 +1,10 @@
 ﻿$(document).ready(function () {
-    // Initialization
+    /* Initialization */
+
+    // Modals
     $(".modal-trigger").leanModal();
+
+    /* Fixes */
 
     // Move hidden inputs at the bottom of their container, to avoid CSS styling errors in Materialize
     $("input[type='hidden']").each(function () {
@@ -10,6 +14,13 @@
         parent.append(copy);
         
     });
+
+    // Prevent collapsable opening when clicking on the vertical ellipsis
+    $(".dropdown-button").on("click", function(e) {
+        e.stopPropagation();
+    });
+
+    /* ADMIN */
 
     // Admin - Create new user form
     $("#create-user-form").on("submit", function() {
@@ -82,31 +93,35 @@
 
     // Admin - Delete selected users
     $("#delete-selected-users").on("click", function () {
-        console.log("Clicked");
         var users = $("input[type='checkbox'][name='user-row']:checked").map(function() {
             return this.value;
         }).get();
 
-        $.ajax({
-            url: "/Admin/DeleteSelectedUsers",
-            data: JSON.stringify(users),
-            method: "POST",
-            contentType: "application/json",
-            success: function (responseData) {
-                if (responseData) {
-                    Materialize.toast("Users deleted", 4000);
-                    $("input[type='checkbox'][name='user-row']:checked").each(function() {
-                        $(this).closest("li").remove();
-                    });
+        if (0 < users.length) {
+            $.ajax({
+                url: "/Admin/DeleteSelectedUsers",
+                data: JSON.stringify(users),
+                method: "POST",
+                contentType: "application/json",
+                success: function(responseData) {
+                    if (responseData) {
+                        Materialize.toast("Users deleted", 4000);
+                        $("input[type='checkbox'][name='user-row']:checked").each(function() {
+                            $(this).closest("li").remove();
+                        });
+                    }
+                    else {
+                        Materialize.toast("An error occurred", 4000);
+                    }
+
+                },
+                error: function() {
+                    // TODO
                 }
-                else {
-                    Materialize.toast("An error occurred", 4000);
-                }
-                
-            },
-            error: function () {
-                // TODO
-            }
-        });
+            });
+        }
+        else {
+            Materialize.toast("No users selected", 2000);
+        }
     });
 });

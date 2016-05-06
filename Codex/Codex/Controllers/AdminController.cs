@@ -53,6 +53,10 @@ namespace Codex.Controllers
         }
 
         public ActionResult DeleteSelectedUsers(List<string> userIds) {
+            if (userIds == null || userIds.Count == 0) {
+                return Json(false);
+            }
+
             UserService userService = new UserService();
 
             var result = userService.DeleteUsersByIds(userIds);

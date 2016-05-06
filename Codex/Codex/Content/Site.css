@@ -150,10 +150,6 @@ input[type="file"] {
     width: 12%;
 }
 
-.collapsible-level1 {
-    background-color: #e0e0e0;
-}
-
 .collapsible-body-container {
     width: 95%;
     margin: 1em auto;
