@@ -49,5 +49,10 @@ namespace Codex.Services
             var idResult = um.AddToRole(userId, roleName);
             return idResult.Succeeded;
         }
+
+        public bool DeleteUser(string userId)
+        {
+            return true;
+        }
     }
 }

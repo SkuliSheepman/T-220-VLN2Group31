@@ -8,44 +8,65 @@ using Codex.Models;
 
 namespace Codex.Services
 {
+
     public class ProblemService
     {
+
+        // <summary>
+        // privatized database property
+        // </summary>
         private Database _db;
 
+        // <summary>
+        // problem service constructor
+        // </summary>
         public ProblemService()
         {
             _db = new Database();
         }
-        public List<ProblemViewModel> GetAllProblemsInAssignment(int Id)
+
+        // <summary>
+        // Gets assignment details
+        // </summary>
+        public ProblemViewModel GetProblem(int problemId)
         {
-            var problems = (from _assignment in _db.Assignments
-                            join _relation in _db.AssignmentProblems on _assignment.Id equals _relation.AssignmentId
-                            join _problem in _db.Problems on _relation.ProblemId equals _problem.Id
-                            select _problem).Select(_problem => new ProblemViewModel
-                            {
-
-                                Id = _problem.Id,
-                                Name = _problem.Name,
-                                Description = _problem.Description,
-                                Filetype = _problem.Filetype,
-                                Attachment = _problem.Attachment,
-                                Language = _problem.Language
-
-                            }).ToList();
-            return problems;
-        }
-        public void DeleteProblem(int Id)
-        {
-            var problem = _db.Problems.Where(x => x.Id == Id).FirstOrDefault();
-
-            if (problem != null)
+            var problem = _db.Problems.SingleOrDefault(x => x.Id == problemId);
+            return new ProblemViewModel
             {
-                _db.Problems.Remove(problem);
-            }
-            _db.SaveChanges();
+                Id = problem.Id,
+                Name = problem.Name,
+                Description = problem.Description,
+                Filetype = problem.Filetype,
+                Attachment = problem.Attachment,
+                Language = problem.Language
+            };
+            
         }
-        public List<ProblemViewModel> GetAllProblemsInCourse(int Id)
+
+        // <summary>
+        // Gets all problems in an assignment provided with an ID
+        // </summary>
+        public List<ProblemViewModel> GetAllProblemsInAssignment(int assignmentId)
         {
+
+            var problemIds = (from _relation in _db.AssignmentProblems
+                              where _relation.AssignmentId == assignmentId
+                              select _relation.ProblemId);
+
+            var rtrn = new List<ProblemViewModel>();
+            foreach (var _problemId in problemIds)
+                rtrn.Add(GetProblem(_problemId));
+
+            return rtrn;
+
+        }
+
+        // <summary>
+        // Gets all problems related to a specific course instances
+        // </summary>
+        public List<ProblemViewModel> GetAllProblemsInCourseInstance(int Id)
+        {
+
             var problems = (from _course in _db.Courses
                             join _problem in _db.Problems on _course.Id equals _problem.CourseId
                             select _problem).Select(_problem => new ProblemViewModel
@@ -59,8 +80,101 @@ namespace Codex.Services
                                 Language = _problem.Language
 
                             }).ToList();
+
             return problems;
+
+        }
+
+        // <summary>
+        // Removes a problem from all assignments
+        // </summary>
+        public void RemoveProblem(int problemId)
+        {
+
+            var relations = _db.AssignmentProblems.Where(x => x.ProblemId == problemId);
+
+            foreach (var _relation in relations)
+            {
+                _db.AssignmentProblems.Remove(_relation);
+            }
+
+            try
+            {
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                //throw
+            }
+
+        }
+
+        // <summary>
+        // Deletes a problem in the database that exists with the parameter Id as problem.Id
+        // </summary>
+        public void DeleteProblem(int problemId)
+        {
+
+            var problem = _db.Problems.Where(x => x.Id == problemId).SingleOrDefault();
+            // Remove all relations the specified problem has with assignments
+            RemoveProblem(problemId);
+
+            if (problem != null)
+            {
+                _db.Problems.Remove(problem);
+            }
+
+            try
+            {
+                _db.SaveChanges();
+            } catch ( Exception e )
+            {
+                //throw stuff
+            }
+
+        }
+
+        // <summary>
+        // Removes a problem from all related assignments
+        // </summary>
+        public void RemoveProblemFromAssignment(int problemId, int assignmentId)
+        {
+
+            var relation = (from _relation in _db.AssignmentProblems
+                            where _relation.ProblemId == problemId
+                            && _relation.AssignmentId == assignmentId
+                            select _relation);
+
+            foreach (var _relation in relation)
+            {
+                _db.AssignmentProblems.Remove(_relation);
+            }
+
+            try
+            {
+                _db.SaveChanges();
+            } catch ( Exception e )
+            {
+                // throw stuff
+            }
+
+        }
+
+        public void RemoveProblemsFromAssignment(int assignmentId)
+        {
+
+            var problemIds = (from _relation in _db.AssignmentProblems
+                              where _relation.AssignmentId == assignmentId
+                              select _relation.ProblemId);
+
+            // Destroy the relations
+            foreach (var _problemId in problemIds)
+            {
+                RemoveProblemFromAssignment(_problemId, assignmentId);
+            }
+
         }
 
     }
+
 }
