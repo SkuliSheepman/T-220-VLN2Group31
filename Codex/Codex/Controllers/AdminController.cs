@@ -30,7 +30,9 @@ namespace Codex.Controllers
 
             if (!userService.UserExists(newUser.Email)) {
                 ApplicationUser userToBeCreated = new ApplicationUser { UserName = newUser.Email, Email = newUser.Email, FullName = newUser.Name };
-                return Json(userService.CreateUser(userToBeCreated));
+                if (userService.CreateUser(userToBeCreated)) {
+                    return Json(userToBeCreated.Id);
+                }
             }
 
             return Json(false);

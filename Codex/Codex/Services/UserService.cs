@@ -42,6 +42,11 @@ namespace Codex.Services
             return true;
         }
 
+        public List<ApplicationUser> GetAllUsers() {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+            return um.Users.ToList();
+        }
+
         /* The methods CreateUser, GetUser, UserExists, CreateRole and AddUserToRole
          * are methods given in Lab 7 in Web Programming by Patrekur Patreksson
          */
@@ -67,11 +72,6 @@ namespace Codex.Services
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             var idResult = um.AddToRole(userId, roleName);
             return idResult.Succeeded;
-        }
-
-        public List<ApplicationUser> GetAllUsers() {
-            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
-            return um.Users.ToList();
         }
 
         public ApplicationUser GetUser(string name) {
