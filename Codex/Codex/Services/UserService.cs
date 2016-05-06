@@ -15,30 +15,39 @@ namespace Codex.Services
 {
     public class UserService
     {
+        private ApplicationDbContext _db;
 
-        private Database _db;
+        public UserService() {
+            _db = new ApplicationDbContext();
+        }
 
-        public UserService()
+        /* The methods CreateUser, UserExists, CreateRole and AddUserToRole
+         * are methods given in Lab 7 in Web Programming by Patrekur Patreksson
+         */
+
+        public bool CreateUser(ApplicationUser user)
         {
-
-            _db = new Database();
-
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+            var idResult = um.Create(user, user.Email);
+            return idResult.Succeeded;
         }
 
-        public bool CreateUser(NewUserViewModel newUserViewModel) {
-            /*if (!(_db.AspNetUsers.Any(u => u.UserName == newUserViewModel.Email))) {
-                var userStore = new UserStore<ApplicationUser>(_db);
-                var userManager = new UserManager<ApplicationUser>(userStore);
-                var newUser = new ApplicationUser { UserName = newUserViewModel.Email, Email = newUserViewModel.Email, FullName = newUserViewModel.Name };
-                var result = userManager.Create(newUser, newUserViewModel.Email);
-
-                if (result.Succeeded) {
-                    return true;
-                }
-            }*/
-
-            return false;
+        public bool UserExists(string name) {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+            return um.FindByName(name) != null;
         }
 
+        public bool CreateRole(string name) {
+            var rm = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(_db));
+            var idResult = rm.Create(new IdentityRole(name));
+            return idResult.Succeeded;
+        }
+        
+        public bool AddUserToRole(string userId, string roleName)
+        {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+            var idResult = um.AddToRole(userId, roleName);
+            return idResult.Succeeded;
+        }
     }
 }

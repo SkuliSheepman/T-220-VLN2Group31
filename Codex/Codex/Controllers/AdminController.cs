@@ -25,9 +25,12 @@ namespace Codex.Controllers
         public ActionResult CreateUser(NewUserViewModel newUser) {
             UserService userService = new UserService();
 
-            userService.CreateUser(newUser);
+            if (!userService.UserExists(newUser.Email)) {
+                ApplicationUser userToBeCreated = new ApplicationUser { UserName = newUser.Email, Email = newUser.Email, FullName = newUser.Name };
+                return Json(userService.CreateUser(userToBeCreated));
+            }
 
-            return Json(newUser);
+            return Json(false);
         }
 
         public ActionResult CreateCourse(NewCourseViewModel newCourse) {

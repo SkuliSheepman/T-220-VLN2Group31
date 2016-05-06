@@ -25,7 +25,12 @@
             data: formData,
             method: "POST",
             success: function (responseData) {
-                console.log(responseData);
+                if (responseData) {
+                    Materialize.toast("The user " + formData.Email + " has been created", 4000);
+                }
+                else {
+                    Materialize.toast("The user " + formData.Email + " already exists", 4000);
+                }
             }
         });
         return false;
