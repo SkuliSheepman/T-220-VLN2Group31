@@ -28,10 +28,14 @@ namespace Codex.Controllers
         public ActionResult CreateUser(NewUserViewModel newUser) {
             UserService userService = new UserService();
 
-            if (!userService.UserExists(newUser.Email)) {
+            if (!userService.UserExistsByUsername(newUser.Email)) {
                 ApplicationUser userToBeCreated = new ApplicationUser { UserName = newUser.Email, Email = newUser.Email, FullName = newUser.Name };
                 if (userService.CreateUser(userToBeCreated)) {
-                    return Json(userToBeCreated.Id);
+                    if (newUser.Admin) {
+                        userService.AddUserToRoleByUserId(userToBeCreated.Id, "Admin");
+                    }
+
+                    return Json(true);
                 }
             }
 

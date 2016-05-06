@@ -16,6 +16,8 @@ namespace Codex.Services
 {
     public class UserService
     {
+        /* Most methods here use code given in Lab 7 in Web Programming by Patrekur Patreksson */
+
         private ApplicationDbContext _db;
 
         public UserService() {
@@ -47,17 +49,13 @@ namespace Codex.Services
             return um.Users.ToList();
         }
 
-        /* The methods CreateUser, GetUser, UserExists, CreateRole and AddUserToRole
-         * are methods given in Lab 7 in Web Programming by Patrekur Patreksson
-         */
-
         public bool CreateUser(ApplicationUser user) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             var idResult = um.Create(user, user.Email);
             return idResult.Succeeded;
         }
 
-        public bool UserExists(string name) {
+        public bool UserExistsByUsername(string name) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             return um.FindByName(name) != null;
         }
@@ -68,15 +66,15 @@ namespace Codex.Services
             return idResult.Succeeded;
         }
 
-        public bool AddUserToRole(string userId, string roleName) {
+        public bool AddUserToRoleByUserId(string userId, string roleName) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             var idResult = um.AddToRole(userId, roleName);
             return idResult.Succeeded;
         }
 
-        public ApplicationUser GetUser(string name) {
+        public ApplicationUser GetUserById(string id) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
-            return um.FindByName(name);
+            return um.FindById(id);
         }
     }
 }
