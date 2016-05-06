@@ -1,0 +1,535 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <title>Codex</title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+</head>
+<body>
+
+    <nav class="blue">
+        <div class="nav-wrapper">
+            <div class="row">
+                <div class="col s3 l2 center-align">
+                    <a href="#" class="button-collapse hide-on-large-only" data-activates="slide-out"><i class="material-icons">menu</i></a>
+                    <h1>
+                        <a href="#" class="logo">Codex</a>
+                    </h1>
+                </div>
+
+                <div id="search-col" class="col s9 l8">
+                    <form class="blue lighten-2">
+                        <div class="input-field">
+                            <input id="search" type="search" required>
+                            <label for="search"><i class="material-icons">search</i></label>
+                            <i class="material-icons">close</i>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col l2 hide-on-med-and-down">
+                    <ul id="nav-mobile" class="hide-on-med-and-down">
+                        <li>
+                            <a href="#" class="valign-wrapper dropdown-button" data-activates="avatar-dropdown" data-beloworigin="true">
+                                <img src="images/cat.jpeg" class="circle responsive-img avatar" alt="Kitten">
+                                <span class="truncate">Cat Kittenstein</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Sidenav -->
+            <ul id="slide-out" class="side-nav hide-on-large-only">
+                <li><a href="#!"><i class="material-icons">school</i> Teacher Inbox</a></li>
+                <li><a href="#!"><i class="material-icons">person</i> Student Inbox</a></li>
+                <li class="divider"></li>
+                <li><a href="#!"><i class="material-icons">power_settings_new</i> Logout</a></li>
+            </ul>
+
+            <!-- Dropdown Structure -->
+            <ul id="avatar-dropdown" class="dropdown-content">
+                <li><a href="#!"><i class="material-icons">school</i> Teacher Inbox</a></li>
+                <li><a href="#!"><i class="material-icons">person</i> Student Inbox</a></li>
+                <li class="divider"></li>
+                <li><a href="#!"><i class="material-icons">power_settings_new</i> Logout</a></li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="section">
+            <div class="row">
+                <div class="input-field col s12">
+                    <select>
+                        <option value="1">2016 - Spring</option>
+                        <option value="2">2015 - Authum </option>
+                        <option value="3">2015 - Summer</option>
+                    </select>
+                    <label>Select Semester</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Buttons -->
+        <div class="admin-buttons">
+            <a class="waves-effect waves-light btn">Vefforritun</a>
+        </div>
+
+        <!-- Requires Grading -->
+        <div class="section">
+            <h5>Requires Grading</h5>
+            <ul class="collapsible popout" data-collapsible="accordion">
+                <!-- Assignment -->
+                <li class="assignment">
+                    <div class="collapsible-header">
+                        <div class="row">
+                            <div class="col s5">
+                                <span class="problem-title">
+                                    Problem 1
+                                </span>
+                            </div>
+                            <div class="col s2">
+                                <span>
+                                    Closed
+                                </span>
+                            </div>
+                            <div class="col s2">
+                                <span>
+                                    Forritun
+                                </span>
+                            </div>
+                            <div class="col s2">
+                                <span>
+                                    1 Problem
+                                </span>
+                            </div>
+                            <div class="col s1">
+                                <span class="align-right">
+                                    <a class='dropdown-button' href='#' data-activates='dropdown1'>
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                </span>
+                            </div>
+                            <!-- Drop Down 1 | Edit and Delete Assignment -->
+                            <ul id='dropdown1' data-alignment='right' class='dropdown-content'>
+                                <li>
+                                    <a class="waves-effect waves-light modal-trigger" href="#modal1">
+                                        Edit
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a class="waves-effect waves-light modal-trigger" href="#modal2">
+                                        Delete
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="collapsible-body">
+                        <ul class="collapsible">
+                            <li class="assignment">
+                                <div class="collapsible-header">
+                                    <div class="row">
+                                        <div class="col s5 problem-title">
+                                            Strings
+                                        </div>
+                                        <div class="col s2">
+                                            <span>
+                                                50%
+                                            </span>
+                                        </div>
+                                        <div class="col s3">
+                                            <span>
+                                                Students 213
+                                            </span>
+                                        </div>
+                                        <div class="col s2">
+                                            <span class="align-right">
+                                                <a class='dropdown-button' href='#' data-activates='dropdown2'>
+                                                    <i class="material-icons">more_vert</i>
+                                                </a>
+                                            </span>
+                                        </div>
+                                        <!-- Drop Down 2 | Edit and Delete Problem -->
+                                        <ul id='dropdown2' data-alignment='right' class='dropdown-content'>
+                                            <li>
+                                                <a class="waves-effect waves-light modal-trigger" href="#modal3">
+                                                    Edit
+                                                </a>
+                                            </li>
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a class="waves-effect waves-light modal-trigger" href="#modal4">
+                                                    Delete
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="collapsible-body">
+                                    <ul class="collapsible problems2" data-collapsible="accordion">
+                                        <li class="assignment">
+                                            <div class="collapsible-header">
+                                                    <div class="row">
+                                                        <div class="col s2">
+                                                            Steve Rogers
+                                                        </div>
+                                                        <div class="col s2">
+                                                            03.03.16 - 02:34
+                                                        </div>
+                                                        <div class="col s3">
+                                                            <a class="waves-effect waves-light btn">Download best</a>
+                                                        </div>
+                                                        <div class="input-field col s1 gradebox">
+                                                            <input placeholder="Grade" id="grade" type="text" class="validate">
+                                                        </div>
+                                                        <div class="col s2">
+                                                            <a class="waves-effect waves-light btn">Save</a>
+                                                        </div>
+                                                        <div class="col s1">
+                                                            Accepted
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <div class="collapsible-body">
+                                                <ul class="collection">
+                                                    <li class="collection-item">
+                                                        <div class="row">
+                                                            <div class="col s3">main.cpp</div>
+                                                            <div class="col s3">03.03.16 - 02:34</div>
+                                                            <div class="col s4"><a class="waves-effect waves-light btn">Download</a></div>
+                                                            <div class="col s2">Accepted</div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="collection-item">
+                                                        <div class="row">
+                                                            <div class="col s3">main.cpp</div>
+                                                            <div class="col s3">03.03.16 - 02:34</div>
+                                                            <div class="col s4"><a class="waves-effect waves-light btn">Download</a></div>
+                                                            <div class="col s2">Accepted</div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="collection-item">
+                                                        <div class="row">
+                                                            <div class="col s3">main.cpp</div>
+                                                            <div class="col s3">03.03.16 - 02:34</div>
+                                                            <div class="col s4"><a class="waves-effect waves-light btn">Download</a></div>
+                                                            <div class="col s2">Accepted</div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                </li>
+
+    <!-- Open Assignments -->
+    <div class="section">
+                    <h5>Open Assignments</h5>
+                    <ul class="collapsible popout" data-collapsible="accordion">
+                        <!-- Assignment -->
+                        <li class="assignment">
+                            <div class="collapsible-header"><i class="material-icons">subject</i>Skilaverkefni 4</div>
+                            <div class="collapsible-body">
+                                <ul class="collapsible problems" data-collapsible="accordion">
+                                    <li>
+                                        <div class="collapsible-header">
+                                            <div class="row">
+                                                <div class="col m3">
+                                                    <i class="material-icons">turned_in</i>
+                                                    <a href="teacher-grading.html">PredatorPrey</a>
+                                                </div>
+                                                <div class="col m2">
+                                                    <div class="grey-text center-align">
+                                                        <span>100%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col m2">
+                                                    <div class="grey-text center-align">
+                                                        <span>Submissions: 4</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col m3 center">
+                                                    <form action="#" method="post">
+                                                        <label for="predator" class="custom-file-upload">
+                                                            <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
+                                                                <i class="material-icons">insert_drive_file</i>
+                                                            </span>
+                                                        </label>
+                                                        <input id="predator" type="file" />
+                                                        <button class="btn-flat waves-effect waves-teal white testButton teal-text" type="submit" name="action">
+                                                            <span>Submit</span>
+                                                            <i class="material-icons right">send</i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                <div class="col m2 right-align">
+                                                    <a class="green-text problemStatus" href="#">Accepted <span class="material-icons">done</span></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <!-- Upcomming Assignments -->
+                        <div class="section">
+                            <h5>Upcomming Assignments</h5>
+                            <ul class="collapsible popout" data-collapsible="accordion">
+                                <!-- Assignment -->
+                                <li class="assignment">
+                                    <div class="collapsible-header"><i class="material-icons">subject</i>Skilaverkefni 4</div>
+                                    <div class="collapsible-body">
+                                        <ul class="collapsible problems" data-collapsible="accordion">
+                                            <li>
+                                                <div class="collapsible-header">
+                                                    <div class="row">
+                                                        <div class="col m3">
+                                                            <i class="material-icons">turned_in</i>
+                                                            <a href="teacher-grading.html">PredatorPrey</a>
+                                                        </div>
+                                                        <div class="col m2">
+                                                            <div class="grey-text center-align">
+                                                                <span>100%</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col m2">
+                                                            <div class="grey-text center-align">
+                                                                <span>Submissions: 4</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col m3 center">
+                                                            <form action="#" method="post">
+                                                                <label for="predator" class="custom-file-upload">
+                                                                    <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
+                                                                        <i class="material-icons">insert_drive_file</i>
+                                                                    </span>
+                                                                </label>
+                                                                <input id="predator" type="file" />
+                                                                <button class="btn-flat waves-effect waves-teal white testButton teal-text" type="submit" name="action">
+                                                                    <span>Submit</span>
+                                                                    <i class="material-icons right">send</i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                        <div class="col m2 right-align">
+                                                            <a class="green-text problemStatus" href="#">Accepted <span class="material-icons">done</span></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+    </main>
+
+    <!--Footer-->
+    <footer class="page-footer orange">
+        <div class="row">
+            <div class="col s12 center-align">
+                <p>&copy; Codex Team - Group 31</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Structure - Modal 1 - Edit Assignment -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Edit Assignment</h4>
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="Placeholder" id="title" type="text" class="validate">
+                        <label for="title">Title</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="textarea1" class="materialize-textarea"></textarea>
+                        <label for="textarea1">Textarea</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s3">
+                        <label for="opendate">Open Date</label>
+                        <input id="opendate" type="text" class="datepicker">
+                    </div>
+                    <div class="input-field col s3">
+                        <label for=duedate">Due Date</label>
+                        <input id="duedate" type="text" class="datepicker">
+                    </div>
+                    <div class="input-field col s6">
+                        <select>
+                            <option value="" disabled selected>Max collaborators</option>
+                            <option value="1">1 collaborators</option>
+                            <option value="2">2 collaborators</option>
+                            <option value="3">3 collaborators</option>
+                        </select>
+                        <label>Max collaborators</label>
+                    </div>
+                </div>
+                <h5>Problems</h5>
+                <div class="row">
+                    <div class="input-field col s5">
+                        <select>
+                            <option value="" disabled selected>Choose Problem</option>
+                            <option value="1">Problem 1</option>
+                            <option value="2">Problem 2</option>
+                            <option value="3">Problem 3</option>
+                        </select>
+                        <label>Choose Problem</label>
+                    </div>
+                    <div class="input-field col s2">
+                        <input id="icon_prefix" type="text" class="validate">
+                        <label for="icon_prefix">Weight</label>
+                    </div>
+                    <div class="input-field col s4">
+                        <select>
+                            <option value="" disabled selected>Max submissions</option>
+                            <option value="1">1 submission</option>
+                            <option value="2">2 submissions</option>
+                            <option value="3">3 submissions</option>
+                        </select>
+                        <label>Max submissions</label>
+                    </div>
+                    <div class="input-field" col s1">
+                        <a href="#"><i class="material-icons">clear</i></a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s5">
+                        <a href="#"><i class="material-icons">add</i></a>
+                        <span>Add another problem</span>
+                    </div>
+                </div>
+            </form>
+                    <div class="modal-footer">
+                        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Change Password</a>
+                        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+                    </div>
+            </div>
+    </div>
+
+    <!-- Modal Structure - Modal 2 - Delete Assignment -->
+    <div id="modal2" class="modal">
+                <div class="modal-content">
+                    <h4>Delete Assignment</h4>
+                    <p>Are you sure you want to delete assignment?</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Delete User</a>
+                    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+                </div>
+            </div>
+    
+    <!-- Modal Structure - Modal 3 - Edit Problem -->
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <h4>Edit Problem</h4>
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="edit_problem" type="text" class="validate">
+                        <label for="edit_problem">Problem name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="textarea1" class="materialize-textarea"></textarea>
+                        <label for="textarea1">Textarea</label>
+                    </div>
+                </div>
+                <div class="row">
+                   <div class="input-field col s6">
+                        <select>
+                            <option value="" disabled selected>Course</option>
+                            <option value="1">Forritun</option>
+                            <option value="2">Gagnaskipan</option>
+                            <option value="3">Greining og hönnun</option>
+                        </select>
+                        <label>Course</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <select>
+                            <option value="" disabled selected>Programming Language</option>
+                            <option value="1">C++</option>
+                            <option value="2">C#</option>
+                            <option value="3">Java Script</option>
+                        </select>
+                        <label>Programming Language</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <select>
+                            <option value="" disabled selected>Allowed Filetype</option>
+                            <option value="1">.zip</option>
+                            <option value="2">.cpp</option>
+                            <option value="3">.h</option>
+                        </select>
+                        <label>Allowed Filetype</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <a class="waves-effect waves-light btn">Choose File...</a>
+                        <label>Choose File:</label>
+                    </div>
+                </div>
+                <h5>Test Cases</h5>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="textarea2" class="materialize-textarea"></textarea>
+                        <label for="textarea2">Input</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="textarea3" class="materialize-textarea"></textarea>
+                        <label for="textarea3">Output</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s5">
+                        <a href="#"><i class="material-icons">add</i></a>
+                        <span>Add another test case</span>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Change Password</a>
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Structure - Modal 4 - Delete Problem -->
+    <div id="modal4" class="modal">
+        <div class="modal-content">
+            <h4>Delete Assignment</h4>
+            <p>Are you sure you want to delete assignment?</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Delete User</a>
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+        </div>
+    </div>
+
+    <!--  Scripts-->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="js/materialize.js"></script>
+    <script src="js/init.js"></script>
+
+</body>
+</html>

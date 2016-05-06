@@ -399,7 +399,8 @@ namespace Codex.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return View("Login");
+            return RedirectToAction("Login");
+            //return View("Login");
         }
 
         //
