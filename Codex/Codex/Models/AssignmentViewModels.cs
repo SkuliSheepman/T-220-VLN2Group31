@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Codex.Models
@@ -11,6 +12,9 @@ namespace Codex.Models
         public int CourseInstanceId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public DateTime? StartTIme { get; set; }
+        public DateTime? EndTIme { get; set; }
+        public int MaxCollaborators { get; set; }
         public List<ProblemViewModel> AssignmentProblems { get; set; }
 
     }
@@ -18,8 +22,14 @@ namespace Codex.Models
     public class AssignmentCreationViewModel
     {
 
-        // NICHT FINISHED
-        //public int max { get; set; }
+        public int CourseInstanceId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public DateTime? StartTIme { get; set; }
+        public DateTime? EndTIme { get; set; }
+        public int MaxCollaborators { get; set; }
+        public List<int> AssignmentProblems { get; set; }
+
 
     }
 
