@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Codex.DAL;
 using Codex.Models;
 using Codex.Services;
-
+/*
 namespace Codex.Services
 {
 
@@ -30,18 +30,21 @@ namespace Codex.Services
 
 
         }
-        /*
-        public List<UserViewModel> GetAssignmentCollaborators(int Id)
+       
+        public List<ApplicationUser> GetAssignmentCollaborators(int Id)
         {
+
             var collabrators = (from _assignment in _db.Assignments
                                 join _relation in _db.AssignmentGroups on _assignment.Id equals _relation.AssignmentId
                                 join _users in _db.AspNetUsers on _relation.UserId equals _users.Id
-                                select _users).Select(_users => new UserViewModel
+                                select _users).Select(_users => new ApplicationUser
                                 {
+                                    Id = _users.Id;
                                     
-                                })
+                                }).ToList();
+        
         }
-        */
+        
         /// <summary>
         /// gets an assignment and it's related problems by assignment id
         /// </summary>
