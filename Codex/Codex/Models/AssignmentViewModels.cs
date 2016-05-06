@@ -16,6 +16,7 @@ namespace Codex.Models
         public DateTime? EndTIme { get; set; }
         public int MaxCollaborators { get; set; }
         public List<ProblemViewModel> AssignmentProblems { get; set; }
+        public List<UserViewModel> AssignmentCollaborators { get; set; }
 
     }
 
