@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Codex.Controllers;
 using Codex.DAL;
 using Codex.Models;
+using Codex.Models.AdminHelperModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -21,12 +22,31 @@ namespace Codex.Services
             _db = new ApplicationDbContext();
         }
 
-        /* The methods CreateUser, UserExists, CreateRole and AddUserToRole
+        public bool DeleteUserById(string id) {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+            var appUser = um.FindById(id);
+            var result = um.Delete(appUser);
+
+            return result.Succeeded;
+        }
+
+        public bool DeleteUsersByIds(List<string> userIds) {
+            foreach (var id in userIds) {
+                var result = DeleteUserById(id);
+
+                if (!result) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /* The methods CreateUser, GetUser, UserExists, CreateRole and AddUserToRole
          * are methods given in Lab 7 in Web Programming by Patrekur Patreksson
          */
 
-        public bool CreateUser(ApplicationUser user)
-        {
+        public bool CreateUser(ApplicationUser user) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             var idResult = um.Create(user, user.Email);
             return idResult.Succeeded;
@@ -42,12 +62,21 @@ namespace Codex.Services
             var idResult = rm.Create(new IdentityRole(name));
             return idResult.Succeeded;
         }
-        
-        public bool AddUserToRole(string userId, string roleName)
-        {
+
+        public bool AddUserToRole(string userId, string roleName) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             var idResult = um.AddToRole(userId, roleName);
             return idResult.Succeeded;
+        }
+
+        public List<ApplicationUser> GetAllUsers() {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+            return um.Users.ToList();
+        }
+
+        public ApplicationUser GetUser(string name) {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+            return um.FindByName(name);
         }
     }
 }

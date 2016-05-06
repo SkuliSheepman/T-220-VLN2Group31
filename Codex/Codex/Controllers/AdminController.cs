@@ -12,7 +12,10 @@ namespace Codex.Controllers
     {
         public ActionResult Users()
         {
+            UserService userService = new UserService();
+
             UserViewModel model = new UserViewModel();
+            model.Users = userService.GetAllUsers();
             return View(model);
         }
 
@@ -39,6 +42,14 @@ namespace Codex.Controllers
             courseService.CreateCourse(newCourse);
 
             return Json(newCourse);
+        }
+
+        public ActionResult DeleteSelectedUsers(List<string> userIds) {
+            UserService userService = new UserService();
+
+            var result = userService.DeleteUsersByIds(userIds);
+
+            return Json(result);
         }
     }
 }

@@ -67,8 +67,35 @@
         return false;
     });
 
-    $("#create-course-button").on("click", function () {
+    $("#create-course-button").on("click", function() {
         console.log("Clicked");
         $("#create-course-form").submit();
+    });
+
+    // Admin - Delete selected users
+    $("#delete-selected-users").on("click", function () {
+        console.log("Clicked");
+        var users = $("input[type='checkbox'][name='user-row']:checked").map(function() {
+            return this.value;
+        }).get();
+
+        $.ajax({
+            url: form.attr("action"),
+            data: users,
+            method: "POST",
+            success: function (responseData) {
+                if (responseData) {
+                    Materialize.toast("Users deleted", 4000);
+                    
+                }
+                else {
+                    Materialize.toast("An error occurred", 4000);
+                }
+                
+            },
+            error: function () {
+                // TODO
+            }
+        });
     });
 });
