@@ -164,6 +164,12 @@ input[type="file"] {
   background-color: #fff;
 }
 
+.problems2 {
+  width: 95%;
+  margin: 1em auto;
+  background-color: #fff;
+}
+
 .problems > li > div > .row{
   margin: 0;
 }
@@ -219,4 +225,43 @@ input[type="file"] {
 .section-table {
     width: 90%;
     margin: 1em auto 2em auto;
+}
+
+/* Teacher Page */
+
+.problem-title {
+    font-weight: bold;
+    width: 6em;
+    float: left;
+} 
+
+.problem-info {
+    float: right;
+    width: 8em;
+}
+
+.media-insert .modal {
+  max-height: 100%;
+  overflow: visible;
+}
+.modal { max-height: 100%; }
+
+/* Date Picker */
+.modal .material-icons {
+    margin: 0.7em auto;
+}
+
+/* Date Picker */
+.picker__date-display {
+    display: none;
+}
+
+.submissions {
+    background-color: white;
+    margin: 0 auto;
+    width: 95%;
+}
+
+.gradebox {
+    margin:0;
 }
