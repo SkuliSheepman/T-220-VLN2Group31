@@ -1,8 +1,14 @@
 ﻿$(document).ready(function () {
     // Initialization
     $(".modal-trigger").leanModal();
-    $(".tab > a").click(function() {
-        $(this).unbind("click");
+
+    // Move hidden inputs at the bottom of their container, to avoid CSS styling errors in Materialize
+    $("input[type='hidden']").each(function () {
+        var copy = $(this).clone();
+        var parent = $(this).parent();
+        $(this).remove();
+        parent.append(copy);
+        
     });
 
     // Admin - Create new user form

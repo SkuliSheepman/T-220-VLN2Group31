@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Codex.DAL;
+using Codex.Models.SharedModels.SharedViewModels;
 using Codex.Models;
 using Codex.Services;
 
@@ -13,25 +14,72 @@ namespace Codex.Services
     public class AssignmentService
     {
 
-        /*private Database _db;
+        private Database _db;
+        private ProblemService _problemService;
 
         public AssignmentService()
         {
 
             _db = new Database();
+            _problemService = new ProblemService();
 
         }
 
         /// <summary>
         /// creates an assignment
         /// </summary>
-        public void CreateAssignment(AssignmentCreationViewModel nu)
+        public void CreateAssignment(AssignmentCreationViewModel newAssignmentViewModel)
         {
+
+            // new assignment entry entity
+            var newAssignment = new Assignment
+            {
+                CourseInstanceId = newAssignmentViewModel.CourseInstanceId,
+                Name = newAssignmentViewModel.Name,
+                Description = newAssignmentViewModel.Description,
+                StartTime = newAssignmentViewModel.StartTime,
+                EndTime = newAssignmentViewModel.EndTIme,
+                MaxCollaborators = newAssignmentViewModel.MaxCollaborators
+            };
+
+            newAssignment = _db.Assignments.Add(newAssignment);
+
+            foreach (var _problemId in newAssignmentViewModel.AssignmentProblems)
+            {
+
+                var relation = new AssignmentProblem
+                {
+                    AssignmentId = newAssignment.Id,
+                    ProblemId = _problemId
+                };
+
+                _db.AssignmentProblems.Add(relation);
+
+            }
+
+            try
+            {
+
+                _db.SaveChanges();
+
+
+            } catch ( Exception e )
+            {
+
+                //throw stuff
+
+            }
+
+        }
+
+        public void GetAssignment(int assignmentId)
+        {
+
 
 
         }
        
-        public List<ApplicationUser> GetAssignmentCollaborators(int Id)
+        /*public List<ApplicationUser> GetAssignmentCollaborators(int Id)
         {
 
             var collabrators = (from _assignment in _db.Assignments
@@ -134,7 +182,7 @@ namespace Codex.Services
         {
             // Some Error message
         }
-    } */
+    }*/
 
    }
 }
