@@ -18,23 +18,45 @@
             {
                 <ul class="collapsible popout" data-collapsible="accordion">
                     @foreach (var assignment in Model.Assignments)
-                {
-                    if (assignment.EndTIme < DateTime.Now)
                     {
+                        if (assignment.EndTIme < DateTime.Now)
+                        {
                             <li class="collapsible-level1">
                                 <div class="collapsible-header">
                                     <div class="row clear-margin">
                                         <div class="col s3 truncate">
-                                            <label for="@assignment.Id">
-                                                <span class="transparent-text">.</span>
-                                            </label>
-                                            <span>@assignment.EndTIme</span>
+                                            <div class="col s3">
+                                                <span>@assignment.Name</span>
+                                            </div>
+                                            <span class="col s3"><a class="waves-effect waves-light btn" href="#!">Details</a></span>
+                                            <span class="col s3">@assignment.EndTIme</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="collapsible-body">
                                     <div class="card-panel collapsible-body-container">
-                                        test
+                                        @if (assignment.AssignmentProblems.Count > 0)
+                                        {
+                                            <ul class="collapsible popout" data-collapsible="accordion">
+                                                @foreach (var problem in assignment.AssignmentProblems)
+                                                {
+                                                    <li class="collapsible-level1">
+                                                        <div class="row clear-margin">
+                                                            <div class="col s3 truncate">
+                                                                <label for="@problem.Name">
+                                                                    <span class="transparent-text">.</span>
+                                                                </label>
+                                                                <span>@problem.Filetype</span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            <div>This assignment has no problems.</div>
+                                        }
                                     </div>
                                 </div>
                             </li>
@@ -70,7 +92,28 @@
                             </div>
                             <div class="collapsible-body">
                                 <div class="card-panel collapsible-body-container">
-                                    test
+                                    @if (assignment.AssignmentProblems.Count > 0)
+                                    {
+                                        <ul class="collapsible popout" data-collapsible="accordion">
+                                            @foreach (var problem in assignment.AssignmentProblems)
+                                            {
+                                                <li class="collapsible-level1">
+                                                    <div class="row clear-margin">
+                                                        <div class="col s3 truncate">
+                                                            <label for="@problem.Name">
+                                                                <span class="transparent-text">.</span>
+                                                            </label>
+                                                            <span>@problem.Filetype</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <div>This assignment has no problems.</div>
+                                    }
                                 </div>
                             </div>
                         </li>
@@ -82,5 +125,6 @@
         {
             //do nothing
         }
+        </div>
 </body>
 </html>

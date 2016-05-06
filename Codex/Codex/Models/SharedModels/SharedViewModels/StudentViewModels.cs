@@ -7,7 +7,7 @@ namespace Codex.Models.SharedModels.SharedViewModels
 {
     public class StudentViewModel
     {
-        //public UserViewModel User { get; set; }
+        //public SomeViewModel User { get; set; }  todo
         public List<AssignmentViewModel> Assignments { get; set; }
     }
 
