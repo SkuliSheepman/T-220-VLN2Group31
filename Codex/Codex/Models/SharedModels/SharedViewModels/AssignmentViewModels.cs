@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Codex.Models.AdminModels.AdminViewModels;
 
-namespace Codex.Models
+namespace Codex.Models.SharedModels.SharedViewModels
 {
 
     public class AssignmentViewModel

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using Codex.Models.AdminHelperModels;
+using Codex.Models.AdminModels.AdminHelperModels;
 
-namespace Codex.Models
+namespace Codex.Models.AdminModels.AdminViewModels
 {
     public class UserViewModel
     {

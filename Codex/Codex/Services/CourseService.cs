@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Codex.DAL;
-using Codex.Models;
-using Codex.Models.AdminHelperModels;
+using Codex.Models.AdminModels.AdminViewModels;
+using Codex.Models.AdminModels.AdminHelperModels;
 
-namespace Codex.Models
+namespace Codex.Services
 {
     public class CourseService
     {

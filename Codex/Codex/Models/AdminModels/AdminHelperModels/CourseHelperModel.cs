@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Codex.Models.AdminHelperModels
+namespace Codex.Models.AdminModels.AdminHelperModels
 {
     public class CourseHelperModel
     {
