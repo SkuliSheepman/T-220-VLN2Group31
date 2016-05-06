@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using Codex.Models.AdminHelperModels;
@@ -17,6 +18,9 @@ namespace Codex.Models
     {
         public string Name { get; set; }
         public string Email { get; set; }
+
+        [Display(Name = "Admin")]
+        public bool Admin { get; set; }
         public List<UserCoursesHelperModel> UserCourses { get; set; }
     }
 

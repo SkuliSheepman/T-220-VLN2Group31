@@ -13,6 +13,7 @@
         var formData = {
             "Name": $("#NewUserModel_Name").val(),
             "Email": $("#NewUserModel_Email").val(),
+            "Admin": $("#NewUserModel_Admin").val(),
             "UserCourses": [
                 {
                     
@@ -80,13 +81,16 @@
         }).get();
 
         $.ajax({
-            url: form.attr("action"),
-            data: users,
+            url: "/Admin/DeleteSelectedUsers",
+            data: JSON.stringify(users),
             method: "POST",
+            contentType: "application/json",
             success: function (responseData) {
                 if (responseData) {
                     Materialize.toast("Users deleted", 4000);
-                    
+                    $("input[type='checkbox'][name='user-row']:checked").each(function() {
+                        $(this).closest("li").remove();
+                    });
                 }
                 else {
                     Materialize.toast("An error occurred", 4000);
