@@ -5,6 +5,7 @@ using System.Web;
 using Codex.DAL;
 using Codex.Models.AdminModels.AdminViewModels;
 using Codex.Models.AdminModels.AdminHelperModels;
+using Codex.Models;
 
 namespace Codex.Services
 {
@@ -12,13 +13,18 @@ namespace Codex.Services
     {
 
         private Database _db;
+        private UserService _userService;
 
         public CourseService()
         {
             _db = new Database();
+            _userService = new UserService();
         }
 
-        public void CreateCourse(NewCourseViewModel newCourseViewModel)
+        // <summary>
+        // Create a course
+        // </summary>
+        public bool CreateCourse(NewCourseViewModel newCourseViewModel)
         {
 
             var _course = _db.Courses.SingleOrDefault(x => x.Name == newCourseViewModel.Name);
@@ -42,17 +48,18 @@ namespace Codex.Services
 
             try
             {
-
                 _db.SaveChanges();
-
+                return true;
             } catch ( Exception e )
             {
-                // halp
-                return;
+                return false;
             }
 
         }
 
+        // <summary>
+        // Get all course instances
+        // </summary>
         public List<CourseHelperModel> GetAllCourseInstances()
         {
 
@@ -60,15 +67,98 @@ namespace Codex.Services
                                    join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
                                    select new { _courseInstance, _course }).Select(_coursePair => new CourseHelperModel
                                    {
-                                       Id          = _coursePair._courseInstance.Id,
-                                       Name        = _coursePair._course.Name,
+
+                                       Id = _coursePair._courseInstance.Id,
+                                       Name = _coursePair._course.Name,
                                        Description = _coursePair._course.Description,
-                                       Year        = _coursePair._courseInstance.Year,
-                                       Semester    = _coursePair._courseInstance.SemesterId
+                                       Year = _coursePair._courseInstance.Year,
+                                       Semester = _coursePair._courseInstance.SemesterId
 
                                    }).ToList();
 
             return courseInstances;
+
+        }
+
+        public bool DeleteCourseById(int courseId) {
+
+            /*var course = _db.Courses.FirstOrDefault(x => x.Id == courseId);
+            var courseInstances = _db.CourseInstances.Where(x => x.CourseId == course.Id);
+
+            foreach (var _courseInstance in courseInstances)
+            {
+                _db.CourseInstances.Remove(_courseInstance);
+            }
+
+            try
+            {
+                _db.SaveChanges();
+                return true;
+            } catch ( Exception e )
+            {
+                return false;
+            }*/
+
+            return false;
+
+        }
+
+        // <summary>
+        // Get all students in a course instance with a given id
+        // </summary>
+        public List<ApplicationUser> GetAllUsersInCourseInstance(int courseInstanceId)
+        {
+
+            var users = (from _user in _db.AspNetUsers
+                         where _user.CourseInstances.Any(x => x.Id == courseInstanceId)
+                         select _user);
+
+            var applicationUsers = new List<ApplicationUser>();
+
+            foreach (var _user in users)
+                applicationUsers.Add(_userService.GetUserById(_user.Id));
+
+
+            return applicationUsers;
+                             
+        }
+
+        // <summary>
+        // Get all students in a course instance with a given id
+        // </summary>
+        public List<ApplicationUser> GetAllStudentsInCourseInstance(int courseInstanceId)
+        {
+
+            var students = (from _user in _db.AspNetUsers
+                            where _user.CourseInstances.Any(x => x.Id == courseInstanceId)
+                            select _user);
+
+            var applicationStudents = new List<ApplicationUser>();
+
+            foreach (var _student in students)
+                applicationStudents.Add(_userService.GetUserById(_student.Id));
+
+            return applicationStudents;
+
+        }
+
+        // <summary>
+        // Get all students in a course instance with a given id
+        // </summary>
+        public bool DeleteCourseInstance(int courseInstanceId)
+        {
+
+            var courseInstance = _db.CourseInstances.FirstOrDefault(x => x.Id == courseInstanceId);
+
+            try
+            {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
 
         }
 

@@ -5,7 +5,13 @@ using System.Web;
 
 namespace Codex.Models.SharedModels.SharedViewModels
 {
-    public class TestCaseViewModel
+    public class CourseViewModel
     {
+        
+    }
+
+    public class CourseCreationViewModel
+    {
+
     }
 }

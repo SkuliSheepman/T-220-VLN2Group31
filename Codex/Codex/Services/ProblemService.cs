@@ -31,6 +31,9 @@ namespace Codex.Services
         public ProblemViewModel GetProblem(int problemId)
         {
             var problem = _db.Problems.SingleOrDefault(x => x.Id == problemId);
+            if (problem == null)
+                return new ProblemViewModel();
+
             return new ProblemViewModel
             {
                 Id = problem.Id,
@@ -61,9 +64,9 @@ namespace Codex.Services
 
         }
 
-        // <summary>
-        // Gets all problems related to a specific course instances
-        // </summary>
+        /// <summary>
+        /// Gets all problems related to a specific course instances
+        /// </summary>
         public List<ProblemViewModel> GetAllProblemsInCourseInstance(int Id)
         {
 
@@ -85,9 +88,9 @@ namespace Codex.Services
 
         }
 
-        // <summary>
-        // Removes a problem from all assignments
-        // </summary>
+        /// <summary>
+        /// Removes a problem from all assignments
+        /// </summary>
         public void RemoveProblem(int problemId)
         {
 
@@ -107,10 +110,10 @@ namespace Codex.Services
 
         }
 
-        // <summary>
-        // Deletes a problem in the database that exists with the parameter Id as problem.Id
-        // </summary>
-        public void DeleteProblem(int problemId)
+        /// <summary>
+        /// Deletes a problem in the database that exists with the parameter Id as problem.Id
+        /// </summary>
+        public bool DeleteProblem(int problemId)
         {
 
             var problem = _db.Problems.Where(x => x.Id == problemId).SingleOrDefault();
@@ -118,24 +121,23 @@ namespace Codex.Services
             RemoveProblem(problemId);
 
             if (problem != null)
-            {
                 _db.Problems.Remove(problem);
-            }
 
             try
             {
                 _db.SaveChanges();
+                return true;
             } catch ( Exception e )
             {
-                //throw stuff
+                return false;
             }
 
         }
 
-        // <summary>
-        // Removes a problem from all related assignments
-        // </summary>
-        public void RemoveProblemFromAssignment(int problemId, int assignmentId)
+        /// <summary>
+        /// Removes a problem from a specified assignment
+        /// </summary>
+        public bool RemoveProblemFromAssignment(int problemId, int assignmentId)
         {
 
             var relation = (from _relation in _db.AssignmentProblems
@@ -144,20 +146,22 @@ namespace Codex.Services
                             select _relation);
 
             foreach (var _relation in relation)
-            {
                 _db.AssignmentProblems.Remove(_relation);
-            }
 
             try
             {
                 _db.SaveChanges();
+                return true;
             } catch ( Exception e )
             {
-                // throw stuff
+                return false;
             }
 
         }
 
+        /// <summary>
+        /// Removes all problems from a specified assignment
+        /// </summary>
         public void RemoveProblemsFromAssignment(int assignmentId)
         {
 
@@ -167,9 +171,7 @@ namespace Codex.Services
 
             // Destroy the relations
             foreach (var _problemId in problemIds)
-            {
                 RemoveProblemFromAssignment(_problemId, assignmentId);
-            }
 
         }
 

@@ -16,21 +16,20 @@ namespace Codex.Services
 
         private Database _db;
         private ProblemService _problemService;
+        private CourseService _courseService;
         
 
         public AssignmentService()
         {
-
             _db = new Database();
             _problemService = new ProblemService();
-            
-
+            _courseService = new CourseService();
         }
 
         /// <summary>
-        /// creates an assignment
+        /// creates a new assignment
         /// </summary>
-        public void CreateAssignment(AssignmentCreationViewModel newAssignmentViewModel)
+        public bool CreateAssignment(AssignmentCreationViewModel newAssignmentViewModel)
         {
 
             // new assignment entry entity
@@ -46,6 +45,7 @@ namespace Codex.Services
 
             newAssignment = _db.Assignments.Add(newAssignment);
 
+            // assign problems to the assignment
             foreach (var _problemId in newAssignmentViewModel.AssignmentProblems)
             {
 
@@ -59,39 +59,47 @@ namespace Codex.Services
 
             }
 
+            var students = _courseService.GetAllStudentsInCourseInstance(newAssignmentViewModel.CourseInstanceId);
+
+            // create groups for students
+            foreach (var _student in students)
+            {
+
+                _db.AssignmentGroups.Add(new AssignmentGroup
+                {
+
+                    UserId       = _student.Id,
+                    AssignmentId = newAssignment.Id,
+
+                });
+
+            }
+
             try
             {
-
                 _db.SaveChanges();
-
-
-            } catch ( Exception e )
+                return true;
+            } catch (Exception e)
             {
-
-                //throw stuff
-
+                return false;
             }
 
         }
 
-        public List<ApplicationUser> GetAssignmentCollaborators(int Id)
-        {
-
-            var collaborators = (from _relation in _db.AssignmentGroups
-                                 join _users in _db.AspNetUsers on _relation.UserId equals _users.Id
-                                 where _relation.AssignmentId == Id
-                                 select _users).Select(_users => new ApplicationUser
-                                 {
-                                     Id = _users.Id
-                                 }).ToList();
-
-            return collaborators;
-
-        }
-
+        /// <summary>
+        /// Gets an assignment with the specified argument ID
+        /// </summary>
         public AssignmentViewModel GetAssignment(int assignmentId)
         {
+
+            // gets the assignment with the specified ID if it exists
             var assignment = _db.Assignments.SingleOrDefault(x => x.Id == assignmentId);
+
+            // if it doesn't exist and the query has returned null the function returns an empty viewmodel
+            if (assignment == null)
+                return new AssignmentViewModel();
+
+            // if it does exist then we populate a new view model with the returned query results
             return new AssignmentViewModel
             {
                 Id = assignment.Id,
@@ -102,43 +110,26 @@ namespace Codex.Services
                 EndTIme = assignment.EndTime,
                 MaxCollaborators = assignment.MaxCollaborators,
                 AssignmentProblems = _problemService.GetAllProblemsInAssignment(assignmentId),
-                AssignmentCollaborators = GetAssignmentCollaborators(assignmentId)
+                //AssignmentCollaborators = GetAssignmentCollaborators(assignmentId)
             };
 
-
         }
-       
-        
-        
+      
         /// <summary>
         /// gets an assignment and it's related problems by assignment id
         /// </summary>
-        public AssignmentViewModel GetAssignmentById(int Id)
+        public AssignmentViewModel GetAssignmentById(int assignmentId)
         {
 
-            var assignment = _db.Assignments.SingleOrDefault(x => x.Id == Id);
+            // finds the assignment and make sure it exists
+            var assignment = _db.Assignments.SingleOrDefault(x => x.Id == assignmentId);
             if (assignment == null)
-            {
+                return new AssignmentViewModel();
 
-                // throw something :D
+            // gets all problems related to the assignment
+            var problems = _problemService.GetAllProblemsInAssignment(assignmentId);
 
-            }
-
-            var problems = (from _assignment in _db.Assignments
-                            join _relation in _db.AssignmentProblems on _assignment.Id equals _relation.AssignmentId
-                            join _problem in _db.Problems on _relation.ProblemId equals _problem.Id
-                            select _problem).Select(_problem => new ProblemViewModel
-                            {
-
-                                Id = _problem.Id,
-                                Name = _problem.Name,
-                                Description = _problem.Description,
-                                Filetype = _problem.Filetype,
-                                Attachment = _problem.Attachment,
-                                Language = _problem.Language
-
-                            }).ToList();
-
+            // creates a viewmodel which is to be returned
             var viewModel = new AssignmentViewModel
             {
 
@@ -154,52 +145,50 @@ namespace Codex.Services
         ///<summary>
         /// get all assignments and their problems from a course instance
         ///</summary>
-        public List<AssignmentViewModel> GetAssignmentsInCourseInstance(int Id)
+        public List<AssignmentViewModel> GetAssignmentsInCourseInstance(int courseInstanceId)
         {
-            
 
+            // gets all assignment ids related to a course instance
+            var assignmentIds = (from _assignment in _db.Assignments
+                               where _assignment.CourseInstanceId == courseInstanceId
+                               select _assignment.Id).ToList();
 
-            var assignments = (from _courseInstance in _db.CourseInstances
-                               join _assignment in _db.Assignments on _courseInstance.Id equals _assignment.Id
-                               select _assignment).Select(_assignment => new AssignmentViewModel
-                               {
+            // creates a new list of view models which is to be returned
+            var assignments = new List<AssignmentViewModel>();
 
-                                   Id = _assignment.Id,
-                                   CourseInstanceId = _assignment.CourseInstanceId,
-                                   Name = _assignment.Name,
-                                   Description = _assignment.Description,
-                                   AssignmentProblems = _problemService.GetAllProblemsInAssignment(Id),
-                                   AssignmentCollaborators = GetAssignmentCollaborators(Id)
+            // populates the list defined above with view models
+            foreach (var _assignmentId in assignmentIds)
+                assignments.Add(GetAssignmentById(_assignmentId));
 
-
-
-                               }).ToList();
             return assignments;
 
         }
-    /// <summary>
-    /// Removes all problems from the marked assignment and the then deletes it
-    /// </summary>
-    public void DeleteAssignmentById(int Id)
-    {
-        
-        _problemService.RemoveProblemsFromAssignment(Id);
 
-        var assignment = _db.Assignments.Where(x => x.Id == Id).FirstOrDefault();
+        /// <summary>
+        /// Removes all problems from the marked assignment and the then deletes it
+        /// </summary>
+        public bool DeleteAssignmentById(int assignmentId)
+        {
 
-        if (assignment != null)
-        {
-            _db.Assignments.Remove(assignment);
+            var assignmentToDelete = _db.Assignments.SingleOrDefault(x => x.Id == assignmentId);
+            if (assignmentToDelete != null)
+            {
+                _problemService.RemoveProblemsFromAssignment(assignmentToDelete.Id);
+                _db.Assignments.Remove(assignmentToDelete);
+            }
+
+            try
+            {
+                _db.SaveChanges();
+                return true;
+            }
+            catch ( Exception e )
+            {
+                return false;
+            }
+
         }
-        try
-        {
-            _db.SaveChanges();
-        }
-        catch
-        {
-            // Some Error message
-        }
+
     }
 
-   }
 }
