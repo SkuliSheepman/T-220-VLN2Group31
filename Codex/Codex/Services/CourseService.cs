@@ -39,8 +39,8 @@ namespace Codex.Services
 
             CourseInstance newCourseInstance = new CourseInstance()
             {
-                CourseId   = _course.Id,
-                Year       = newCourseViewModel.Year,
+                CourseId = _course.Id,
+                Year = newCourseViewModel.Year,
                 SemesterId = newCourseViewModel.Semester
             };
 
@@ -50,7 +50,8 @@ namespace Codex.Services
             {
                 _db.SaveChanges();
                 return true;
-            } catch ( Exception e )
+            }
+            catch (Exception e)
             {
                 return false;
             }
@@ -72,14 +73,9 @@ namespace Codex.Services
                                        Id = _coursePair._courseInstance.Id,
                                        Name = _coursePair._course.Name,
                                        Description = _coursePair._course.Description,
-<<<<<<< HEAD
                                        Year = _coursePair._courseInstance.Year,
-                                       Semester = _coursePair._courseInstance.SemesterId
-=======
-                                       Year        = _coursePair._courseInstance.Year,
-                                       SemesterId  = _coursePair._courseInstance.SemesterId,
-                                       Semester    = _coursePair._semester.Name
->>>>>>> 88b1f8bf07096874f45dbcdc772e1304dc27aa90
+                                       SemesterId = _coursePair._courseInstance.SemesterId,
+                                       Semester = _coursePair._semester.Name
 
                                    }).ToList();
 
@@ -87,7 +83,8 @@ namespace Codex.Services
 
         }
 
-        public bool DeleteCourseById(int courseId) {
+        public bool DeleteCourseById(int courseId)
+        {
 
             /*var course = _db.Courses.FirstOrDefault(x => x.Id == courseId);
             var courseInstances = _db.CourseInstances.Where(x => x.CourseId == course.Id);
@@ -127,7 +124,7 @@ namespace Codex.Services
 
 
             return applicationUsers;
-                             
+
         }
 
         // <summary>
