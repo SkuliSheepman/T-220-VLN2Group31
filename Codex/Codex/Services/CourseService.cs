@@ -11,12 +11,10 @@ namespace Codex.Services
 {
     public class CourseService
     {
-
         private Database _db;
         private UserService _userService;
 
-        public CourseService()
-        {
+        public CourseService() {
             _db = new Database();
             _userService = new UserService();
         }
@@ -24,12 +22,9 @@ namespace Codex.Services
         // <summary>
         // Create a course
         // </summary>
-        public bool CreateCourse(NewCourseViewModel newCourseViewModel)
-        {
-
+        public bool CreateCourse(NewCourseViewModel newCourseViewModel) {
             var _course = _db.Courses.SingleOrDefault(x => x.Name == newCourseViewModel.Name);
-            Course newCourse = new Course()
-            {
+            Course newCourse = new Course() {
                 Name = newCourseViewModel.Name,
                 Description = newCourseViewModel.Description
             };
@@ -37,14 +32,33 @@ namespace Codex.Services
             if (_course == null)
                 _course = _db.Courses.Add(newCourse);
 
-            CourseInstance newCourseInstance = new CourseInstance()
-            {
+            CourseInstance newCourseInstance = new CourseInstance() {
                 CourseId = _course.Id,
                 Year = newCourseViewModel.Year,
                 SemesterId = newCourseViewModel.Semester
             };
 
             _db.CourseInstances.Add(newCourseInstance);
+
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
+
+        // <summary>
+        // Update a course
+        // </summary>
+        public bool UpdateCourse(CourseHelperModel course) {
+            var courseInstance = _db.CourseInstances.SingleOrDefault(x => x.Id == course.Id);
+
+            if (courseInstance != null) {
+                courseInstance.SemesterId = course.SemesterId;
+                courseInstance.Year = course.Year;
+            }
 
             try
             {
@@ -55,37 +69,29 @@ namespace Codex.Services
             {
                 return false;
             }
-
         }
 
         // <summary>
         // Get all course instances
         // </summary>
-        public List<CourseHelperModel> GetAllCourseInstances()
-        {
-
+        public List<CourseHelperModel> GetAllCourseInstances() {
             var courseInstances = (from _courseInstance in _db.CourseInstances
                                    join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
                                    join _semester in _db.Semesters on _courseInstance.SemesterId equals _semester.Id
-                                   select new { _courseInstance, _course, _semester }).Select(_coursePair => new CourseHelperModel
-                                   {
-
+                                   select new {_courseInstance, _course, _semester}).Select(_coursePair => new CourseHelperModel {
                                        Id = _coursePair._courseInstance.Id,
+                                       CourseId = _coursePair._course.Id,
                                        Name = _coursePair._course.Name,
                                        Description = _coursePair._course.Description,
                                        Year = _coursePair._courseInstance.Year,
                                        SemesterId = _coursePair._courseInstance.SemesterId,
                                        Semester = _coursePair._semester.Name
-
                                    }).ToList();
 
             return courseInstances;
-
         }
 
-        public bool DeleteCourseById(int courseId)
-        {
-
+        public bool DeleteCourseById(int courseId) {
             /*var course = _db.Courses.FirstOrDefault(x => x.Id == courseId);
             var courseInstances = _db.CourseInstances.Where(x => x.CourseId == course.Id);
 
@@ -104,15 +110,12 @@ namespace Codex.Services
             }*/
 
             return false;
-
         }
 
         // <summary>
         // Get all students in a course instance with a given id
         // </summary>
-        public List<ApplicationUser> GetAllUsersInCourseInstance(int courseInstanceId)
-        {
-
+        public List<ApplicationUser> GetAllUsersInCourseInstance(int courseInstanceId) {
             var users = (from _user in _db.AspNetUsers
                          where _user.CourseInstances.Any(x => x.Id == courseInstanceId)
                          select _user);
@@ -124,15 +127,12 @@ namespace Codex.Services
 
 
             return applicationUsers;
-
         }
 
         // <summary>
         // Get all students in a course instance with a given id
         // </summary>
-        public List<ApplicationUser> GetAllStudentsInCourseInstance(int courseInstanceId)
-        {
-
+        public List<ApplicationUser> GetAllStudentsInCourseInstance(int courseInstanceId) {
             var students = (from _user in _db.AspNetUsers
                             where _user.CourseInstances.Any(x => x.Id == courseInstanceId)
                             select _user);
@@ -143,28 +143,21 @@ namespace Codex.Services
                 applicationStudents.Add(_userService.GetUserById(_student.Id));
 
             return applicationStudents;
-
         }
 
         // <summary>
         // Get all students in a course instance with a given id
         // </summary>
-        public bool DeleteCourseInstance(int courseInstanceId)
-        {
-
+        public bool DeleteCourseInstance(int courseInstanceId) {
             var courseInstance = _db.CourseInstances.FirstOrDefault(x => x.Id == courseInstanceId);
 
-            try
-            {
+            try {
                 _db.SaveChanges();
                 return true;
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 return false;
             }
-
         }
-
     }
 }

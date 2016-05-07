@@ -12,8 +12,7 @@ namespace Codex.Controllers
 {
     public class AdminController : Controller
     {
-        public ActionResult Users()
-        {
+        public ActionResult Users() {
             UserService userService = new UserService();
             CourseService courseService = new CourseService();
 
@@ -24,8 +23,7 @@ namespace Codex.Controllers
             return View(model);
         }
 
-        public ActionResult Courses()
-        {
+        public ActionResult Courses() {
             CourseService courseService = new CourseService();
 
             CourseViewModel model = new CourseViewModel();
@@ -38,7 +36,7 @@ namespace Codex.Controllers
             UserService userService = new UserService();
 
             if (!userService.UserExistsByUsername(newUser.Email)) {
-                ApplicationUser userToBeCreated = new ApplicationUser { UserName = newUser.Email, Email = newUser.Email, FullName = newUser.Name };
+                ApplicationUser userToBeCreated = new ApplicationUser {UserName = newUser.Email, Email = newUser.Email, FullName = newUser.Name};
                 if (userService.CreateUser(userToBeCreated)) {
                     if (newUser.Admin) {
                         userService.AddUserToRoleByUserId(userToBeCreated.Id, "Admin");
@@ -73,6 +71,11 @@ namespace Codex.Controllers
 
         public ActionResult EditUser(ApplicationUser user) {
             return null;
+        }
+
+        public ActionResult EditCourse(CourseHelperModel course) {
+            CourseService courseService = new CourseService();
+            return Json(courseService.UpdateCourse(course));
         }
     }
 }

@@ -126,4 +126,37 @@
             Materialize.toast("No users selected", 2000);
         }
     });
+
+    // Admin - Edit course
+    $(".edit-course-form").on("submit", function () {
+        var form = $(this);
+        var formData = form.serializeArray();
+
+        var sendData = {
+            "Name": formData[0].value,
+            "SemesterId": formData[1].value,
+            "Year": formData[2].value,
+            "Description": formData[3].value,
+            // formData[4] is the __RequestVerificationToken
+            "Id": formData[5].value,
+            "CourseId": formData[6].value
+        }
+
+        $.ajax({
+            url: form.attr("action"),
+            data: sendData,
+            method: "POST",
+            success: function (responseData) {
+                console.log(responseData);
+            },
+            error: function () {
+                // TODO
+            }
+        });
+        return false;
+    });
+
+    $(".edit-course-button").on("click", function () {
+        $(this).closest("form").submit();
+    });
 });

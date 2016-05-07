@@ -37,6 +37,7 @@
                             <!-- Course semester -->
                             <div class="col s3 truncate">
                                 <span>@course.Semester</span>
+                                <span>@course.SemesterId</span>
                             </div>
                         </div>
                     </div>
@@ -44,42 +45,57 @@
                     <!-- Collapsible body -->
                     <div class="collapsible-body">
                         <div class="card-panel collapsible-body-container">
-                            @using (Html.BeginForm("EditUser", "Admin", FormMethod.Post, new {id = course.Id + "-form", role = "form"})) {
+                            @using (Html.BeginForm("EditCourse", "Admin", FormMethod.Post, new {id = course.Id + "-form", @class = "edit-course-form", role = "form"})) {
                                 @Html.AntiForgeryToken()
 
                                 @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+
+                                @Html.HiddenFor(m => course.Id, new {id = "id-" + course.Id, @class = "validate", Name = "Id." + course.Id})
+                                @Html.HiddenFor(m => course.CourseId, new {id = "course-id-" + course.Id, @class = "validate", Name = "CourseId." + course.Id})
 
                                 <div class="row">
                                     <!-- Name -->
                                     <div class="input-field col s12 m4">
                                         <i class="material-icons prefix">title</i>
-                                        @Html.TextBoxFor(m => m.NewCourseModel.Name, new {id = course.Id + "-name", @class = "validate", Value = course.Name, @Name = course.Id + ".Name"})
-                                        @Html.ValidationMessageFor(m => m.NewCourseModel.Name, "", new {@class = "text-danger"})
-                                        @Html.LabelFor(m => m.NewCourseModel.Name, new {@for = course.Id + "-name"})
+                                        @Html.TextBoxFor(m => course.Name, new {id = "name-" + course.Id, @class = "validate", Name = "Name." + course.Id})
+                                        @Html.ValidationMessageFor(m => course.Name, "", new {@class = "text-danger", data_valmsg_for = "Name." + course.Id})
+                                        @Html.LabelFor(m => course.Name, new {@for = "name-" + course.Id})
                                     </div>
 
                                     <!-- Semester & Year -->
                                     <div class="col s12 m8">
                                         <div class="row">
+                                            <!-- Semester -->
                                             <div class="col s12 m6">
                                                 <div class="input-field">
                                                     <span>Semester</span>
+                                                    <!-- Fall -->
+                                                    @(course.SemesterId == 1
+                                                          ? Html.RadioButtonFor(m => course.Semester, 1, new {@id = "semester-fall-" + course.Id, Name = "Semester." + course.Id, @checked = "checked"})
+                                                          : Html.RadioButtonFor(m => course.Semester, 1, new {@id = "semester-fall-" + course.Id, Name = "Semester." + course.Id})
+                                                          )
+                                                    @Html.Label("semester-fall-" + course.Id, "Fall")
 
-                                                    @Html.RadioButtonFor(m => m.NewCourseModel.Semester, 1, new {@id = course.Id + "-semester-fall", @checked = (course.SemesterId == 1 ? true : false), Name = course.Id + ".Semester" })
-                                                    @Html.Label(course.Id + "-semester-fall", "Fall")
+                                                    <!-- Spring -->
+                                                    @(course.SemesterId == 2
+                                                          ? Html.RadioButtonFor(m => course.Semester, 2, new {@id = "semester-spring-" + course.Id, Name = "Semester." + course.Id, @checked = "checked"})
+                                                          : Html.RadioButtonFor(m => course.Semester, 2, new {@id = "semester-spring-" + course.Id, Name = "Semester." + course.Id})
+                                                          )
+                                                    @Html.Label("semester-spring-" + course.Id, "Spring")
 
-                                                    @Html.RadioButtonFor(m => m.NewCourseModel.Semester, 2, new {@id = course.Id + "-semester-spring", @checked = (course.SemesterId == 2 ? true : false), Name = course.Id + ".Semester" })
-                                                    @Html.Label(course.Id + "-semester-spring", "Spring")
-
-                                                    @Html.RadioButtonFor(m => m.NewCourseModel.Semester, 3, new {@id = course.Id + "-semester-summer", @checked = (course.SemesterId == 3 ? true : false), Name = course.Id + ".Semester" })
-                                                    @Html.Label(course.Id + "-semester-summer", "Summer")
+                                                    <!-- Summer -->
+                                                    @(course.SemesterId == 3
+                                                          ? Html.RadioButtonFor(m => course.Semester, 3, new {@id = "semester-summer" + course.Id, Name = "Semester." + course.Id, @checked = "checked"})
+                                                          : Html.RadioButtonFor(m => course.Semester, 3, new {@id = "semester-summer" + course.Id, Name = "Semester." + course.Id})
+                                                          )
+                                                    @Html.Label("semester-summer" + course.Id, "Summer")
                                                 </div>
                                             </div>
-
+                                            <!-- Year -->
                                             <div class="col s12 m2">
                                                 <div class="input-field">
-                                                    @Html.TextBoxFor(m => m.NewCourseModel.Year, new { id = course.Id + "-Year", Value = course.Year, @type = "number", min = 2000, Name = course.Id + ".Year" })
-                                                    @Html.LabelFor(m => m.NewCourseModel.Year, new { @for = course.Id + "-Year" })
+                                                    @Html.TextBoxFor(m => course.Year, new {id = "year-" + course.Id, type = "number", min = 2000, Name = "Year." + course.Id})
+                                                    @Html.LabelFor(m => course.Year, new {@for = "year-" + course.Id})
                                                 </div>
                                             </div>
                                         </div>
@@ -90,11 +106,14 @@
                                 <div class="row">
                                     <div class="input-field col s12">
                                         <i class="material-icons prefix">description</i>
-                                        @Html.TextAreaFor(m => m.NewCourseModel.Description, new { @class = "validate materialize-textarea" })
-                                        @Html.ValidationMessageFor(m => m.NewCourseModel.Description, "", new { @class = "text-danger" })
+                                        @Html.TextAreaFor(m => m.NewCourseModel.Description, new {@class = "validate materialize-textarea"})
+                                        @Html.ValidationMessageFor(m => m.NewCourseModel.Description, "", new {@class = "text-danger"})
                                         @Html.LabelFor(m => m.NewCourseModel.Description)
                                     </div>
                                 </div>
+
+                                <!-- Save button -->
+                                <a href="#" class="btn waves-effect waves-light edit-course-button">Save</a>
                             }
                         </div>
                     </div>
