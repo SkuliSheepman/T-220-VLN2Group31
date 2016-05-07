@@ -8,10 +8,12 @@ namespace Codex.Models.AdminModels.AdminHelperModels
     public class CourseHelperModel
     {
         public int Id { get; set; }
+        public int CourseId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Year { get; set; }
-        public int Semester { get; set; }
+        public int SemesterId { get; set; }
+        public string Semester { get; set; }
         public int StudentsCount { get; set; }
         public List<CourseTeacherHelperModel> Teachers { get; set; }
 

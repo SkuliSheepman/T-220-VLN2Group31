@@ -6,26 +6,47 @@
 
 <div class="row">
     <div class="col s6 l3 offset-l3">
-        @Html.ActionLink("Users", "Users", "Admin", null, new { @class = "waves-effect waves-light btn fill-width center-align" })
+        @Html.ActionLink("Users", "Users", "Admin", null, new {@class = "waves-effect waves-light btn fill-width center-align"})
     </div>
     <div class="col s6 l3">
-        @Html.ActionLink("Courses", "Courses", "Admin", null, new { @class = "waves-effect waves-light btn-flat fill-width center-align" })
+        @Html.ActionLink("Courses", "Courses", "Admin", null, new {@class = "waves-effect waves-light btn-flat fill-width center-align"})
     </div>
 </div>
 
 <div class="row">
-    <div class="s12">
+    <div class="col s12">
         <ul class="collapsible popout" data-collapsible="accordion">
-            <li class="collapsible-level1">
-                <div class="collapsible-header">
-                    <i class="material-icons">account_box</i> User 1
-                </div>
-                <div class="collapsible-body">
-                    <div class="card-panel collapsible-body-container">
+            @foreach (var course in Model.Courses) {
+                <li class="grey lighten-2">
+                    <div class="collapsible-header">
+                        <div class="row clear-margin">
+                            <!--  Course name and checkbox -->
+                            <div class="col s3 truncate">
+                                <input type="checkbox" id="@course.Id" value="@course.Id" name="course-row"/>
+                                <label for="@course.Id">
+                                    <span class="transparent-text">.</span>
+                                </label>
+                                <span>@course.Name</span>
+                            </div>
 
+                            <!--  Course year -->
+                            <div class="col s3 truncate">
+                                <span>@course.Year</span>
+                            </div>
+
+                            <!--  Course semester -->
+                            <div class="col s3 truncate">
+                                <span>@course.Semester</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </li>
+
+                    <!-- Collapsible body -->
+                    <div class="collapsible-body">
+                        
+                    </div>
+                </li>
+            }
         </ul>
     </div>
 </div>
@@ -48,16 +69,15 @@
         <h4 class="center-align">New Course</h4>
         <div class="divider"></div>
 
-        @using (Html.BeginForm("CreateCourse", "Admin", FormMethod.Post, new { @id = "create-course-form", role = "form" }))
-        {
+        @using (Html.BeginForm("CreateCourse", "Admin", FormMethod.Post, new {@id = "create-course-form", role = "form"})) {
             @Html.AntiForgeryToken()
 
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationSummary(true, "", new {@class = "text-danger"})
             <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">title</i>
-                    @Html.TextBoxFor(m => m.NewCourseModel.Name, new { @class = "validate" })
-                    @Html.ValidationMessageFor(m => m.NewCourseModel.Name, "", new { @class = "text-danger" })
+                    @Html.TextBoxFor(m => m.NewCourseModel.Name, new {@class = "validate"})
+                    @Html.ValidationMessageFor(m => m.NewCourseModel.Name, "", new {@class = "text-danger"})
                     @Html.LabelFor(m => m.NewCourseModel.Name)
                 </div>
             </div>
@@ -65,8 +85,8 @@
             <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">description</i>
-                    @Html.TextAreaFor(m => m.NewCourseModel.Description, new { @class = "validate materialize-textarea" })
-                    @Html.ValidationMessageFor(m => m.NewCourseModel.Description, "", new { @class = "text-danger" })
+                    @Html.TextAreaFor(m => m.NewCourseModel.Description, new {@class = "validate materialize-textarea"})
+                    @Html.ValidationMessageFor(m => m.NewCourseModel.Description, "", new {@class = "text-danger"})
                     @Html.LabelFor(m => m.NewCourseModel.Description)
                 </div>
             </div>
@@ -85,7 +105,7 @@
                 </div>
 
                 <div class="input-field col s6">
-                    @Html.TextBoxFor(m => m.NewCourseModel.Year, new { Value = DateTime.Now.Year, @type = "number", min = 2000 })
+                    @Html.TextBoxFor(m => m.NewCourseModel.Year, new {Value = DateTime.Now.Year, @type = "number", min = 2000})
                     @Html.LabelFor(m => m.NewCourseModel.Year)
                 </div>
             </div>
