@@ -128,6 +128,7 @@ namespace Codex.Services
             // gets all problems related to the assignment
             var problems = _problemService.GetAllProblemsInAssignment(assignmentId);
 
+
             // creates a viewmodel which is to be returned
             var viewModel = new AssignmentViewModel
             {
