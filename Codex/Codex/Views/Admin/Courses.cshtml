@@ -20,7 +20,7 @@
                 <li class="grey lighten-2">
                     <div class="collapsible-header">
                         <div class="row clear-margin">
-                            <!--  Course name and checkbox -->
+                            <!-- Course name and checkbox -->
                             <div class="col s3 truncate">
                                 <input type="checkbox" id="@course.Id" value="@course.Id" name="course-row"/>
                                 <label for="@course.Id">
@@ -29,12 +29,12 @@
                                 <span>@course.Name</span>
                             </div>
 
-                            <!--  Course year -->
+                            <!-- Course year -->
                             <div class="col s3 truncate">
                                 <span>@course.Year</span>
                             </div>
 
-                            <!--  Course semester -->
+                            <!-- Course semester -->
                             <div class="col s3 truncate">
                                 <span>@course.Semester</span>
                             </div>
@@ -43,7 +43,60 @@
 
                     <!-- Collapsible body -->
                     <div class="collapsible-body">
-                        
+                        <div class="card-panel collapsible-body-container">
+                            @using (Html.BeginForm("EditUser", "Admin", FormMethod.Post, new {id = course.Id + "-form", role = "form"})) {
+                                @Html.AntiForgeryToken()
+
+                                @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+
+                                <div class="row">
+                                    <!-- Name -->
+                                    <div class="input-field col s12 m4">
+                                        <i class="material-icons prefix">title</i>
+                                        @Html.TextBoxFor(m => m.NewCourseModel.Name, new {id = course.Id + "-name", @class = "validate", Value = course.Name, @Name = course.Id + ".Name"})
+                                        @Html.ValidationMessageFor(m => m.NewCourseModel.Name, "", new {@class = "text-danger"})
+                                        @Html.LabelFor(m => m.NewCourseModel.Name, new {@for = course.Id + "-name"})
+                                    </div>
+
+                                    <!-- Semester & Year -->
+                                    <div class="col s12 m8">
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <div class="input-field">
+                                                    <span>Semester</span>
+
+                                                    @Html.RadioButtonFor(m => m.NewCourseModel.Semester, 1, new {@id = course.Id + "-semester-fall", @checked = (course.SemesterId == 1 ? true : false), Name = course.Id + ".Semester" })
+                                                    @Html.Label(course.Id + "-semester-fall", "Fall")
+
+                                                    @Html.RadioButtonFor(m => m.NewCourseModel.Semester, 2, new {@id = course.Id + "-semester-spring", @checked = (course.SemesterId == 2 ? true : false), Name = course.Id + ".Semester" })
+                                                    @Html.Label(course.Id + "-semester-spring", "Spring")
+
+                                                    @Html.RadioButtonFor(m => m.NewCourseModel.Semester, 3, new {@id = course.Id + "-semester-summer", @checked = (course.SemesterId == 3 ? true : false), Name = course.Id + ".Semester" })
+                                                    @Html.Label(course.Id + "-semester-summer", "Summer")
+                                                </div>
+                                            </div>
+
+                                            <div class="col s12 m2">
+                                                <div class="input-field">
+                                                    @Html.TextBoxFor(m => m.NewCourseModel.Year, new { id = course.Id + "-Year", Value = course.Year, @type = "number", min = 2000, Name = course.Id + ".Year" })
+                                                    @Html.LabelFor(m => m.NewCourseModel.Year, new { @for = course.Id + "-Year" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <i class="material-icons prefix">description</i>
+                                        @Html.TextAreaFor(m => m.NewCourseModel.Description, new { @class = "validate materialize-textarea" })
+                                        @Html.ValidationMessageFor(m => m.NewCourseModel.Description, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.NewCourseModel.Description)
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </li>
             }
