@@ -65,14 +65,21 @@ namespace Codex.Services
 
             var courseInstances = (from _courseInstance in _db.CourseInstances
                                    join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
-                                   select new { _courseInstance, _course }).Select(_coursePair => new CourseHelperModel
+                                   join _semester in _db.Semesters on _courseInstance.SemesterId equals _semester.Id
+                                   select new { _courseInstance, _course, _semester }).Select(_coursePair => new CourseHelperModel
                                    {
 
                                        Id = _coursePair._courseInstance.Id,
                                        Name = _coursePair._course.Name,
                                        Description = _coursePair._course.Description,
+<<<<<<< HEAD
                                        Year = _coursePair._courseInstance.Year,
                                        Semester = _coursePair._courseInstance.SemesterId
+=======
+                                       Year        = _coursePair._courseInstance.Year,
+                                       SemesterId  = _coursePair._courseInstance.SemesterId,
+                                       Semester    = _coursePair._semester.Name
+>>>>>>> 88b1f8bf07096874f45dbcdc772e1304dc27aa90
 
                                    }).ToList();
 

@@ -15,10 +15,12 @@
         
     });
 
-    // Prevent collapsable opening when clicking on the vertical ellipsis
-    $(".dropdown-button").on("click", function(e) {
+    // Stop propagation for all elements with this class
+    // This is mainly used to prevent collapsable from opening when clicking on buttons
+    $(".stop-propagation").on("click", function (e) {
         e.stopPropagation();
     });
+
 
     /* ADMIN */
 
