@@ -91,7 +91,7 @@ namespace Codex.Services
         /// <summary>
         /// Removes a problem from all assignments
         /// </summary>
-        public void RemoveProblem(int problemId)
+        public bool RemoveProblem(int problemId)
         {
 
             var relations = _db.AssignmentProblems.Where(x => x.ProblemId == problemId);
@@ -102,10 +102,11 @@ namespace Codex.Services
             try
             {
                 _db.SaveChanges();
+                return true;
             }
             catch (Exception e)
             {
-                //throw
+                return false;
             }
 
         }

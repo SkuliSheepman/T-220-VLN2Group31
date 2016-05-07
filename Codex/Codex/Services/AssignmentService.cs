@@ -39,7 +39,7 @@ namespace Codex.Services
                 Name = newAssignmentViewModel.Name,
                 Description = newAssignmentViewModel.Description,
                 StartTime = newAssignmentViewModel.StartTime,
-                EndTime = newAssignmentViewModel.EndTIme,
+                EndTime = newAssignmentViewModel.EndTime,
                 MaxCollaborators = newAssignmentViewModel.MaxCollaborators
             };
 
@@ -106,11 +106,10 @@ namespace Codex.Services
                 Name = assignment.Name,
                 Description = assignment.Description,
                 CourseInstanceId = assignment.CourseInstanceId,
-                StartTIme = assignment.StartTime,
-                EndTIme = assignment.EndTime,
+                StartTime = assignment.StartTime,
+                EndTime = assignment.EndTime,
                 MaxCollaborators = assignment.MaxCollaborators,
-                AssignmentProblems = _problemService.GetAllProblemsInAssignment(assignmentId),
-                //AssignmentCollaborators = GetAssignmentCollaborators(assignmentId)
+                AssignmentProblems = _problemService.GetAllProblemsInAssignment(assignmentId)
             };
 
         }

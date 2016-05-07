@@ -35,8 +35,8 @@ namespace Codex.Controllers
                 CourseInstanceId = 1,
                 Name = "Assignment 1",
                 Description = "Temp Description",
-                StartTIme = DateTime.Today,
-                EndTIme = tempstart,
+                StartTime = DateTime.Today,
+                EndTime = tempstart,
                 MaxCollaborators = 3,
 
                 AssignmentProblems = templist
