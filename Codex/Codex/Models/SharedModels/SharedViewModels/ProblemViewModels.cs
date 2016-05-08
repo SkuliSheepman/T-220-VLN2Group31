@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Codex.Models
+namespace Codex.Models.SharedModels.SharedViewModels
 {
     public class ProblemViewModel
     {
@@ -15,6 +15,7 @@ namespace Codex.Models
         public string Filetype { get; set; }
         public string Attachment { get; set; }
         public string Language { get; set; }
+        public List<TestCaseViewModel> testCases { get; set; }
 
     }
 
@@ -27,6 +28,7 @@ namespace Codex.Models
         public string Filetype { get; set; }
         public string Attachment { get; set; }
         public string Language { get; set; }
+        public List<TestCaseCreationViewModel> testCases { get; set; }
 
     }
 }

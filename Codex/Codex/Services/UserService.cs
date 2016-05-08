@@ -76,5 +76,13 @@ namespace Codex.Services
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             return um.FindById(id);
         }
+        public string GetUserIdByName(string name)
+        {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+            ApplicationUser user = new ApplicationUser();
+            user = um.FindByName(name);
+            //If user not empty return Id, else throw exception
+            return user.Id;
+        }
     }
 }

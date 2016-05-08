@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Codex.DAL;
 using Codex.Models;
+using Codex.Models.SharedModels.SharedViewModels;
 
 namespace Codex.Services
 {
@@ -16,6 +17,7 @@ namespace Codex.Services
         // privatized database property
         // </summary>
         private Database _db;
+        private TestCaseService _testCaseService;
 
         // <summary>
         // problem service constructor
@@ -23,6 +25,47 @@ namespace Codex.Services
         public ProblemService()
         {
             _db = new Database();
+            _testCaseService = new TestCaseService();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool CreateProblem(ProblemCreationViewModel newProblemViewModel)
+        {
+
+            // form an entity from the view model for the database
+            var newProblem = new Problem
+            {
+                CourseId = newProblemViewModel.CourseId,
+                Name = newProblemViewModel.Name,
+                Description = newProblemViewModel.Description,
+                Filetype = newProblemViewModel.Filetype,
+                Attachment = newProblemViewModel.Attachment,
+                Language = newProblemViewModel.Language
+            };
+
+            // add the new problem
+            newProblem = _db.Problems.Add(newProblem);
+
+            try
+            {
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+            // create test cases
+            foreach (var _testCase in newProblemViewModel.testCases)
+            {
+                _testCase.ProblemId = newProblem.Id;
+                _testCaseService.CreateTestCase(_testCase);
+            }
+
+            return true;
+
         }
 
         // <summary>
@@ -163,7 +206,7 @@ namespace Codex.Services
         /// <summary>
         /// Removes all problems from a specified assignment
         /// </summary>
-        public void RemoveProblemsFromAssignment(int assignmentId)
+        public bool RemoveProblemsFromAssignment(int assignmentId)
         {
 
             var problemIds = (from _relation in _db.AssignmentProblems
@@ -173,6 +216,16 @@ namespace Codex.Services
             // Destroy the relations
             foreach (var _problemId in problemIds)
                 RemoveProblemFromAssignment(_problemId, assignmentId);
+
+            try
+            {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
 
         }
 
