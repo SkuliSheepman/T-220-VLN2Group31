@@ -20,7 +20,7 @@ namespace Codex.Controllers
 
             List<SelectListItem> allCourseItems = new List<SelectListItem>();
             foreach (var course in allCourses) {
-                allCourseItems.Add(new SelectListItem { Text = course.Name, Value = course.Id.ToString() });
+                allCourseItems.Add(new SelectListItem {Text = course.Name + " - " + course.Year + " - " + course.Semester, Value = course.Id.ToString()});
             }
 
             UserViewModel model = new UserViewModel();
@@ -82,6 +82,12 @@ namespace Codex.Controllers
 
         public ActionResult EditUser(ApplicationUser user) {
             return null;
+        }
+
+        public ActionResult AddUserToCourse(UserAddCourseHelperModel model) {
+            CourseService courseService = new CourseService();
+
+            return Json(courseService.AddUserToCourse(model));
         }
 
         public ActionResult EditCourse(CourseHelperModel course) {
