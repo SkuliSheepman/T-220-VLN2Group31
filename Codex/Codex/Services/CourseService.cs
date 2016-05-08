@@ -54,19 +54,34 @@ namespace Codex.Services
         // </summary>
         public bool UpdateCourse(CourseHelperModel course) {
             var courseInstance = _db.CourseInstances.SingleOrDefault(x => x.Id == course.Id);
+            var baseCourse = _db.Courses.SingleOrDefault(x => x.Id == course.Id);
 
             if (courseInstance != null) {
+                // Check if name changed, create base course if it doesn't exist
+                if (baseCourse != null && baseCourse.Name != course.Name) {
+                    baseCourse = _db.Courses.SingleOrDefault(x => x.Name == course.Name);
+
+                    if (baseCourse == null) {
+                        Course newCourse = new Course() {
+                            Name = course.Name,
+                            Description = course.Description
+                        };
+
+                        baseCourse = _db.Courses.Add(newCourse);
+                    }
+
+                    courseInstance.CourseId = baseCourse.Id;
+                }
+
                 courseInstance.SemesterId = course.SemesterId;
                 courseInstance.Year = course.Year;
             }
 
-            try
-            {
+            try {
                 _db.SaveChanges();
                 return true;
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 return false;
             }
         }

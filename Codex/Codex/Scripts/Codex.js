@@ -147,7 +147,12 @@
             data: sendData,
             method: "POST",
             success: function (responseData) {
-                console.log(responseData);
+                if (responseData) {
+                    Materialize.toast("Course information updated", 4000);
+                }
+                else {
+                    Materialize.toast("An error occurred", 4000);
+                }
             },
             error: function () {
                 // TODO
