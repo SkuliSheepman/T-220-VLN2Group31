@@ -169,6 +169,44 @@ namespace Codex.Services
 
         }
 
+        public List<CollaboratorViewModel> GetCollaborators(int assignmentId, string studentId)
+        {
+            var groupNumber = _db.AssignmentGroups.SingleOrDefault(x => x.AssignmentId == assignmentId && x.AspNetUser.Id == studentId);
+
+            var collaborators = (from _assignmentGroup in _db.AssignmentGroups
+                                 where _assignmentGroup.AssignmentId == assignmentId && _assignmentGroup.GroupNumber == groupNumber.GroupNumber
+                                 join _student in _db.AspNetUsers on _assignmentGroup.UserId equals _student.Id
+                                 select new {_assignmentGroup, _student}).Select(_collaborator => new CollaboratorViewModel
+                                 {
+                                     Id = _collaborator._student.Id,
+                                     Name = _collaborator._student.FullName,
+                                     GroupNumber = _collaborator._assignmentGroup.GroupNumber
+                                 }).ToList();
+            return collaborators;
+        }
+        public List<AssignmentViewModel> GetAssignmentsByStudentId(string studentId)
+        {
+            var assignments = (from _assignmentGroup in _db.AssignmentGroups
+                          where _assignmentGroup.UserId == studentId
+                          join _assignment in _db.Assignments on _assignmentGroup.AssignmentId equals _assignment.Id
+                          select new { _assignmentGroup, _assignment }).Select(_assignmentPair => new AssignmentViewModel
+                          {
+                              Id = _assignmentPair._assignment.Id,
+                              CourseInstanceId = _assignmentPair._assignment.CourseInstanceId,
+                              Name = _assignmentPair._assignment.Name,
+                              Description = _assignmentPair._assignment.Description,
+                              StartTime = _assignmentPair._assignment.StartTime,
+                              EndTime = _assignmentPair._assignment.EndTime,
+                              MaxCollaborators = _assignmentPair._assignment.MaxCollaborators,
+                              AssignmentGrade = _assignmentPair._assignmentGroup.AssignmentGrade
+                          }).ToList();
+            foreach(var _assignment in assignments)
+            {
+                _assignment.Collaborators = GetCollaborators(_assignment.Id, studentId);
+            }
+            return assignments;
+        }
+
     }
 
 }
