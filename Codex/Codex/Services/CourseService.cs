@@ -211,28 +211,8 @@ namespace Codex.Services
         // <summary>
         // Get all courses a user is in via User ID
         // </summary>
-        //public UserCoursesHelperModel GetCoursesByUserId(string userId) {
-            /*var courses = (from _course in _db.CourseInstances
-                           join _teacher in _db.Teachers on _course.Teachers)
-            */
-            /*
-            var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userId);
-            if (user == null) {
-                return false;
-            }
-
-            var courses = (from _course in _db.CourseInstances
-                           where _course.AspNetUsers.Contains(user)
-                           select _course);
+        /*public List<UserCoursesHelperModel> GetCoursesByUserId(string userId) {
             
-
-            try {
-                _db.SaveChanges();
-                return true;
-            }
-            catch (Exception e) {
-                return false;
-            }*/
-        //}
+        }*/
     }
 }
