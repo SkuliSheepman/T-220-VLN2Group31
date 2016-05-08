@@ -11,7 +11,7 @@ namespace Codex.Models.AdminModels.AdminViewModels
     public class UserViewModel
     {
         public NewUserViewModel NewUserModel { get; set; }
-        public List<ApplicationUser> Users { get; set; }
+        public List<UserHelperModel> Users { get; set; }
         public List<SelectListItem> AvailableCourses { get; set; }
     }
 

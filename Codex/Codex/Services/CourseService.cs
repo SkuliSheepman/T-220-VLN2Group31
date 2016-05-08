@@ -213,14 +213,10 @@ namespace Codex.Services
         // </summary>
         public List<UserCoursesHelperModel> GetCoursesByUserId(string userId)
         {
-
-            //var studentCourses = _db.CourseInstances.Where(x => x.AspNetUsers.Any(y => y.Id == userId)).ToList();
-            //var teacherCourses = _db.CourseInstances.Where(x => x.Teachers.Any(y => y.UserId == userId)).ToList();
-
-
             var studentCourses = (from _courseInstance in _db.CourseInstances
                                   join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
-                                  where _courseInstance.AspNetUsers.Any(user => user.Id == userId)
+                                  join _user in _db.AspNetUsers on userId equals _user.Id
+                                  where _courseInstance.AspNetUsers.Contains(_user)
                                   select new { _courseInstance, _course }).Select(pair => new UserCoursesHelperModel
                                   {
                                       CourseInstanceId = pair._courseInstance.Id,
@@ -256,10 +252,7 @@ namespace Codex.Services
                                       Year = pair._courseInstance.Year
                                   }).ToList();
 
-            var userCourses = new List<UserCoursesHelperModel>();
-            userCourses.Concat(studentCourses);
-            userCourses.Concat(teacherCourses);
-            userCourses.Concat(assistantCourses);
+            var userCourses = studentCourses.Concat(teacherCourses).Concat(assistantCourses).ToList();
 
             return userCourses;
 

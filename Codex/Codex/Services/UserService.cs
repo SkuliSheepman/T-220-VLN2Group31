@@ -44,9 +44,23 @@ namespace Codex.Services
             return true;
         }
 
-        public List<ApplicationUser> GetAllUsers() {
+        public List<UserHelperModel> GetAllUsers() {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
-            return um.Users.ToList();
+            var users = um.Users.ToList();
+
+            CourseService courseService = new CourseService();
+
+            var userModels = new List<UserHelperModel>();
+            foreach (var user in users) {
+                var model = new UserHelperModel() {
+                    UserInfo = user,
+                    UserCourses = courseService.GetCoursesByUserId(user.Id)
+                };
+
+                userModels.Add(model);
+            }
+
+            return userModels;
         }
 
         public bool CreateUser(ApplicationUser user) {
