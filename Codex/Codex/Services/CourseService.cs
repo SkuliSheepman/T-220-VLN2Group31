@@ -161,7 +161,7 @@ namespace Codex.Services
         }
 
         // <summary>
-        // Get all students in a course instance with a given id
+        // Delete course instance by ID
         // </summary>
         public bool DeleteCourseInstance(int courseInstanceId) {
             var courseInstance = _db.CourseInstances.FirstOrDefault(x => x.Id == courseInstanceId);
@@ -176,7 +176,7 @@ namespace Codex.Services
         }
 
         // <summary>
-        // Get all students in a course instance with a given id
+        // Add user to course via UserAddCourseHelperModel
         // </summary>
         public bool AddUserToCourse(UserAddCourseHelperModel model) {
             var courseInstance = _db.CourseInstances.SingleOrDefault(x => x.Id == model.CourseId);
@@ -207,5 +207,32 @@ namespace Codex.Services
                 return false;
             }
         }
+
+        // <summary>
+        // Get all courses a user is in via User ID
+        // </summary>
+        //public UserCoursesHelperModel GetCoursesByUserId(string userId) {
+            /*var courses = (from _course in _db.CourseInstances
+                           join _teacher in _db.Teachers on _course.Teachers)
+            */
+            /*
+            var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userId);
+            if (user == null) {
+                return false;
+            }
+
+            var courses = (from _course in _db.CourseInstances
+                           where _course.AspNetUsers.Contains(user)
+                           select _course);
+            
+
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }*/
+        //}
     }
 }
