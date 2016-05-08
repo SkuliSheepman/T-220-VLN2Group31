@@ -12,11 +12,6 @@ namespace Codex.Models.SharedModels.SharedViewModels
         public int GroupNumber { get; set; }
     }
 
-    public class CollaboratorViewModel
-    {
-
-    }
-
     public class AssignmentViewModel
     {
 
