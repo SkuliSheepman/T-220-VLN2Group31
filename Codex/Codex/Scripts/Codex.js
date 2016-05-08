@@ -195,4 +195,34 @@
     $(".edit-course-button").on("click", function () {
         $(this).closest("form").submit();
     });
+
+    // Admin - Add course button
+    $(".add-course-button").on("click", function (e) {
+        e.preventDefault();
+
+        var container = $(this).parent().parent();
+
+        var sendData = {
+            "CourseId": container.find("select").val(),
+            "UserId": container.closest("form").find(".user-id").val(),
+            "Position": container.find("input[type='radio']:checked").val()
+        }
+
+        $.ajax({
+            url: "/Admin/AddUserToCourse",
+            data: sendData,
+            method: "POST",
+            success: function (responseData) {
+                if (responseData) {
+                    Materialize.toast("User added to course", 4000);
+                }
+                else {
+                    Materialize.toast("An error occurred", 4000);
+                }
+            },
+            error: function () {
+                // TODO
+            }
+        });
+    });
 });

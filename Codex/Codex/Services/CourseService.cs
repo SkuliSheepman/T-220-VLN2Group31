@@ -174,5 +174,38 @@ namespace Codex.Services
                 return false;
             }
         }
+
+        // <summary>
+        // Get all students in a course instance with a given id
+        // </summary>
+        public bool AddUserToCourse(UserAddCourseHelperModel model) {
+            var courseInstance = _db.CourseInstances.SingleOrDefault(x => x.Id == model.CourseId);
+            if (courseInstance == null) {
+                return false;
+            }
+
+            var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == model.UserId);
+            if (user == null) {
+                return false;
+            }
+
+            if (model.Position == 1) {
+                courseInstance.AspNetUsers.Add(user);
+            }
+            else {
+                Teacher teacher = new Teacher();
+                teacher.AspNetUser = user;
+                teacher.IsAssistant = model.Position != 2;
+                courseInstance.Teachers.Add(teacher);
+            }
+
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
     }
 }
