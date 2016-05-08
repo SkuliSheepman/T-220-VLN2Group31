@@ -67,9 +67,11 @@
 
                                 <div class="divider"></div>
 
+                                <!--Courses-->
                                 <div class="row">
-                                    <div class="col s12 m6 l4">
-                                        <!--Courses-->
+                                    <div class="col s12 m6 l4 input-field">
+                                        @Html.DropDownList(user.Id + "-add-course", Model.AvailableCourses)
+                                        <label>Courses</label>
                                     </div>
                                 </div>
                             }
@@ -138,7 +140,7 @@
     </a>
     <ul>
         <li>
-            <a id="delete-selected-users" class="btn-floating red tooltipped" data-position="left" data-delay="50" data-tooltip="Delete selected users">
+            <a id="delete-selected-users-modal-button" class="btn-floating red tooltipped" data-position="left" data-delay="50" data-tooltip="Delete selected users">
                 <i class="material-icons">delete</i>
             </a>
         </li>
@@ -171,7 +173,7 @@
             <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">email</i>
-                    @Html.TextBoxFor(m => m.NewUserModel.Email, new {@class = "validate"})
+                    @Html.TextBoxFor(m => m.NewUserModel.Email, new {@class = "validate", type = "email"})
                     @Html.ValidationMessageFor(m => m.NewUserModel.Email, "", new {@class = "text-danger"})
                     @Html.LabelFor(m => m.NewUserModel.Email)
                 </div>
@@ -195,5 +197,21 @@
     <div class="modal-footer">
         <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
         <a href="#" id="create-user-button" class="waves-effect waves-green btn-flat">Create</a>
+    </div>
+</div>
+
+<!-- Delete Selected Users modal -->
+<div id="delete-selected-users-modal" class="modal">
+    <div class="modal-content">
+        <h4 class="center-align">Delete seleced users</h4>
+        <div class="divider"></div>
+
+        <p>Are you sure you want to delete these users?</p>
+        <p>This action cannot be undone!</p>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+        <a href="#" id="delete-selected-users-button" class="waves-effect waves-green btn-flat">Delete</a>
     </div>
 </div>

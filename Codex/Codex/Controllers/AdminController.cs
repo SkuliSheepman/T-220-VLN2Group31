@@ -16,9 +16,16 @@ namespace Codex.Controllers
             UserService userService = new UserService();
             CourseService courseService = new CourseService();
 
+            List<CourseHelperModel> allCourses = courseService.GetAllCourseInstances();
+
+            List<SelectListItem> allCourseItems = new List<SelectListItem>();
+            foreach (var course in allCourses) {
+                allCourseItems.Add(new SelectListItem { Text = course.Name, Value = course.Id.ToString() });
+            }
+
             UserViewModel model = new UserViewModel();
             model.Users = userService.GetAllUsers();
-            model.AvailableCourses = courseService.GetAllCourseInstances();
+            model.AvailableCourses = allCourseItems;
 
             return View(model);
         }
@@ -33,6 +40,10 @@ namespace Codex.Controllers
         }
 
         public ActionResult CreateUser(NewUserViewModel newUser) {
+            if (newUser.Name == null && newUser.Email == null) {
+                return Json(false);
+            }
+
             UserService userService = new UserService();
 
             if (!userService.UserExistsByUsername(newUser.Email)) {

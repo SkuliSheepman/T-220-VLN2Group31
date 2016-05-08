@@ -4,6 +4,9 @@
     // Modals
     $(".modal-trigger").leanModal();
 
+    // Select tags
+    $('select').material_select();
+
     /* Fixes */
 
     // Move hidden inputs at the bottom of their container, to avoid CSS styling errors in Materialize
@@ -21,44 +24,59 @@
         e.stopPropagation();
     });
 
+    /* Helper functions */
+    // Verify email. Source: http://stackoverflow.com/questions/2507030/email-validation-using-jquery
+    function isEmail(email) {
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return regex.test(email);
+    }
 
     /* ADMIN */
 
     // Admin - Create new user form
     $("#create-user-form").on("submit", function() {
-        console.log("Creating new user...");
         var form = $(this);
 
-        var formData = {
-            "Name": $("#NewUserModel_Name").val(),
-            "Email": $("#NewUserModel_Email").val(),
-            "Admin": $("#NewUserModel_Admin").val(),
-            "UserCourses": [
-                {
+        var name = $("#NewUserModel_Name").val();
+        var email = $("#NewUserModel_Email").val();
+
+        if (0 < name.length && isEmail(email)) {
+            var formData = {
+                "Name": name,
+                "Email": email,
+                "Admin": $("#NewUserModel_Admin").val(),
+                "UserCourses": [
+                    {
                     
+                    }
+                ]
+            }
+
+            $.ajax({
+                url: form.attr("action"),
+                data: formData,
+                method: "POST",
+                success: function(responseData) {
+                    if (responseData) {
+                        Materialize.toast("The user " + formData.Email + " has been created", 4000);
+                        $("#NewUserModel_Name").val("").blur();
+                        $("#NewUserModel_Email").val("").blur();
+                        $("#NewUserModel_Admin").attr("checked", false);
+                    }
+                    else {
+                        Materialize.toast("The user " + formData.Email + " already exists", 4000);
+                    }
                 }
-            ]
+            });
+        }
+        else {
+            Materialize.toast("Missing/Invalid information", 4000);
         }
         
-        $.ajax({
-            url: form.attr("action"),
-            data: formData,
-            method: "POST",
-            success: function (responseData) {
-                console.log(responseData);
-                if (responseData) {
-                    Materialize.toast("The user " + formData.Email + " has been created", 4000);
-                }
-                else {
-                    Materialize.toast("The user " + formData.Email + " already exists", 4000);
-                }
-            }
-        });
         return false;
     });
 
     $("#create-user-button").on("click", function () {
-        console.log("Clicked");
         $("#create-user-form").submit();
     });
 
@@ -94,7 +112,19 @@
     });
 
     // Admin - Delete selected users
-    $("#delete-selected-users").on("click", function () {
+
+    // Only display modal when at least 1 user is selected
+    $("#delete-selected-users-modal-button").on("click", function (e) {
+        if ($("input[type='checkbox'][name='user-row']:checked").length === 0) {
+            Materialize.toast("No users selected", 2000);
+        }
+        else {
+            $("#delete-selected-users-modal").openModal();
+        }
+    });
+
+    // Delete button in the modal
+    $("#delete-selected-users-button").on("click", function () {
         var users = $("input[type='checkbox'][name='user-row']:checked").map(function() {
             return this.value;
         }).get();
@@ -111,6 +141,7 @@
                         $("input[type='checkbox'][name='user-row']:checked").each(function() {
                             $(this).closest("li").remove();
                         });
+                        $("#delete-selected-users-modal").closeModal();
                     }
                     else {
                         Materialize.toast("An error occurred", 4000);

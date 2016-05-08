@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using Codex.Models.AdminModels.AdminHelperModels;
 
 namespace Codex.Models.AdminModels.AdminViewModels
@@ -11,14 +12,20 @@ namespace Codex.Models.AdminModels.AdminViewModels
     {
         public NewUserViewModel NewUserModel { get; set; }
         public List<ApplicationUser> Users { get; set; }
-        public List<CourseHelperModel> AvailableCourses { get; set; }
+        public List<SelectListItem> AvailableCourses { get; set; }
     }
 
     public class NewUserViewModel
     {
+        [Required]
+        [Display(Name = "Name")]
         public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
+        [Required]
         [Display(Name = "Admin")]
         public bool Admin { get; set; }
         public List<UserCoursesHelperModel> UserCourses { get; set; }
