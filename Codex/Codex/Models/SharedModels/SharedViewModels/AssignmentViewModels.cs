@@ -5,6 +5,12 @@ using Codex.Models.AdminModels.AdminViewModels;
 
 namespace Codex.Models.SharedModels.SharedViewModels
 {
+    public class CollaboratorViewModel
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public int GroupNumber { get; set; }
+    }
 
     public class AssignmentViewModel
     {
@@ -16,6 +22,8 @@ namespace Codex.Models.SharedModels.SharedViewModels
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public int MaxCollaborators { get; set; }
+        public double? AssignmentGrade { get; set; }
+        public List<CollaboratorViewModel> Collaborators { get; set; }
         public List<ProblemViewModel> AssignmentProblems { get; set; }
 
     }
