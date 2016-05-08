@@ -113,34 +113,6 @@ namespace Codex.Services
             };
 
         }
-      
-        /// <summary>
-        /// gets an assignment and it's related problems by assignment id
-        /// </summary>
-        public AssignmentViewModel GetAssignmentById(int assignmentId)
-        {
-
-            // finds the assignment and make sure it exists
-            var assignment = _db.Assignments.SingleOrDefault(x => x.Id == assignmentId);
-            if (assignment == null)
-                return new AssignmentViewModel();
-
-            // gets all problems related to the assignment
-            var problems = _problemService.GetAllProblemsInAssignment(assignmentId);
-
-
-            // creates a viewmodel which is to be returned
-            var viewModel = new AssignmentViewModel
-            {
-
-                Id = assignment.Id,
-                AssignmentProblems = problems
-
-            };
-
-            return viewModel;
-
-        }
 
         ///<summary>
         /// get all assignments and their problems from a course instance
@@ -158,7 +130,7 @@ namespace Codex.Services
 
             // populates the list defined above with view models
             foreach (var _assignmentId in assignmentIds)
-                assignments.Add(GetAssignmentById(_assignmentId));
+                assignments.Add(GetAssignment(_assignmentId));
 
             return assignments;
 
@@ -167,14 +139,22 @@ namespace Codex.Services
         /// <summary>
         /// Removes all problems from the marked assignment and the then deletes it
         /// </summary>
-        public bool DeleteAssignmentById(int assignmentId)
+        public bool DeleteAssignment(int assignmentId)
         {
 
             var assignmentToDelete = _db.Assignments.SingleOrDefault(x => x.Id == assignmentId);
-            if (assignmentToDelete != null)
-            {
-                _problemService.RemoveProblemsFromAssignment(assignmentToDelete.Id);
+
+            if (assignmentToDelete == null)
+                return false;
+
+            if (_problemService.RemoveProblemsFromAssignment(assignmentToDelete.Id)) {
+
                 _db.Assignments.Remove(assignmentToDelete);
+
+            } else {
+
+                return false;
+
             }
 
             try
