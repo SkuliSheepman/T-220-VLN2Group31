@@ -211,28 +211,58 @@ namespace Codex.Services
         // <summary>
         // Get all courses a user is in via User ID
         // </summary>
-        //public UserCoursesHelperModel GetCoursesByUserId(string userId) {
-            /*var courses = (from _course in _db.CourseInstances
-                           join _teacher in _db.Teachers on _course.Teachers)
-            */
-            /*
-            var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userId);
-            if (user == null) {
-                return false;
-            }
+        public List<UserCoursesHelperModel> GetCoursesByUserId(string userId)
+        {
 
-            var courses = (from _course in _db.CourseInstances
-                           where _course.AspNetUsers.Contains(user)
-                           select _course);
-            
+            //var studentCourses = _db.CourseInstances.Where(x => x.AspNetUsers.Any(y => y.Id == userId)).ToList();
+            //var teacherCourses = _db.CourseInstances.Where(x => x.Teachers.Any(y => y.UserId == userId)).ToList();
 
-            try {
-                _db.SaveChanges();
-                return true;
-            }
-            catch (Exception e) {
-                return false;
-            }*/
-        //}
+
+            var studentCourses = (from _courseInstance in _db.CourseInstances
+                                  join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
+                                  where _courseInstance.AspNetUsers.Any(user => user.Id == userId)
+                                  select new { _courseInstance, _course }).Select(pair => new UserCoursesHelperModel
+                                  {
+                                      CourseInstanceId = pair._courseInstance.Id,
+                                      Name = pair._course.Name,
+                                      Position = 1,
+                                      Semester = pair._courseInstance.SemesterId,
+                                      Year = pair._courseInstance.Year
+                                  }).ToList();
+
+            var teacherCourses = (from _courseInstance in _db.CourseInstances
+                                  join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
+                                  where _courseInstance.Teachers.Any(user => user.UserId == userId)
+                                  && _courseInstance.Teachers.Any(user => user.IsAssistant == false)
+                                  select new { _courseInstance, _course }).Select(pair => new UserCoursesHelperModel
+                                  {
+                                      CourseInstanceId = pair._courseInstance.Id,
+                                      Name = pair._course.Name,
+                                      Position = 2,
+                                      Semester = pair._courseInstance.SemesterId,
+                                      Year = pair._courseInstance.Year
+                                  }).ToList();
+
+            var assistantCourses = (from _courseInstance in _db.CourseInstances
+                                  join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
+                                  where _courseInstance.Teachers.Any(user => user.UserId == userId)
+                                  && _courseInstance.Teachers.Any(user => user.IsAssistant == true)
+                                  select new { _courseInstance, _course }).Select(pair => new UserCoursesHelperModel
+                                  {
+                                      CourseInstanceId = pair._courseInstance.Id,
+                                      Name = pair._course.Name,
+                                      Position = 3,
+                                      Semester = pair._courseInstance.SemesterId,
+                                      Year = pair._courseInstance.Year
+                                  }).ToList();
+
+            var userCourses = new List<UserCoursesHelperModel>();
+            userCourses.Concat(studentCourses);
+            userCourses.Concat(teacherCourses);
+            userCourses.Concat(assistantCourses);
+
+            return userCourses;
+
+        }
     }
 }
