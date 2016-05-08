@@ -265,3 +265,18 @@ input[type="file"] {
 .gradebox {
     margin:0;
 }
+
+.closed-alignment {
+    margin-top: 2em;
+}
+
+.student-overview  {
+    line-height:4em;
+}
+
+.collaborators {
+    padding: 0 auto;
+    vertical-align: baseline;
+  position: relative;
+  top:-5px;
+}
