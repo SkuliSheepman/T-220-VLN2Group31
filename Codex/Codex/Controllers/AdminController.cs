@@ -61,11 +61,13 @@ namespace Codex.Controllers
         }
 
         public ActionResult CreateCourse(NewCourseViewModel newCourse) {
+            if (string.IsNullOrEmpty(newCourse.Name) || newCourse.Year == null || newCourse.Year < 2000) {
+                return Json(false);
+            }
+
             CourseService courseService = new CourseService();
 
-            courseService.CreateCourse(newCourse);
-
-            return Json(newCourse);
+            return Json(courseService.CreateCourse(newCourse));
         }
 
         public ActionResult DeleteSelectedUsers(List<string> userIds) {
@@ -75,9 +77,17 @@ namespace Codex.Controllers
 
             UserService userService = new UserService();
 
-            var result = userService.DeleteUsersByIds(userIds);
+            return Json(userService.DeleteUsersByIds(userIds));
+        }
 
-            return Json(result);
+        public ActionResult DeleteSelectedCourses(List<int> courseInstanceIds) {
+            if (courseInstanceIds == null || courseInstanceIds.Count == 0) {
+                return Json(false);
+            }
+
+            CourseService courseService = new CourseService();
+
+            return Json(courseService.DeleteCourseInstancesById(courseInstanceIds));
         }
 
         public ActionResult EditUser(ApplicationUser user) {
@@ -105,6 +115,10 @@ namespace Codex.Controllers
         }
 
         public ActionResult EditCourse(CourseHelperModel course) {
+            if (string.IsNullOrEmpty(course.Name) || course.Year == null || course.Year < 2000) {
+                return Json(false);
+            }
+
             CourseService courseService = new CourseService();
             return Json(courseService.UpdateCourse(course));
         }

@@ -16,13 +16,13 @@ namespace Codex.Models.AdminModels.AdminHelperModels
         public string Semester { get; set; }
         public int StudentsCount { get; set; }
         public List<CourseTeacherHelperModel> Teachers { get; set; }
+    }
 
-        public class CourseTeacherHelperModel
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public string Email { get; set; }
-            public bool IsAssistant { get; set; }
-        }
+    public class CourseTeacherHelperModel
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public bool? IsAssistant { get; set; }
     }
 }

@@ -58,7 +58,7 @@ namespace Codex.Services
         /// </summary>
         public bool UpdateCourse(CourseHelperModel course) {
             var courseInstance = _db.CourseInstances.SingleOrDefault(x => x.Id == course.Id);
-            var baseCourse = _db.Courses.SingleOrDefault(x => x.Id == course.Id);
+            var baseCourse = _db.Courses.SingleOrDefault(x => x.Id == courseInstance.CourseId);
 
             if (courseInstance != null) {
                 // Check if name changed, create base course if it doesn't exist
@@ -91,21 +91,49 @@ namespace Codex.Services
         }
 
         /// <summary>
+        /// Get all teachers in a course instance by the course instance's ID
+        /// </summary>
+        public List<CourseTeacherHelperModel> GetTeachersInCourseInstanceByCourseInstanceId(int courseInstanceId) { 
+            var course = _db.CourseInstances.SingleOrDefault(x => x.Id == courseInstanceId);
+
+            if (course == null) {
+                return new List<CourseTeacherHelperModel>();
+            }
+
+            var teachers = course.Teachers.Select(teacher => new CourseTeacherHelperModel {
+                Id = teacher.AspNetUser.Id,
+                Email = teacher.AspNetUser.Email,
+                IsAssistant = teacher.IsAssistant,
+                Name = teacher.AspNetUser.FullName
+            }).ToList();
+
+
+            return teachers;
+        }
+
+        /// <summary>
         /// Get all course instances
         /// </summary>
-        public List<CourseHelperModel> GetAllCourseInstances() {
+        public List<CourseHelperModel> GetAllCourseInstances()
+        {
             var courseInstances = (from _courseInstance in _db.CourseInstances
                                    join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
                                    join _semester in _db.Semesters on _courseInstance.SemesterId equals _semester.Id
-                                   select new {_courseInstance, _course, _semester}).Select(_coursePair => new CourseHelperModel {
+                                   select new { _courseInstance, _course, _semester }).Select(_coursePair => new CourseHelperModel
+                                   {
                                        Id = _coursePair._courseInstance.Id,
                                        CourseId = _coursePair._course.Id,
                                        Name = _coursePair._course.Name,
                                        Description = _coursePair._course.Description,
                                        Year = _coursePair._courseInstance.Year,
                                        SemesterId = _coursePair._courseInstance.SemesterId,
-                                       Semester = _coursePair._semester.Name
+                                       Semester = _coursePair._semester.Name,
+                                       StudentsCount = _coursePair._courseInstance.AspNetUsers.Count
                                    }).ToList();
+
+            foreach (var course in courseInstances) {
+                course.Teachers = GetTeachersInCourseInstanceByCourseInstanceId(course.Id);
+            }
 
             return courseInstances;
         }
@@ -129,6 +157,36 @@ namespace Codex.Services
             }*/
 
             return false;
+        }
+
+        /// <summary>
+        /// Delete a course instance via its ID
+        /// </summary>
+        public bool DeleteCourseInstanceById(int courseInstanceId) {
+            var courseInstance = _db.CourseInstances.SingleOrDefault(x => x.Id == courseInstanceId);
+
+            _db.CourseInstances.Remove(courseInstance);
+
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Delete multiple courses instances via a list of course instance IDs
+        /// </summary>
+        public bool DeleteCourseInstancesById(List<int> courseInstanceIds) {
+            foreach (var courseInstanceId in courseInstanceIds) {
+                if (!DeleteCourseInstanceById(courseInstanceId)) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
