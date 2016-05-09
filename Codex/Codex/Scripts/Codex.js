@@ -41,7 +41,7 @@
     // Admin - Create new user form
     $("#create-user-form").on("submit", function() {
         var form = $(this);
-
+        
         var name = $("#NewUserModel_Name").val();
         var email = $("#NewUserModel_Email").val();
 
