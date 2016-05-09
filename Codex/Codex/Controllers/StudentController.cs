@@ -9,8 +9,7 @@ using Codex.Models.SharedModels.SharedViewModels;
 
 namespace Codex.Controllers
 {
-    public class StudentController : Controller
-    {
+    public class StudentController : Controller {
         // GET: Student
         public ActionResult Index() {
             //Temporary model for testing
@@ -24,8 +23,7 @@ namespace Codex.Controllers
             var tempstimespan = new TimeSpan(tempticks);
              
             var templist = new List<ProblemViewModel> { };
-            var tempprob = new ProblemViewModel
-            {
+            var tempprob = new ProblemViewModel {
                 Id = 1,
                 CourseId = 1,
                 Name = "Problem 1.1",
