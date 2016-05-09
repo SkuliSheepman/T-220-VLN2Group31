@@ -62,17 +62,17 @@ namespace Codex.Services
             var students = _courseService.GetAllStudentsInCourseInstance(newAssignmentViewModel.CourseInstanceId);
 
             // create groups for students
+            int count = 1;
             foreach (var _student in students)
             {
-
                 _db.AssignmentGroups.Add(new AssignmentGroup
                 {
 
                     UserId       = _student.Id,
                     AssignmentId = newAssignment.Id,
-
+                    GroupNumber  = count 
                 });
-
+                count++;
             }
 
             try
@@ -203,10 +203,6 @@ namespace Codex.Services
             foreach(var _assignment in assignments)
             {
                 _assignment.Collaborators = GetCollaborators(_assignment.Id, studentId);
-            }
-            foreach(var _assignment in assignments)
-            {
-                _assignment.AssignmentProblems = _problemService.GetAllProblemsInStudentAssignment(_assignment.Id, studentId);
             }
             return assignments;
         }
