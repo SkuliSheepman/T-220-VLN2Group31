@@ -160,6 +160,23 @@ namespace Codex.Services
             return um.FindById(id);
         }
 
+        /// <summary>
+        /// Check if a user is in a role via user ID
+        /// </summary>
+        public bool IsUserInRoleByUserId(string id, string role) {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+            return um.IsInRole(id, role);
+        }
+
+        /// <summary>
+        /// Check if a user is in a role via user ID
+        /// </summary>
+        public bool RemoveUserFromRoleByUserId(string id, string role)
+        {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+            return um.RemoveFromRole(id, role).Succeeded;
+        }
+
         // Used with User.Identity.Name
         public string GetUserIdByName(string name) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));

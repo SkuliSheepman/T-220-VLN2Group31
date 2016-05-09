@@ -217,10 +217,15 @@ namespace Codex.Services
                 courseInstance.AspNetUsers.Add(user);
             }
             else {
-                Teacher teacher = new Teacher();
-                teacher.AspNetUser = user;
-                teacher.IsAssistant = model.Position != 2;
+                Teacher teacher = new Teacher {
+                    AspNetUser = user,
+                    IsAssistant = model.Position != 2
+                };
                 courseInstance.Teachers.Add(teacher);
+
+                if (!_userService.IsUserInRoleByUserId(user.Id, "Teacher")) {
+                    _userService.AddUserToRoleByUserId(user.Id, "Teacher");
+                }
             }
 
             try {
@@ -299,6 +304,12 @@ namespace Codex.Services
             else {
                 var teacher = courseInstance.Teachers.SingleOrDefault(x => x.AspNetUser == user && x.IsAssistant == (model.Position != 2));
                 courseInstance.Teachers.Remove(teacher);
+
+                var teacherCourses = _db.CourseInstances.SingleOrDefault(x => x.Teachers.Any(y => y.AspNetUser.Id == user.Id));
+
+                if(teacherCourses != null && !teacherCourses.Teachers.Any()) {
+                    _userService.RemoveUserFromRoleByUserId(user.Id, "Teacher");
+                }
             }
 
             try {
