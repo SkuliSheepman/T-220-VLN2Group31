@@ -6,12 +6,8 @@ using System.Web;
 namespace Codex.Models.SharedModels.SharedViewModels
 {
     public class CourseViewModel
-    {
-        
-    }
+    {}
 
     public class CourseCreationViewModel
-    {
-
-    }
+    {}
 }

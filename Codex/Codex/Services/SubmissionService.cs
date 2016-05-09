@@ -9,26 +9,20 @@ namespace Codex.Services
 {
     public class SubmissionService
     {
-
         private Database _db;
         private AssignmentService _assignmentService;
 
-        public SubmissionService()
-        {
+        public SubmissionService() {
             _db = new Database();
         }
 
-        public List<SubmissionViewModel> GetGroupSubmissionsInProblem(string studentId, int problemId, int assignmentId)
-        {
+        public List<SubmissionViewModel> GetGroupSubmissionsInProblem(string studentId, int problemId, int assignmentId) {
             var collaborators = _assignmentService.GetCollaborators(assignmentId, studentId);
             var groupSubmissions = new List<SubmissionViewModel>();
-            foreach (var student in collaborators)
-            {
+            foreach (var student in collaborators) {
                 var submissions = _db.Submissions.Where(x => x.AssignmentId == assignmentId && x.ProblemId == problemId && x.StudentId == student.Id);
-                foreach (var submission in submissions)
-                {
-                    groupSubmissions.Add(new SubmissionViewModel()
-                    {
+                foreach (var submission in submissions) {
+                    groupSubmissions.Add(new SubmissionViewModel() {
                         Id = submission.Id,
                         SubmissionTime = submission.Time,
                         FailedTests = submission.FailedTests,
@@ -42,6 +36,5 @@ namespace Codex.Services
         /// <summary>
         /// SubmitSubmission
         /// </summary>
-
     }
 }

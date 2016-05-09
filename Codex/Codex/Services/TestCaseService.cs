@@ -9,48 +9,37 @@ namespace Codex.Services
 {
     public class TestCaseService
     {
-
         private Database _db;
 
-        public TestCaseService()
-        {
-
+        public TestCaseService() {
             _db = new Database();
-
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool CreateTestCase(TestCaseCreationViewModel newTestCaseViewModel)
-        {
-
-            var newTestCase = new TestCase
-            {
-                ProblemId      = newTestCaseViewModel.ProblemId,
-                Input          = newTestCaseViewModel.Input,
+        public bool CreateTestCase(TestCaseCreationViewModel newTestCaseViewModel) {
+            var newTestCase = new TestCase {
+                ProblemId = newTestCaseViewModel.ProblemId,
+                Input = newTestCaseViewModel.Input,
                 ExpectedOutput = newTestCaseViewModel.ExpectedOutput
             };
 
             _db.TestCases.Add(newTestCase);
 
-            try
-            {
+            try {
                 _db.SaveChanges();
                 return true;
-            } catch ( Exception e )
-            {
+            }
+            catch (Exception e) {
                 return false;
             }
-
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool DeleteTestCase(int testCaseId)
-        {
-
+        public bool DeleteTestCase(int testCaseId) {
             var testCaseToBeDeleted = _db.TestCases.SingleOrDefault(x => x.Id == testCaseId);
 
             if (testCaseToBeDeleted == null)
@@ -58,24 +47,19 @@ namespace Codex.Services
 
             _db.TestCases.Remove(testCaseToBeDeleted);
 
-            try
-            {
+            try {
                 _db.SaveChanges();
                 return true;
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 return false;
             }
-
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool EditTestCase(TestCaseViewModel editTestCaseViewModel)
-        {
-
+        public bool EditTestCase(TestCaseViewModel editTestCaseViewModel) {
             var testCaseToBeEdited = _db.TestCases.SingleOrDefault(x => x.Id == editTestCaseViewModel.Id);
 
             if (testCaseToBeEdited == null)
@@ -85,17 +69,13 @@ namespace Codex.Services
             testCaseToBeEdited.Input = editTestCaseViewModel.Input;
             testCaseToBeEdited.ExpectedOutput = editTestCaseViewModel.ExpectedOutput;
 
-            try
-            {
+            try {
                 _db.SaveChanges();
                 return true;
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 return false;
             }
-
         }
-
     }
 }

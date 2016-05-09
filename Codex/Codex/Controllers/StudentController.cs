@@ -12,8 +12,7 @@ namespace Codex.Controllers
     public class StudentController : Controller
     {
         // GET: Student
-        public ActionResult Index()
-        {
+        public ActionResult Index() {
             //Temporary model for testing
             var tempstart = DateTime.Now;
             tempstart = tempstart.AddHours(1);
@@ -36,8 +35,7 @@ namespace Codex.Controllers
                 Language = "C++"
             };
             templist.Add(tempprob);
-            var tempass = new AssignmentViewModel
-            {
+            var tempass = new AssignmentViewModel {
                 Id = 1,
                 CourseInstanceId = 1,
                 Name = "Assignment 1",
@@ -45,13 +43,11 @@ namespace Codex.Controllers
                 StartTime = DateTime.Now,
                 EndTime = tempstart,
                 MaxCollaborators = 3,
-
                 AssignmentProblems = templist
             };
-            var templist2 = new List<AssignmentViewModel> { };
+            var templist2 = new List<AssignmentViewModel>();
             templist2.Add(tempass);
-            StudentViewModel model = new StudentViewModel
-            {
+            StudentViewModel model = new StudentViewModel {
                 Assignments = templist2
             };
             //Temporary model for testing

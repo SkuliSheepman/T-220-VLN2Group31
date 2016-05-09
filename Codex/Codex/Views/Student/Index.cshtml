@@ -74,6 +74,7 @@
                                             @TimeRemaining
                                             
                                         </div>
+                                        <!-- todo: get course by id -->
                                         <div class="col s2">@assignment.CourseInstanceId</div>
                                         <div class="col s2">
                                             @{
@@ -98,7 +99,6 @@
                                     </div>
                                 </div>
                                 <div class="collapsible-body">
-                                    <!--<div class="card-panel collapsible-body-container">-->
                                         @if (assignment.AssignmentProblems.Count > 0)
                                         {
                                             <ul class="collapsible" data-collapsible="accordion">
@@ -108,8 +108,11 @@
                                                         <div class="collapsible-header">
                                                             <div class="row clear-margin">
                                                                 <div class="col s3">@problem.Name</div>
+                                                                <!-- todo: Weight -->
                                                                 <div class="col s1">100%</div>
-                                                                <div class="col s2">Submissions: </div>
+                                                                <!-- todo: submisssion count -->
+                                                                <div class="col s2">Submissions: </div>  
+                                                                <!-- todo: submit solution -->
                                                                 <div class="col s3">
                                                                     <form action="#" method="post">
                                                                         <label for="fileChooser" class="custom-file-upload">
@@ -128,6 +131,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="collapsible-body" style="display: block;">
+                                                            <!-- todo: problem details -->
                                                             lorem ipsum
                                                         </div>
                                                     </li>
@@ -139,7 +143,6 @@
                                             <div>This assignment has no problems.</div>
                                         }
                                     </div>
-                                <!--</div>-->
                             </li>
                         }
                     }

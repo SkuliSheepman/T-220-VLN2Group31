@@ -7,7 +7,6 @@ namespace Codex.Models.SharedModels.SharedViewModels
 {
     public class ProblemViewModel
     {
-
         public int Id { get; set; }
         public int CourseId { get; set; }
         public string Name { get; set; }
@@ -16,12 +15,10 @@ namespace Codex.Models.SharedModels.SharedViewModels
         public string Attachment { get; set; }
         public string Language { get; set; }
         public List<TestCaseViewModel> testCases { get; set; }
-
     }
 
     public class ProblemCreationViewModel
     {
-
         public int CourseId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -29,7 +26,6 @@ namespace Codex.Models.SharedModels.SharedViewModels
         public string Attachment { get; set; }
         public string Language { get; set; }
         public List<TestCaseCreationViewModel> testCases { get; set; }
-
     }
 
     public class StudentProblemViewModel : ProblemViewModel

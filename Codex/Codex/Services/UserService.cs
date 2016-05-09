@@ -64,6 +64,7 @@ namespace Codex.Services
             foreach (var user in users) {
                 var model = new UserHelperModel() {
                     UserInfo = user,
+                    IsAdmin = um.IsInRole(user.Id, "Admin"),
                     UserCourses = courseService.GetCoursesByUserId(user.Id)
                 };
 
@@ -90,6 +91,7 @@ namespace Codex.Services
 
             var completeUser = GetUserById(user.Id);
 
+            completeUser.UserName = user.Email;
             completeUser.Email = user.Email;
             completeUser.FullName = user.FullName;
 
@@ -156,6 +158,22 @@ namespace Codex.Services
         public ApplicationUser GetUserById(string id) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             return um.FindById(id);
+        }
+
+        /// <summary>
+        /// Check if a user is in a role via user ID
+        /// </summary>
+        public bool IsUserInRoleByUserId(string id, string role) {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+            return um.IsInRole(id, role);
+        }
+
+        /// <summary>
+        /// Check if a user is in a role via user ID
+        /// </summary>
+        public bool RemoveUserFromRoleByUserId(string id, string role) {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+            return um.RemoveFromRole(id, role).Succeeded;
         }
 
         // Used with User.Identity.Name
