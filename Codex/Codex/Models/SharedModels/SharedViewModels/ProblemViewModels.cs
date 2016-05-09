@@ -31,4 +31,9 @@ namespace Codex.Models.SharedModels.SharedViewModels
         public List<TestCaseCreationViewModel> testCases { get; set; }
 
     }
+
+    public class StudentProblemViewModel : ProblemViewModel
+    {
+        public List<SubmissionViewModel> Submissions { get; set; }
+    }
 }

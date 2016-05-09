@@ -5,19 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Codex.Services;
-using Codex.Models.SharedModels.SharedViewModels;
 
 namespace Codex.Controllers
 {
     public class HomeController : Controller
     {
         public ActionResult Index() {
-            AssignmentService assService = new AssignmentService();
-            UserService userService = new UserService();
-            StudentViewModel model = new StudentViewModel();
+            var assService = new AssignmentService();
+            var userService = new UserService();
+            var model = new HomeStudentViewModel();
             String studentId = userService.GetUserIdByName(User.Identity.Name);
-            model.Assignments = assService.GetAssignmentsByStudentId(studentId);
+            model.Assignments = assService.GetStudentAssignmentsByStudentId(studentId);
             ViewBag.UserName = User.Identity.Name;
             return View();
         }

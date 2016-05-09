@@ -18,6 +18,7 @@ namespace Codex.Services
         // </summary>
         private Database _db;
         private TestCaseService _testCaseService;
+        private SubmissionService _submissionService;
 
         // <summary>
         // problem service constructor
@@ -26,6 +27,7 @@ namespace Codex.Services
         {
             _db = new Database();
             _testCaseService = new TestCaseService();
+            _submissionService = new SubmissionService();
         }
 
         /// <summary>
@@ -105,6 +107,26 @@ namespace Codex.Services
 
             return rtrn;
 
+        }
+
+        public List<StudentProblemViewModel> GetAllProblemsInStudentAssignment(int assignmentId, string studentId)
+        {
+            var assignmentProblems = _db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId);
+            var problems = new List<StudentProblemViewModel>();
+            foreach(var problem in assignmentProblems)
+            {
+                problems.Add(new StudentProblemViewModel()
+                {
+                    Id = problem.Problem.Id,
+                    CourseId = problem.Problem.CourseId,
+                    Name = problem.Problem.Name,
+                    Description = problem.Problem.Description,
+                    Filetype = problem.Problem.Filetype,
+                    Attachment = problem.Problem.Attachment,
+                    Submissions = _submissionService.GetGroupSubmissionsInProblem(studentId, problem.Problem.Id, assignmentId)
+                });
+            }
+            return problems;
         }
 
         /// <summary>

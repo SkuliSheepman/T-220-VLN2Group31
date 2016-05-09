@@ -184,12 +184,12 @@ namespace Codex.Services
                                  }).ToList();
             return collaborators;
         }
-        public List<AssignmentViewModel> GetAssignmentsByStudentId(string studentId)
+        public List<StudentAssignmentViewModel> GetStudentAssignmentsByStudentId(string studentId)
         {
             var assignments = (from _assignmentGroup in _db.AssignmentGroups
                           where _assignmentGroup.UserId == studentId
                           join _assignment in _db.Assignments on _assignmentGroup.AssignmentId equals _assignment.Id
-                          select new { _assignmentGroup, _assignment }).Select(_assignmentPair => new AssignmentViewModel
+                          select new { _assignmentGroup, _assignment }).Select(_assignmentPair => new StudentAssignmentViewModel
                           {
                               Id = _assignmentPair._assignment.Id,
                               CourseInstanceId = _assignmentPair._assignment.CourseInstanceId,
@@ -203,6 +203,10 @@ namespace Codex.Services
             foreach(var _assignment in assignments)
             {
                 _assignment.Collaborators = GetCollaborators(_assignment.Id, studentId);
+            }
+            foreach(var _assignment in assignments)
+            {
+                _assignment.AssignmentProblems = _problemService.GetAllProblemsInStudentAssignment(_assignment.Id, studentId);
             }
             return assignments;
         }
