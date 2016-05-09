@@ -138,27 +138,6 @@ namespace Codex.Services
             return courseInstances;
         }
 
-        public bool DeleteCourseById(int courseId) {
-            /*var course = _db.Courses.FirstOrDefault(x => x.Id == courseId);
-            var courseInstances = _db.CourseInstances.Where(x => x.CourseId == course.Id);
-
-            foreach (var _courseInstance in courseInstances)
-            {
-                _db.CourseInstances.Remove(_courseInstance);
-            }
-
-            try
-            {
-                _db.SaveChanges();
-                return true;
-            } catch ( Exception e )
-            {
-                return false;
-            }*/
-
-            return false;
-        }
-
         /// <summary>
         /// Delete a course instance via its ID
         /// </summary>

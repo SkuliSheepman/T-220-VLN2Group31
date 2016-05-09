@@ -19,7 +19,7 @@
                 <ul class="collapsible popout" data-collapsible="accordion">
                     @foreach (var assignment in Model.Assignments)
                     {
-                        if (assignment.EndTIme < DateTime.Now)
+                        if (assignment.EndTime < DateTime.Now)
                         {
                             <li class="collapsible-level1">
                                 <div class="collapsible-header">
@@ -29,7 +29,7 @@
                                                 <span>@assignment.Name</span>
                                             </div>
                                             <span class="col s3"><a class="waves-effect waves-light btn" href="#!">Details</a></span>
-                                            <span class="col s3">@assignment.EndTIme</span>
+                                            <span class="col s3">@assignment.EndTime</span>
                                         </div>
                                     </div>
                                 </div>
@@ -77,7 +77,7 @@
             <ul class="collapsible popout" data-collapsible="accordion">
                 @foreach (var assignment in Model.Assignments)
                 {
-                    if (assignment.EndTIme >= DateTime.Now)
+                    if (assignment.EndTime >= DateTime.Now)
                     {
                         <li class="collapsible-level1">
                             <div class="collapsible-header">
@@ -86,7 +86,7 @@
                                         <label for="@assignment.Id">
                                             <span class="transparent-text">.</span>
                                         </label>
-                                        <span>@assignment.EndTIme</span>
+                                        <span>@assignment.EndTime</span>
                                     </div>
                                 </div>
                             </div>

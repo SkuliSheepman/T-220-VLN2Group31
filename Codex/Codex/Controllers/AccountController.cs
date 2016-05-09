@@ -86,7 +86,16 @@ namespace Codex.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    var user = await UserManager.FindAsync(model.Email, model.Password);
+                    if (UserManager.IsInRole(user.Id, "Admin")) {
+                        return RedirectToAction("Users", "Admin");
+                    }
+                    else if(UserManager.IsInRole(user.Id, "Teacher")) {
+                        return RedirectToAction("Index", "Teacher");
+                    }
+                    else {
+                        return RedirectToAction("Index", "Student");
+                    }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

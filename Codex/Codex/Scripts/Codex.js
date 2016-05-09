@@ -421,15 +421,15 @@
 
     // Admin - Update user
     $(".update-user-button").on("click", function () {
-        var container = $(this).prev();
+        var container = $(this).parent().parent().prev();
 
         var sendData = {
             "Id": getUserId($(this)),
             "FullName": container.find("input[type='text']:first").val(),
             "Email": container.find("input[type='text']:last").val()
         }
-        
-        if (sendData.Name.length <= 0) {
+
+        if (sendData.FullName.length <= 0) {
             Materialize.toast("Name missing!", 2000);
         }
         else if (sendData.Email.length <= 0) {

@@ -91,6 +91,7 @@ namespace Codex.Services
 
             var completeUser = GetUserById(user.Id);
 
+            completeUser.UserName = user.Email;
             completeUser.Email = user.Email;
             completeUser.FullName = user.FullName;
 
