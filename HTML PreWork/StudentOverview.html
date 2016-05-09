@@ -66,25 +66,127 @@
         <!-- Section for open assignments -->
         <div class="section">
             <h5>Open Assignments</h5>
-            <ul class="collection with-header">
+            <ul class="collapsible popout" data-collapsible="accordion">
                 <li class="collection-item">
-                    <div class="row student-overview">
-                        <div class="col s2"><b>Skilaverkefni 3</b></div>
-                        <div class="col s2"><a class="waves-effect waves-light btn">Details</a></div>
-                        <div class="col s2">6 days left</div>
-                        <div class="col s2">Gagnaskipan</div>
-                        <div class="col s2">1 problem</div>
-                        <div class="col s2">Unfisnished</div>
+                    <div class="collapsible-header">
+                        <div class="row">
+                            <div class="col s2"><b>Skilaverkefni 3</b></div>
+                            <div class="col s2"><a class="waves-effect waves-light btn" href="StudentAssignmentDetails.html">Details</a></div>
+                            <div class="col s2">6 days left</div>
+                            <div class="col s2">Gagnaskipan</div>
+                            <div class="col s2">1 problem</div>
+                            <div class="col s2">Unfisnished</div>
+                        </div>
+                    </div>
+                    <div class="collapsible-body">
+                        <ul class="collapsible problems" data-collapsible="accordion">
+                            <li>
+                                <div class="collapsible-header">
+                                    <div class="row">
+                                        <div class="col m3">
+                                            <i class="material-icons">turned_in</i>
+                                            <a href="#">PredatorPrey</a>
+                                        </div>
+                                        <div class="col m2">
+                                            <div class="grey-text center-align">
+                                                <span>100%</span>
+                                            </div>
+                                        </div>
+                                        <div class="col m2">
+                                            <div class="grey-text center-align">
+                                                <span>Submissions: 4</span>
+                                            </div>
+                                        </div>
+                                        <div class="col m3 center">
+                                            <form action="#" method="post">
+                                                <label for="predator" class="custom-file-upload">
+                                                    <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
+                                                        <i class="material-icons">insert_drive_file</i>
+                                                    </span>
+                                                </label>
+                                                <input id="predator" type="file" />
+                                                <button class="btn-flat waves-effect waves-teal white testButton teal-text" type="submit" name="action">
+                                                    <span>Submit</span>
+                                                    <i class="material-icons right">send</i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="col m2 right-align">
+                                            <a class="green-text problemStatus" href="#">Accepted <span class="material-icons">done</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </li>
                 <li class="collection-item">
-                    <div class="row student-overview">
-                        <div class="col s2"><b>Skilaverkefni 2</b></div>
-                        <div class="col s2"><a class="waves-effect waves-light btn">Details</a></div>
-                        <div class="col s2">2 hours left</div>
-                        <div class="col s2">Gagnaskipan</div>
-                        <div class="col s2">2 problems</div>
-                        <div class="col s2">Done</div>
+                    <div class="collapsible-header">
+                        <div class="row">
+                            <div class="col s2"><b>Skilaverkefni 2</b></div>
+                            <div class="col s2"><a class="waves-effect waves-light btn">Details</a></div>
+                            <div class="col s2">2 hours left</div>
+                            <div class="col s2">Gagnaskipan</div>
+                            <div class="col s2">2 problems</div>
+                            <div class="col s2">Done</div>
+                        </div>
+                    </div>
+                    <div class="collapsible-body">
+                        <ul class="collapsible problems" data-collapsible="accordion">
+                            <li>
+                                <div class="collapsible-header">
+                                    <div class="row">
+                                        <div class="col m3">
+                                            <i class="material-icons">turned_in</i>
+                                            <a href="teacher-grading.html">PredatorPrey</a>
+                                        </div>
+                                        <div class="col m2">
+                                            <div class="grey-text center-align">
+                                                <span>100%</span>
+                                            </div>
+                                        </div>
+                                        <div class="col m2">
+                                            <div class="grey-text center-align">
+                                                <span>Submissions: 4</span>
+                                            </div>
+                                        </div>
+                                        <div class="col m3 center">
+                                            <form action="#" method="post">
+                                                <label for="predator" class="custom-file-upload">
+                                                    <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
+                                                        <i class="material-icons">insert_drive_file</i>
+                                                    </span>
+                                                </label>
+                                                <input id="predator" type="file" />
+                                                <button class="btn-flat waves-effect waves-teal white testButton teal-text" type="submit" name="action">
+                                                    <span>Submit</span>
+                                                    <i class="material-icons right">send</i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="col m2 right-align">
+                                            <a class="green-text problemStatus" href="#">Accepted <span class="material-icons">done</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <ul class="collapsible problems" data-collapsible="accordion">
+                                            <li>
+                                                <div class="collapsible-header">
+                                                    <div class="row">
+                                                        <div class="col m3">Perms.zip</div>
+                                                        <div class="col m3">03.04.16 - 13:45:45</div>
+                                                        <div class="col m4"><a class="waves-effect waves-light btn">Download</a></div>
+                                                        <div class="col m2">3 test cases</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </li>
             </ul>
@@ -92,15 +194,58 @@
         <!-- Section for closed assignments -->
         <div class="section">
             <h5>Closed Assignments</h5>
-            <ul class="collection with-header">
+            <ul class="collapsible popout" data-collapsible="accordion">
                 <li class="collection-item">
-                    <div class="row student-overview">
-                        <div class="col s2"><b>Skilaverkefni 1</b></div>
-                        <div class="col s2"><a class="waves-effect waves-light btn">Details</a></div>
-                        <div class="col s2">Grade: 10</div>
-                        <div class="col s2">Gagnaskipan</div>
-                        <div class="col s2">1 problem</div>
-                        <div class="col s2">Done</div>
+                    <div class="collapsible-header">
+                        <div class="row">
+                            <div class="col s2"><b>Skilaverkefni 1</b></div>
+                            <div class="col s2"><a class="waves-effect waves-light btn">Details</a></div>
+                            <div class="col s2">Grade: 10</div>
+                            <div class="col s2">Gagnaskipan</div>
+                            <div class="col s2">1 problem</div>
+                            <div class="col s2">Done</div>
+                        </div>
+                    </div>
+                    <div class="collapsible-body">
+                        <ul class="collapsible problems" data-collapsible="accordion">
+                            <li>
+                                <div class="collapsible-header">
+                                    <div class="row">
+                                        <div class="col m3">
+                                            <i class="material-icons">turned_in</i>
+                                            <a href="teacher-grading.html">PredatorPrey</a>
+                                        </div>
+                                        <div class="col m2">
+                                            <div class="grey-text center-align">
+                                                <span>100%</span>
+                                            </div>
+                                        </div>
+                                        <div class="col m2">
+                                            <div class="grey-text center-align">
+                                                <span>Submissions: 4</span>
+                                            </div>
+                                        </div>
+                                        <div class="col m3 center">
+                                            <form action="#" method="post">
+                                                <label for="predator" class="custom-file-upload">
+                                                    <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
+                                                        <i class="material-icons">insert_drive_file</i>
+                                                    </span>
+                                                </label>
+                                                <input id="predator" type="file" />
+                                                <button class="btn-flat waves-effect waves-teal white testButton teal-text" type="submit" name="action">
+                                                    <span>Submit</span>
+                                                    <i class="material-icons right">send</i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="col m2 right-align">
+                                            <a class="green-text problemStatus" href="#">Accepted <span class="material-icons">done</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </li>
             </ul>

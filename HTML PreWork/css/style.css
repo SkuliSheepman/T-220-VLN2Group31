@@ -280,3 +280,13 @@ input[type="file"] {
   position: relative;
   top:-5px;
 }
+
+.border {
+    border: 1px solid #808080;
+}
+
+.output {
+    margin: 0 auto;
+    width: 60%;
+    border: 1px solid #000000;
+}
