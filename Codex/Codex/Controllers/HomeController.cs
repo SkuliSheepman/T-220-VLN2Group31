@@ -31,7 +31,7 @@ namespace Codex.Controllers
             }
 
             ViewBag.UserName = User.Identity.Name;
-            return View();
+            return View(model);
         }
 
         public ActionResult About() {
