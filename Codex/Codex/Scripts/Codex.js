@@ -334,4 +334,34 @@
             }
         });
     });
+
+    // Search functionality
+    // Source: http://stackoverflow.com/questions/12433304/live-search-through-table-rows
+    //         http://jsfiddle.net/FranWahl/rFGWZ/
+    $("#search").on("keyup", function() {
+        var searchVal = $(this).val().toLowerCase();
+
+        $(".collapsible-header").each(function() {
+            row = $(this);
+
+            row.removeClass("active");
+            row.parent().removeClass("active");
+            row.next().css("display", "none");
+
+            var match = false;
+            row.find(".search-criteria").each(function () {
+                if ($(this).text().toLowerCase().indexOf(searchVal) !== -1) {
+                    match = true;
+                    return false;
+                }
+            });
+
+            if (!match) {
+                row.hide();
+            }
+            else {
+                row.show();
+            }
+        });
+    });
 });

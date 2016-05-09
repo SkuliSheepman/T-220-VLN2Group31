@@ -18,18 +18,18 @@
         <ul class="collapsible popout" data-collapsible="accordion">
             @foreach (var user in Model.Users) {
                 <li class="grey lighten-2">
-                    <div class="collapsible-header">
+                    <div class="collapsible-header" data-test="@user.UserInfo.Email">
                         <div class="row clear-margin">
                             <div class="col s5 l3 truncate">
                                 <input type="checkbox" id="@user.UserInfo.Id" value="@user.UserInfo.Id" name="user-row"/>
                                 <label for="@user.UserInfo.Id">
                                     <span class="transparent-text">.</span>
                                 </label>
-                                <span>@user.UserInfo.FullName</span>
+                                <span class="search-criteria">@user.UserInfo.FullName</span>
                             </div>
 
                             <div class="col s5 l3 truncate">
-                                <span class="grey-text">@user.UserInfo.Email</span>
+                                <span class="grey-text search-criteria">@user.UserInfo.Email</span>
                             </div>
 
                             <!-- Vertical ellipsis dropdown menu -->
