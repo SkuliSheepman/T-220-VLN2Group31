@@ -1,11 +1,10 @@
 ﻿using System;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Codex.Services;
-using Codex.Models;
+using Codex.Models.SharedModels.SharedViewModels;
 
 namespace Codex.Controllers
 {
@@ -21,9 +20,12 @@ namespace Codex.Controllers
         }
 
         // GET: Assignment
-        public ActionResult Index()
+        public ActionResult Index(int Id)
         {
-            return View();
+            
+            var model = _assignmentService.GetAssignment(Id);
+
+            return View(model);
         }
 
 

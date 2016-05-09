@@ -64,6 +64,7 @@ namespace Codex.Services
             foreach (var user in users) {
                 var model = new UserHelperModel() {
                     UserInfo = user,
+                    IsAdmin = um.IsInRole(user.Id, "Admin"),
                     UserCourses = courseService.GetCoursesByUserId(user.Id)
                 };
 
@@ -90,6 +91,7 @@ namespace Codex.Services
 
             var completeUser = GetUserById(user.Id);
 
+            completeUser.UserName = user.Email;
             completeUser.Email = user.Email;
             completeUser.FullName = user.FullName;
 
