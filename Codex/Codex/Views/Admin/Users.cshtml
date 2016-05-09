@@ -68,6 +68,15 @@
                                     </div>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col s12 m5 offset-m7 l3 offset-l9">
+                                        <a href="#" id="create-user-button" class="waves-effect waves-green btn update-user-button fill-width">
+                                            Update
+                                        </a>
+                                    </div>
+                                </div>
+                                
+
                                 <div class="divider"></div>
 
                                 <!-- Add Courses -->
@@ -100,9 +109,10 @@
                                 <!-- User Courses -->
                                 <div class="row">
                                     <div class="col s12">
-                                        <table class="striped centered">
+                                        <table class="striped centered bordered responsive-table">
                                             <thead>
                                                 <tr>
+                                                    <th data-field="id" class="hiddendiv">Id</th>
                                                     <th data-field="course">Course</th>
                                                     <th data-field="year">Year</th>
                                                     <th data-field="semester">Semester</th>
@@ -115,19 +125,20 @@
                                                 @foreach (var course in user.UserCourses)
                                                 {
                                                     <tr>
+                                                        <td class="hiddendiv">@course.CourseInstanceId</td>
                                                         <td>@course.Name</td>
                                                         <td>@course.Year</td>
                                                         <td>@switch (course.Semester) {
-                                                            case 1:
-                                                                @:Fall
+                                                                case 1:
+                                                                    @:Fall
                                                                     break;
 
-                                                            case 2:
-                                                                @:Spring
+                                                                case 2:
+                                                                    @:Spring
                                                                     break;
 
-                                                            case 3:
-                                                                @:Summer
+                                                                case 3:
+                                                                    @:Summer
                                                                     break;
                                                             }
                                                         </td>
@@ -147,7 +158,9 @@
                                                             }
                                                         </td>
                                                         <td>
-                                                            <i class="material-icons red-text">clear</i>
+                                                            <a href="#" class="remove-from-course">
+                                                                <i class="material-icons red-text">clear</i>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                 }
@@ -162,53 +175,11 @@
                     <!-- Dropdown content -->
                     <ul id="@user.UserInfo.Id-dropdown" class='dropdown-content stop-propagation'>
                         <li>
-                            <a class="waves-effect waves-light modal-trigger" href="#@user.UserInfo.Id-change-password">
-                                Change Password
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="waves-effect waves-light modal-trigger" href="#@user.UserInfo.Id-delete">
-                                Delete
+                            <a class="waves-effect waves-light reset-password-button" href="#">
+                                Reset Password
                             </a>
                         </li>
                     </ul>
-
-                    <!-- Modal - Change password -->
-                    <div id="@user.UserInfo.Id-change-password" class="modal">
-                        <div class="modal-content">
-                            <h4 class="center-align">Change Password</h4>
-                            <div class="divider"></div>
-                            <h5>Change password for @user.UserInfo.FullName</h5>
-                            <form class="row">
-                                <div class="input-field col s6">
-                                    <input id="@user.UserInfo.Id-new-password" type="password" class="validate">
-                                    <label for="@user.UserInfo.Id-new-password">New Password</label>
-                                </div>
-                                <div class="input-field col s6">
-                                    <input id="@user.UserInfo.Id-repeat-password" type="password" class="validate">
-                                    <label for="@user.UserInfo.Id-repeat-password">Repeat new password</label>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Change Password</a>
-                            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-                        </div>
-                    </div>
-
-                    <!-- Modal - Delete -->
-                    <div id="@user.UserInfo.Id-delete" class="modal">
-                        <div class="modal-content">
-                            <h4 class="center-align">Delete User</h4>
-                            <div class="divider"></div>
-                            <p>Are you sure you want to delete @user.UserInfo.FullName?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Delete User</a>
-                            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-                        </div>
-                    </div>
                 </li>
             }
         </ul>
@@ -276,8 +247,8 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
         <a href="#" id="create-user-button" class="waves-effect waves-green btn-flat">Create</a>
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
     </div>
 </div>
 
@@ -292,7 +263,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
         <a href="#" id="delete-selected-users-button" class="waves-effect waves-green btn-flat">Delete</a>
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
     </div>
 </div>

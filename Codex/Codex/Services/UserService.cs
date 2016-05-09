@@ -18,12 +18,16 @@ namespace Codex.Services
     {
         /* Most methods here use code given in Lab 7 in Web Programming by Patrekur Patreksson */
 
-        private ApplicationDbContext _db;
+        // The UserService uses the ApplicationDbContext in order to utilize the Identity model
+        private readonly ApplicationDbContext _db;
 
         public UserService() {
             _db = new ApplicationDbContext();
         }
 
+        /// <summary>
+        /// Delete a user via the user's ID
+        /// </summary>
         public bool DeleteUserById(string id) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             var appUser = um.FindById(id);
@@ -32,6 +36,9 @@ namespace Codex.Services
             return result.Succeeded;
         }
 
+        /// <summary>
+        /// Delete multiple users via a list of user IDs
+        /// </summary>
         public bool DeleteUsersByIds(List<string> userIds) {
             foreach (var id in userIds) {
                 var result = DeleteUserById(id);
@@ -44,6 +51,9 @@ namespace Codex.Services
             return true;
         }
 
+        /// <summary>
+        /// Get all users in the database
+        /// </summary>
         public List<UserHelperModel> GetAllUsers() {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             var users = um.Users.ToList();
@@ -63,37 +73,93 @@ namespace Codex.Services
             return userModels;
         }
 
+        /// <summary>
+        /// Insert a user into the database with a given ApplicationUser variable
+        /// </summary>
         public bool CreateUser(ApplicationUser user) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             var idResult = um.Create(user, user.Email);
             return idResult.Succeeded;
         }
 
+        /// <summary>
+        /// Update a user with a given ApplicationUser variable
+        /// </summary>
+        public bool EditUser(ApplicationUser user) {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+
+            var completeUser = GetUserById(user.Id);
+
+            completeUser.Email = user.Email;
+            completeUser.FullName = user.FullName;
+
+            um.Update(completeUser);
+
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Reset a user's password to the email address of the user via User ID
+        /// </summary>
+        public bool ResetPassword(string userId) {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
+
+            var user = GetUserById(userId);
+
+            um.RemovePassword(userId);
+            um.AddPassword(userId, user.Email);
+
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Find out whether or not a username is available
+        /// </summary>
         public bool UserExistsByUsername(string name) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             return um.FindByName(name) != null;
         }
 
+        /// <summary>
+        /// Create a new role
+        /// </summary>
         public bool CreateRole(string name) {
             var rm = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(_db));
             var idResult = rm.Create(new IdentityRole(name));
             return idResult.Succeeded;
         }
 
+        /// <summary>
+        /// Add a user to a role with a given user's ID and a role's name
+        /// </summary>
         public bool AddUserToRoleByUserId(string userId, string roleName) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             var idResult = um.AddToRole(userId, roleName);
             return idResult.Succeeded;
         }
 
+        /// <summary>
+        /// Get a ApplicationUser variable from a user's ID
+        /// </summary>
         public ApplicationUser GetUserById(string id) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             return um.FindById(id);
         }
-        
+
         // Used with User.Identity.Name
-        public string GetUserIdByName(string name)
-        {
+        public string GetUserIdByName(string name) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             ApplicationUser user = new ApplicationUser();
             user = um.FindByName(name);

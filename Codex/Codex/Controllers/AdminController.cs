@@ -81,7 +81,21 @@ namespace Codex.Controllers
         }
 
         public ActionResult EditUser(ApplicationUser user) {
-            return null;
+            UserService userService = new UserService();
+
+            return Json(userService.EditUser(user));
+        }
+
+        public ActionResult ChangePassword(string userId) {
+            UserService userService = new UserService();
+
+            return Json(userService.ResetPassword(userId));
+        }
+
+        public ActionResult RemoveUserFromCourse(UserAddCourseHelperModel model) {
+            CourseService courseService = new CourseService();
+
+            return Json(courseService.RemoveUserFromCourse(model));
         }
 
         public ActionResult AddUserToCourse(UserAddCourseHelperModel model) {

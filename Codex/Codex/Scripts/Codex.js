@@ -31,6 +31,11 @@
         return regex.test(email);
     }
 
+    // Get user ID from row in admin view with supplied descendant
+    function getUserId(elem) {
+        return elem.closest("li").find("input[type='checkbox'][name='user-row']").val();
+    }
+
     /* ADMIN */
 
     // Admin - Create new user form
@@ -215,6 +220,110 @@
             success: function (responseData) {
                 if (responseData) {
                     Materialize.toast("User added to course", 4000);
+                }
+                else {
+                    Materialize.toast("An error occurred", 4000);
+                }
+            },
+            error: function () {
+                // TODO
+            }
+        });
+    });
+
+    // Admin - Remove user from course
+    $(".remove-from-course").on("click", function (e) {
+        e.preventDefault();
+
+        var row = $(this).closest("tr");
+
+        var userId = getUserId($(this));
+        var courseInstanceId = row.find(".hiddendiv").html();
+        var position = $(this).parent().prev().html().trim();
+
+        switch (position) {
+            case "Student":
+                position = 1;
+                break;
+
+            case "Teacher":
+                position = 2;
+                break;
+
+            case "Assistant":
+                position = 3;
+                break;
+            default:
+        }
+
+        var sendData = {
+            "UserId": userId,
+            "CourseId": courseInstanceId,
+            "Position": position
+        }
+
+        $.ajax({
+            url: "/Admin/RemoveUserFromCourse",
+            data: sendData,
+            method: "POST",
+            success: function (responseData) {
+                if (responseData) {
+                    row.remove();
+                    Materialize.toast("User removed from course", 4000);
+                }
+                else {
+                    Materialize.toast("An error occurred", 4000);
+                }
+            },
+            error: function () {
+                // TODO
+            }
+        });
+    });
+
+    // Admin - Update user
+    $(".update-user-button").on("click", function () {
+        var container = $(this).prev();
+
+        var sendData = {
+            "Id": getUserId($(this)),
+            "FullName": container.find("input[type='text']:first").val(),
+            "Email": container.find("input[type='text']:last").val()
+        }
+
+        $.ajax({
+            url: "/Admin/EditUser",
+            data: sendData,
+            method: "POST",
+            success: function (responseData) {
+                if (responseData) {
+                    Materialize.toast("User information updated", 4000);
+                }
+                else {
+                    Materialize.toast("An error occurred", 4000);
+                }
+            },
+            error: function () {
+                // TODO
+            }
+        });
+    });
+
+    // Admin - Reset password for user
+    $(".reset-password-button").on("click", function () {
+
+        // Due to dropdowns acting strangely, getUserId cannot be used here
+        var sendData = {
+            "userId":  $(this).closest(".collapsible-header").parent().find("input[type='checkbox'][name='user-row']").val()
+        }
+        
+        $.ajax({
+            url: "/Admin/ChangePassword",
+            data: sendData,
+            method: "POST",
+            success: function (responseData) {
+                if (responseData) {
+                    Materialize.toast("Password reset", 4000);
                 }
                 else {
                     Materialize.toast("An error occurred", 4000);
