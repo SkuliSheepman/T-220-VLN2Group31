@@ -206,11 +206,52 @@ namespace Codex.Services
             }
             return assignments;
         }
-       /* public bool RemoveCollboratorsFromAssignment(int assignmentId, string studentId)
+       public bool RemoveCollboratorsFromAssignment(int assignmentId, string studentId)
         {
+            var relation = (from _relation in _db.AssignmentGroups
+                            where _relation.UserId == studentId
+                            && _relation.AssignmentId == assignmentId
+                            select _relation);
+
+            foreach (var _relation in relation)
+            {
+                _db.AssignmentGroups.Remove(_relation);
+            }
+
+            try
+            {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
 
         }
-        */
+        
+        public bool AddCollaborator(int assignmentId, string studentId)
+        {
+            var relation = (from _relation in _db.AssignmentGroups
+                            where _relation.UserId == studentId
+                            && _relation.AssignmentId == assignmentId
+                            select _relation);
+
+            foreach (var _relation in relation)
+            {
+                _db.AssignmentGroups.Add(_relation);
+            }
+
+            try
+            {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
     }
 
 }

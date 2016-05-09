@@ -44,10 +44,17 @@ namespace Codex.Controllers
             var result = _problemService.GetAllProblemsInAssignment(assignmentId);
             return Json(result);
         }
-       /* public ActionResult RemoveCollaboratorsFromAssignment(int assignmentId, string studentId)
+       public ActionResult RemoveCollaboratorsFromAssignment(int assignmentId, string studentId)
         {
-            return 
-        }*/
+           var result = _assignmentService.RemoveCollboratorsFromAssignment(assignmentId, studentId);
+            return Json(result);
+        }
+        
+        public ActionResult AddCollaboratorsToAssignment(int assignmentId, string studentId)
+        {
+            var result = _assignmentService.AddCollaborator(assignmentId, studentId);
+            return Json(result);
+        }
 
     }
 }
