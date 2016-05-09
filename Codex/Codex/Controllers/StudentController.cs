@@ -15,8 +15,15 @@ namespace Codex.Controllers
         public ActionResult Index()
         {
             //Temporary model for testing
-            var tempstart = DateTime.Today;
-            tempstart.AddDays(3);
+            var tempstart = DateTime.Now;
+            tempstart = tempstart.AddHours(1);
+            tempstart = tempstart.AddMinutes(1);
+            var tempnow = DateTime.Now;
+
+
+            var tempticks = tempstart.Ticks - tempnow.Ticks;
+            var tempstimespan = new TimeSpan(tempticks);
+             
             var templist = new List<ProblemViewModel> { };
             var tempprob = new ProblemViewModel
             {
@@ -35,7 +42,7 @@ namespace Codex.Controllers
                 CourseInstanceId = 1,
                 Name = "Assignment 1",
                 Description = "Temp Description",
-                StartTime = DateTime.Today,
+                StartTime = DateTime.Now,
                 EndTime = tempstart,
                 MaxCollaborators = 3,
 
