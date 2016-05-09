@@ -204,10 +204,6 @@ namespace Codex.Services
             {
                 _assignment.Collaborators = GetCollaborators(_assignment.Id, studentId);
             }
-            foreach(var _assignment in assignments)
-            {
-                _assignment.AssignmentProblems = _problemService.GetAllProblemsInStudentAssignment(_assignment.Id, studentId);
-            }
             return assignments;
         }
 

@@ -109,7 +109,7 @@ namespace Codex.Services
 
         }
 
-        public List<StudentProblemViewModel> GetAllProblemsInStudentAssignment(int assignmentId, string studentId)
+        public List<StudentProblemViewModel> GetAllProblemsInStudentAssignment(int assignmentId)
         {
             var assignmentProblems = _db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId);
             var problems = new List<StudentProblemViewModel>();
@@ -122,8 +122,7 @@ namespace Codex.Services
                     Name = problem.Problem.Name,
                     Description = problem.Problem.Description,
                     Filetype = problem.Problem.Filetype,
-                    Attachment = problem.Problem.Attachment,
-                    Submissions = _submissionService.GetGroupSubmissionsInProblem(studentId, problem.Problem.Id, assignmentId)
+                    Attachment = problem.Problem.Attachment
                 });
             }
             return problems;
