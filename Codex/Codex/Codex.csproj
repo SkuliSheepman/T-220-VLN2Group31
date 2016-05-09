@@ -236,6 +236,7 @@
     <Compile Include="Models\SharedModels\SharedViewModels\CourseViewModels.cs" />
     <Compile Include="Models\SharedModels\SharedViewModels\ProblemViewModels.cs" />
     <Compile Include="Models\SharedModels\SharedViewModels\StudentViewModels.cs" />
+    <Compile Include="Models\SharedModels\SharedViewModels\SubmissionViewModel.cs" />
     <Compile Include="Models\SharedModels\SharedViewModels\TestCaseViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AssignmentService.cs" />

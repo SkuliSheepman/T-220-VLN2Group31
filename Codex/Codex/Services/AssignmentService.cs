@@ -62,17 +62,17 @@ namespace Codex.Services
             var students = _courseService.GetAllStudentsInCourseInstance(newAssignmentViewModel.CourseInstanceId);
 
             // create groups for students
+            int count = 1;
             foreach (var _student in students)
             {
-
                 _db.AssignmentGroups.Add(new AssignmentGroup
                 {
 
                     UserId       = _student.Id,
                     AssignmentId = newAssignment.Id,
-
+                    GroupNumber  = count 
                 });
-
+                count++;
             }
 
             try
@@ -184,12 +184,12 @@ namespace Codex.Services
                                  }).ToList();
             return collaborators;
         }
-        public List<AssignmentViewModel> GetAssignmentsByStudentId(string studentId)
+        public List<StudentAssignmentViewModel> GetStudentAssignmentsByStudentId(string studentId)
         {
             var assignments = (from _assignmentGroup in _db.AssignmentGroups
                           where _assignmentGroup.UserId == studentId
                           join _assignment in _db.Assignments on _assignmentGroup.AssignmentId equals _assignment.Id
-                          select new { _assignmentGroup, _assignment }).Select(_assignmentPair => new AssignmentViewModel
+                          select new { _assignmentGroup, _assignment }).Select(_assignmentPair => new StudentAssignmentViewModel
                           {
                               Id = _assignmentPair._assignment.Id,
                               CourseInstanceId = _assignmentPair._assignment.CourseInstanceId,
@@ -206,7 +206,52 @@ namespace Codex.Services
             }
             return assignments;
         }
+       public bool RemoveCollboratorsFromAssignment(int assignmentId, string studentId)
+        {
+            var relation = (from _relation in _db.AssignmentGroups
+                            where _relation.UserId == studentId
+                            && _relation.AssignmentId == assignmentId
+                            select _relation);
 
+            foreach (var _relation in relation)
+            {
+                _db.AssignmentGroups.Remove(_relation);
+            }
+
+            try
+            {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
+        
+        public bool AddCollaborator(int assignmentId, string studentId)
+        {
+            var relation = (from _relation in _db.AssignmentGroups
+                            where _relation.UserId == studentId
+                            && _relation.AssignmentId == assignmentId
+                            select _relation);
+
+            foreach (var _relation in relation)
+            {
+                _db.AssignmentGroups.Add(_relation);
+            }
+
+            try
+            {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
     }
 
 }

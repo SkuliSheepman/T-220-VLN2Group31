@@ -11,4 +11,9 @@ namespace Codex.Models.SharedModels.SharedViewModels
         public List<AssignmentViewModel> Assignments { get; set; }
     }
 
+    public class HomeStudentViewModel
+    {
+        public List<StudentAssignmentViewModel> Assignments { get; set; }
+    }
+
 }
