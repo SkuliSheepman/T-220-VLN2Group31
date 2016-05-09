@@ -15,17 +15,14 @@ namespace Codex.Controllers
         private SubmissionService _submissionService;
         private AssignmentService _assignmentService;
 
-        public TeacherController()
-        {
+        public TeacherController() {
             _userService = new UserService();
             _submissionService = new SubmissionService();
             _assignmentService = new AssignmentService();
         }
 
         // GET: Teacher
-        public ActionResult Index()
-        {
-
+        public ActionResult Index() {
             return View();
         }
     }

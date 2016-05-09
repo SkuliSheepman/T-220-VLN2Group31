@@ -171,8 +171,7 @@ namespace Codex.Services
         /// <summary>
         /// Check if a user is in a role via user ID
         /// </summary>
-        public bool RemoveUserFromRoleByUserId(string id, string role)
-        {
+        public bool RemoveUserFromRoleByUserId(string id, string role) {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             return um.RemoveFromRole(id, role).Succeeded;
         }

@@ -14,7 +14,6 @@ namespace Codex.Models.SharedModels.SharedViewModels
 
     public class AssignmentViewModel
     {
-
         public int Id { get; set; }
         public int CourseInstanceId { get; set; }
         public string Name { get; set; }
@@ -23,12 +22,10 @@ namespace Codex.Models.SharedModels.SharedViewModels
         public DateTime? EndTime { get; set; }
         public int MaxCollaborators { get; set; }
         public List<ProblemViewModel> AssignmentProblems { get; set; }
-
     }
 
     public class AssignmentCreationViewModel
     {
-
         public int CourseInstanceId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -36,7 +33,6 @@ namespace Codex.Models.SharedModels.SharedViewModels
         public DateTime? EndTime { get; set; }
         public int MaxCollaborators { get; set; }
         public List<int> AssignmentProblems { get; set; }
-
     }
 
     public class StudentAssignmentViewModel : AssignmentViewModel
@@ -45,5 +41,4 @@ namespace Codex.Models.SharedModels.SharedViewModels
         public List<CollaboratorViewModel> Collaborators { get; set; }
         public new List<StudentProblemViewModel> AssignmentProblems { get; set; }
     }
-
 }

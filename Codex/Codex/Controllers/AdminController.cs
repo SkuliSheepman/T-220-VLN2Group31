@@ -10,6 +10,7 @@ using Codex.Models;
 
 namespace Codex.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         public ActionResult Users() {

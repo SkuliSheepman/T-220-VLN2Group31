@@ -15,5 +15,4 @@ namespace Codex.Models.SharedModels.SharedViewModels
     {
         public List<StudentAssignmentViewModel> Assignments { get; set; }
     }
-
 }

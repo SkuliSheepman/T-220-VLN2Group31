@@ -10,17 +10,14 @@ using Codex.Services;
 
 namespace Codex.Services
 {
-
     public class AssignmentService
     {
-
         private Database _db;
         private ProblemService _problemService;
         private CourseService _courseService;
-        
 
-        public AssignmentService()
-        {
+
+        public AssignmentService() {
             _db = new Database();
             _problemService = new ProblemService();
             _courseService = new CourseService();
@@ -29,12 +26,9 @@ namespace Codex.Services
         /// <summary>
         /// creates a new assignment
         /// </summary>
-        public bool CreateAssignment(AssignmentCreationViewModel newAssignmentViewModel)
-        {
-
+        public bool CreateAssignment(AssignmentCreationViewModel newAssignmentViewModel) {
             // new assignment entry entity
-            var newAssignment = new Assignment
-            {
+            var newAssignment = new Assignment {
                 CourseInstanceId = newAssignmentViewModel.CourseInstanceId,
                 Name = newAssignmentViewModel.Name,
                 Description = newAssignmentViewModel.Description,
@@ -46,52 +40,41 @@ namespace Codex.Services
             newAssignment = _db.Assignments.Add(newAssignment);
 
             // assign problems to the assignment
-            foreach (var _problemId in newAssignmentViewModel.AssignmentProblems)
-            {
-
-                var relation = new AssignmentProblem
-                {
+            foreach (var _problemId in newAssignmentViewModel.AssignmentProblems) {
+                var relation = new AssignmentProblem {
                     AssignmentId = newAssignment.Id,
                     ProblemId = _problemId
                 };
 
                 _db.AssignmentProblems.Add(relation);
-
             }
 
             var students = _courseService.GetAllStudentsInCourseInstance(newAssignmentViewModel.CourseInstanceId);
 
             // create groups for students
             int count = 1;
-            foreach (var _student in students)
-            {
-                _db.AssignmentGroups.Add(new AssignmentGroup
-                {
-
-                    UserId       = _student.Id,
+            foreach (var _student in students) {
+                _db.AssignmentGroups.Add(new AssignmentGroup {
+                    UserId = _student.Id,
                     AssignmentId = newAssignment.Id,
-                    GroupNumber  = count 
+                    GroupNumber = count
                 });
                 count++;
             }
 
-            try
-            {
+            try {
                 _db.SaveChanges();
                 return true;
-            } catch (Exception e)
-            {
+            }
+            catch (Exception e) {
                 return false;
             }
-
         }
 
         /// <summary>
         /// Gets an assignment with the specified argument ID
         /// </summary>
-        public AssignmentViewModel GetAssignment(int assignmentId)
-        {
-
+        public AssignmentViewModel GetAssignment(int assignmentId) {
             // gets the assignment with the specified ID if it exists
             var assignment = _db.Assignments.SingleOrDefault(x => x.Id == assignmentId);
 
@@ -100,8 +83,7 @@ namespace Codex.Services
                 return new AssignmentViewModel();
 
             // if it does exist then we populate a new view model with the returned query results
-            return new AssignmentViewModel
-            {
+            return new AssignmentViewModel {
                 Id = assignment.Id,
                 Name = assignment.Name,
                 Description = assignment.Description,
@@ -111,19 +93,16 @@ namespace Codex.Services
                 MaxCollaborators = assignment.MaxCollaborators,
                 AssignmentProblems = _problemService.GetAllProblemsInAssignment(assignmentId)
             };
-
         }
 
         ///<summary>
         /// get all assignments and their problems from a course instance
         ///</summary>
-        public List<AssignmentViewModel> GetAssignmentsInCourseInstance(int courseInstanceId)
-        {
-
+        public List<AssignmentViewModel> GetAssignmentsInCourseInstance(int courseInstanceId) {
             // gets all assignment ids related to a course instance
             var assignmentIds = (from _assignment in _db.Assignments
-                               where _assignment.CourseInstanceId == courseInstanceId
-                               select _assignment.Id).ToList();
+                                 where _assignment.CourseInstanceId == courseInstanceId
+                                 select _assignment.Id).ToList();
 
             // creates a new list of view models which is to be returned
             var assignments = new List<AssignmentViewModel>();
@@ -133,125 +112,103 @@ namespace Codex.Services
                 assignments.Add(GetAssignment(_assignmentId));
 
             return assignments;
-
         }
 
         /// <summary>
         /// Removes all problems from the marked assignment and the then deletes it
         /// </summary>
-        public bool DeleteAssignment(int assignmentId)
-        {
-
+        public bool DeleteAssignment(int assignmentId) {
             var assignmentToDelete = _db.Assignments.SingleOrDefault(x => x.Id == assignmentId);
 
             if (assignmentToDelete == null)
                 return false;
 
             if (_problemService.RemoveProblemsFromAssignment(assignmentToDelete.Id)) {
-
                 _db.Assignments.Remove(assignmentToDelete);
-
-            } else {
-
+            }
+            else {
                 return false;
-
             }
 
-            try
-            {
+            try {
                 _db.SaveChanges();
                 return true;
             }
-            catch ( Exception e )
-            {
+            catch (Exception e) {
                 return false;
             }
-
         }
 
-        public List<CollaboratorViewModel> GetCollaborators(int assignmentId, string studentId)
-        {
+        public List<CollaboratorViewModel> GetCollaborators(int assignmentId, string studentId) {
             var groupNumber = _db.AssignmentGroups.SingleOrDefault(x => x.AssignmentId == assignmentId && x.AspNetUser.Id == studentId);
 
             var collaborators = (from _assignmentGroup in _db.AssignmentGroups
                                  where _assignmentGroup.AssignmentId == assignmentId && _assignmentGroup.GroupNumber == groupNumber.GroupNumber
                                  join _student in _db.AspNetUsers on _assignmentGroup.UserId equals _student.Id
-                                 select new {_assignmentGroup, _student}).Select(_collaborator => new CollaboratorViewModel
-                                 {
+                                 select new {_assignmentGroup, _student}).Select(_collaborator => new CollaboratorViewModel {
                                      Id = _collaborator._student.Id,
                                      Name = _collaborator._student.FullName,
                                      GroupNumber = _collaborator._assignmentGroup.GroupNumber
                                  }).ToList();
             return collaborators;
         }
-        public List<StudentAssignmentViewModel> GetStudentAssignmentsByStudentId(string studentId)
-        {
+
+        public List<StudentAssignmentViewModel> GetStudentAssignmentsByStudentId(string studentId) {
             var assignments = (from _assignmentGroup in _db.AssignmentGroups
-                          where _assignmentGroup.UserId == studentId
-                          join _assignment in _db.Assignments on _assignmentGroup.AssignmentId equals _assignment.Id
-                          select new { _assignmentGroup, _assignment }).Select(_assignmentPair => new StudentAssignmentViewModel
-                          {
-                              Id = _assignmentPair._assignment.Id,
-                              CourseInstanceId = _assignmentPair._assignment.CourseInstanceId,
-                              Name = _assignmentPair._assignment.Name,
-                              Description = _assignmentPair._assignment.Description,
-                              StartTime = _assignmentPair._assignment.StartTime,
-                              EndTime = _assignmentPair._assignment.EndTime,
-                              MaxCollaborators = _assignmentPair._assignment.MaxCollaborators,
-                              AssignmentGrade = _assignmentPair._assignmentGroup.AssignmentGrade
-                          }).ToList();
-            foreach(var _assignment in assignments)
-            {
+                               where _assignmentGroup.UserId == studentId
+                               join _assignment in _db.Assignments on _assignmentGroup.AssignmentId equals _assignment.Id
+                               select new {_assignmentGroup, _assignment}).Select(_assignmentPair => new StudentAssignmentViewModel {
+                                   Id = _assignmentPair._assignment.Id,
+                                   CourseInstanceId = _assignmentPair._assignment.CourseInstanceId,
+                                   Name = _assignmentPair._assignment.Name,
+                                   Description = _assignmentPair._assignment.Description,
+                                   StartTime = _assignmentPair._assignment.StartTime,
+                                   EndTime = _assignmentPair._assignment.EndTime,
+                                   MaxCollaborators = _assignmentPair._assignment.MaxCollaborators,
+                                   AssignmentGrade = _assignmentPair._assignmentGroup.AssignmentGrade
+                               }).ToList();
+            foreach (var _assignment in assignments) {
                 _assignment.Collaborators = GetCollaborators(_assignment.Id, studentId);
             }
             return assignments;
         }
-       public bool RemoveCollboratorsFromAssignment(int assignmentId, string studentId)
-        {
+
+        public bool RemoveCollboratorsFromAssignment(int assignmentId, string studentId) {
             var relation = (from _relation in _db.AssignmentGroups
                             where _relation.UserId == studentId
-                            && _relation.AssignmentId == assignmentId
+                                  && _relation.AssignmentId == assignmentId
                             select _relation);
 
-            foreach (var _relation in relation)
-            {
+            foreach (var _relation in relation) {
                 _db.AssignmentGroups.Remove(_relation);
             }
 
-            try
-            {
+            try {
                 _db.SaveChanges();
                 return true;
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 return false;
             }
-
         }
-        
-        public bool AddCollaborator(int assignmentId, string studentId)
-        {
+
+        public bool AddCollaborator(int assignmentId, string studentId) {
             var relation = (from _relation in _db.AssignmentGroups
                             where _relation.UserId == studentId
-                            && _relation.AssignmentId == assignmentId
+                                  && _relation.AssignmentId == assignmentId
                             select _relation);
 
-            foreach (var _relation in relation)
-            {
+            foreach (var _relation in relation) {
                 _db.AssignmentGroups.Add(_relation);
             }
 
-            try
-            {
+            try {
                 _db.SaveChanges();
                 return true;
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 return false;
             }
         }
     }
-
 }

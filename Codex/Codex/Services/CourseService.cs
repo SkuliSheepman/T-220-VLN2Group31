@@ -93,7 +93,7 @@ namespace Codex.Services
         /// <summary>
         /// Get all teachers in a course instance by the course instance's ID
         /// </summary>
-        public List<CourseTeacherHelperModel> GetTeachersInCourseInstanceByCourseInstanceId(int courseInstanceId) { 
+        public List<CourseTeacherHelperModel> GetTeachersInCourseInstanceByCourseInstanceId(int courseInstanceId) {
             var course = _db.CourseInstances.SingleOrDefault(x => x.Id == courseInstanceId);
 
             if (course == null) {
@@ -114,13 +114,11 @@ namespace Codex.Services
         /// <summary>
         /// Get all course instances
         /// </summary>
-        public List<CourseHelperModel> GetAllCourseInstances()
-        {
+        public List<CourseHelperModel> GetAllCourseInstances() {
             var courseInstances = (from _courseInstance in _db.CourseInstances
                                    join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
                                    join _semester in _db.Semesters on _courseInstance.SemesterId equals _semester.Id
-                                   select new { _courseInstance, _course, _semester }).Select(_coursePair => new CourseHelperModel
-                                   {
+                                   select new {_courseInstance, _course, _semester}).Select(_coursePair => new CourseHelperModel {
                                        Id = _coursePair._courseInstance.Id,
                                        CourseId = _coursePair._course.Id,
                                        Name = _coursePair._course.Name,
@@ -307,7 +305,7 @@ namespace Codex.Services
 
                 var teacherCourses = _db.CourseInstances.SingleOrDefault(x => x.Teachers.Any(y => y.AspNetUser.Id == user.Id));
 
-                if(teacherCourses != null && !teacherCourses.Teachers.Any()) {
+                if (teacherCourses != null && !teacherCourses.Teachers.Any()) {
                     _userService.RemoveUserFromRoleByUserId(user.Id, "Teacher");
                 }
             }
