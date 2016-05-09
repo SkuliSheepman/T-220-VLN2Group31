@@ -203,6 +203,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
+    <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="DAL\AspNetRole.cs" />
     <Compile Include="DAL\AspNetUser.cs" />
     <Compile Include="DAL\AspNetUserClaim.cs" />
@@ -318,6 +319,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\materialize\fonts\roboto\" />
+    <Folder Include="Views\Teacher\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
