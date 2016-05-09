@@ -6,10 +6,10 @@
 
 <div class="row">
     <div class="col s6 l3 offset-l3">
-        @Html.ActionLink("Users", "Users", "Admin", null, new {@class = "teal lighten-3 waves-effect waves-light btn fill-width center-align" })
+        @Html.ActionLink("Users", "Users", "Admin", null, new {@class = "teal lighten-3 waves-effect waves-light btn fill-width center-align"})
     </div>
     <div class="col s6 l3">
-        @Html.ActionLink("Courses", "Courses", "Admin", null, new {@class = "teal waves-effect waves-light btn fill-width center-align" })
+        @Html.ActionLink("Courses", "Courses", "Admin", null, new {@class = "teal waves-effect waves-light btn fill-width center-align"})
     </div>
 </div>
 
@@ -50,7 +50,7 @@
 
                                 @Html.ValidationSummary(true, "", new {@class = "text-danger"})
 
-                                @Html.HiddenFor(m => user.UserInfo.Id, new { id = "id-" + user.UserInfo.Id, @class = "validate user-id", Name = "Id." + user.UserInfo.Id })
+                                @Html.HiddenFor(m => user.UserInfo.Id, new {id = "id-" + user.UserInfo.Id, @class = "validate user-id", Name = "Id." + user.UserInfo.Id})
 
                                 <div class="row">
                                     <div class="input-field col s12 m6">
@@ -75,99 +75,100 @@
                                         </a>
                                     </div>
                                 </div>
-                                
 
-                                <div class="divider"></div>
+                                if (!user.IsAdmin) {
+                                    <div class="divider"></div>
 
-                                <!-- Add Courses -->
-                                <div class="row section">
-                                    <div class="col s12">
-                                        <div class="row">
-                                            <div class="col s12 l5 input-field">
-                                                @Html.DropDownList(user.UserInfo.Id + "-add-course", Model.AvailableCourses)
-                                                <label>Courses</label>
-                                            </div>
+                                    <!-- Add Courses -->
+                                    <div class="row section">
+                                        <div class="col s12">
+                                            <div class="row">
+                                                <div class="col s12 l5 input-field">
+                                                    @Html.DropDownList(user.UserInfo.Id + "-add-course", Model.AvailableCourses)
+                                                    <label>Courses</label>
+                                                </div>
 
-                                            <div class="col s12 m8 l5 input-field">
-                                                <input name="@user.UserInfo.Id-add-course-position" type="radio" id="@user.UserInfo.Id-add-course-position-student" checked value="1"/>
-                                                <label for="@user.UserInfo.Id-add-course-position-student">Student</label>
+                                                <div class="col s12 m8 l5 input-field">
+                                                    <input name="@user.UserInfo.Id-add-course-position" type="radio" id="@user.UserInfo.Id-add-course-position-student" checked value="1"/>
+                                                    <label for="@user.UserInfo.Id-add-course-position-student">Student</label>
 
-                                                <input name="@user.UserInfo.Id-add-course-position" type="radio" id="@user.UserInfo.Id-add-course-position-teacher" value="2"/>
-                                                <label for="@user.UserInfo.Id-add-course-position-teacher">Teacher</label>
+                                                    <input name="@user.UserInfo.Id-add-course-position" type="radio" id="@user.UserInfo.Id-add-course-position-teacher" value="2"/>
+                                                    <label for="@user.UserInfo.Id-add-course-position-teacher">Teacher</label>
 
-                                                <input name="@user.UserInfo.Id-add-course-position" type="radio" id="@user.UserInfo.Id-add-course-position-assistant" value="3"/>
-                                                <label for="@user.UserInfo.Id-add-course-position-assistant">Assistant</label>
-                                            </div>
+                                                    <input name="@user.UserInfo.Id-add-course-position" type="radio" id="@user.UserInfo.Id-add-course-position-assistant" value="3"/>
+                                                    <label for="@user.UserInfo.Id-add-course-position-assistant">Assistant</label>
+                                                </div>
 
-                                            <div class="col s12 m4 l2 input-field">
-                                                <a href="#" class="waves-effect waves-light btn fill-width add-course-button">Add</a>
+                                                <div class="col s12 m4 l2 input-field">
+                                                    <a href="#" class="waves-effect waves-light btn fill-width add-course-button">Add</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- User Courses -->
-                                <div class="row">
-                                    <div class="col s12">
-                                        <table class="striped centered bordered responsive-table">
-                                            <thead>
-                                                <tr>
-                                                    <th data-field="id" class="hiddendiv">Id</th>
-                                                    <th data-field="course">Course</th>
-                                                    <th data-field="year">Year</th>
-                                                    <th data-field="semester">Semester</th>
-                                                    <th data-field="position">Position</th>
-                                                    <th data-field="remove">Remove</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                @foreach (var course in user.UserCourses)
-                                                {
+                                    <!-- User Courses -->
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <table class="striped centered bordered responsive-table">
+                                                <thead>
                                                     <tr>
-                                                        <td class="hiddendiv">@course.CourseInstanceId</td>
-                                                        <td>@course.Name</td>
-                                                        <td>@course.Year</td>
-                                                        <td>@switch (course.Semester) {
-                                                                case 1:
-                                                                    @:Fall
-                                                                    break;
-
-                                                                case 2:
-                                                                    @:Spring
-                                                                    break;
-
-                                                                case 3:
-                                                                    @:Summer
-                                                                    break;
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            @switch (course.Position) {
-                                                                case 1:
-                                                                    @:Student
-                                                                    break;
-
-                                                                case 2:
-                                                                    @:Teacher
-                                                                    break;
-
-                                                                case 3:
-                                                                    @:Assistant
-                                                                    break;
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            <a href="#" class="remove-from-course">
-                                                                <i class="material-icons red-text">clear</i>
-                                                            </a>
-                                                        </td>
+                                                        <th data-field="id" class="hiddendiv">Id</th>
+                                                        <th data-field="course">Course</th>
+                                                        <th data-field="year">Year</th>
+                                                        <th data-field="semester">Semester</th>
+                                                        <th data-field="position">Position</th>
+                                                        <th data-field="remove">Remove</th>
                                                     </tr>
-                                                }
-                                            </tbody>
-                                        </table>
+                                                </thead>
+
+                                                <tbody>
+                                                    @foreach (var course in user.UserCourses) {
+                                                        <tr>
+                                                            <td class="hiddendiv">@course.CourseInstanceId</td>
+                                                            <td>@course.Name</td>
+                                                            <td>@course.Year</td>
+                                                            <td>
+                                                                @switch (course.Semester) {
+                                                                    case 1:
+                                                                        @:Fall
+                                                                        break;
+
+                                                                    case 2:
+                                                                        @:Spring
+                                                                        break;
+
+                                                                    case 3:
+                                                                        @:Summer
+                                                                        break;
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                @switch (course.Position) {
+                                                                    case 1:
+                                                                        @:Student
+                                                                        break;
+
+                                                                    case 2:
+                                                                        @:Teacher
+                                                                        break;
+
+                                                                    case 3:
+                                                                        @:Assistant
+                                                                        break;
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                <a href="#" class="remove-from-course">
+                                                                    <i class="material-icons red-text">clear</i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
+                                }
                             }
                         </div>
                     </div>

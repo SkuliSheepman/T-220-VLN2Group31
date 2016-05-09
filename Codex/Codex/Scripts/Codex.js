@@ -50,7 +50,7 @@
         var formData = {
             "Name": $("#NewUserModel_Name").val(),
             "Email": $("#NewUserModel_Email").val(),
-            "Admin": $("#NewUserModel_Admin").val(),
+            "Admin": $("#NewUserModel_Admin").is(":checked"),
             "UserCourses": [
                 {
 

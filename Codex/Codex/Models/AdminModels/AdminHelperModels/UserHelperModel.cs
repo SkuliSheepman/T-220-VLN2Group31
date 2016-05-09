@@ -8,6 +8,7 @@ namespace Codex.Models.AdminModels.AdminHelperModels
     public class UserHelperModel
     {
         public ApplicationUser UserInfo { get; set; }
+        public bool IsAdmin { get; set; }
         public List<UserCoursesHelperModel> UserCourses { get; set; }
     }
 
