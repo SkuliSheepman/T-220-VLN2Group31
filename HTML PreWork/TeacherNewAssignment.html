@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+</head>
+<body>
+    <div class="container">
+        <h5 class="center">New Assignment</h5>
+        <div class="divider"></div>
+        <form class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="assignment-title" type="text" class="validate">
+                    <label for="assignment-title">Title</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <textarea id="textarea1" class="materialize-textarea"></textarea>
+                    <label for="textarea1">Description</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s3">
+                    <label for="opendate">Open Date</label>
+                    <input id="opendate" type="text" class="datepicker">
+                </div>
+                <div class="input-field col s3">
+                    <label for=duedate">Due Date</label>
+                    <input id="duedate" type="text" class="datepicker">
+                </div>
+                <div class="input-field col s6">
+                    <select>
+                        <option value="" disabled selected>Max collaborators</option>
+                        <option value="1">1 collaborators</option>
+                        <option value="2">2 collaborators</option>
+                        <option value="3">3 collaborators</option>
+                    </select>
+                    <label>Max collaborators</label>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <h5>Problems</h5>
+            <div class="row">
+                <div class="input-field col s5">
+                    <select>
+                        <option value="" disabled selected>Choose Problem</option>
+                        <option value="1">Problem 1</option>
+                        <option value="2">Problem 2</option>
+                        <option value="3">Problem 3</option>
+                    </select>
+                    <label>Choose Problem</label>
+                </div>
+                <div class="input-field col s2">
+                    <input id="icon_prefix" type="text" class="validate">
+                    <label for="icon_prefix">Weight</label>
+                </div>
+                <div class="input-field col s4">
+                    <select>
+                        <option value="" disabled selected>Max submissions</option>
+                        <option value="1">1 submission</option>
+                        <option value="2">2 submissions</option>
+                        <option value="3">3 submissions</option>
+                    </select>
+                    <label>Max submissions</label>
+                </div>
+                <div class="input-field" col s1">
+                    <a href="#"><i class="material-icons">clear</i></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s5">
+                    <a href="#"><i class="material-icons">add</i></a>
+                    <span>Add another problem</span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--  Scripts-->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="js/materialize.js"></script>
+    <script src="js/init.js"></script>
+
+</body>
+</html>
