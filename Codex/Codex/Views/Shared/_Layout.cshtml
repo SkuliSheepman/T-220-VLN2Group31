@@ -1,11 +1,11 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
     <title>@ViewBag.Title</title>
 
-    <!-- CSS  -->
+    <!-- CSS -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -16,7 +16,9 @@
         <div class="nav-wrapper">
             <div class="row">
                 <div class="col s3 l2 center-align">
-                    <a href="#" class="button-collapse hide-on-large-only" data-activates="slide-out"><i class="material-icons">menu</i></a>
+                    <a href="#" class="button-collapse hide-on-large-only" data-activates="slide-out">
+                        <i class="material-icons">menu</i>
+                    </a>
                     <h1>
                         <a href="#" class="logo">Codex</a>
                     </h1>
@@ -26,7 +28,9 @@
                     <form class="blue lighten-2">
                         <div class="input-field">
                             <input id="search" type="search" required>
-                            <label for="search"><i class="material-icons">search</i></label>
+                            <label for="search">
+                                <i class="material-icons">search</i>
+                            </label>
                             <i class="material-icons">close</i>
                         </div>
                     </form>
@@ -46,27 +50,35 @@
 
             <!-- Sidenav -->
             <ul id="slide-out" class="side-nav hide-on-large-only">
-                <li><a href="#!"><i class="material-icons">school</i> Teacher Inbox</a></li>
-                <li><a href="#!"><i class="material-icons">person</i> Student Inbox</a></li>
+                <li>
+                    <a href="#!"><i class="material-icons">school</i> Teacher Inbox</a>
+                </li>
+                <li>
+                    <a href="#!"><i class="material-icons">person</i> Student Inbox</a>
+                </li>
                 <li class="divider"></li>
-                <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="material-icons">power_settings_new</i> Logout</a></li>
+                <li>
+                    <a href="javascript:document.getElementById('logoutForm').submit()"><i class="material-icons">power_settings_new</i> Logout</a>
+                </li>
             </ul>
 
             <!-- Dropdown Structure -->
             <ul id="avatar-dropdown" class="dropdown-content">
-                <li><a href="#!"><i class="material-icons">school</i> Teacher Inbox</a></li>
-                <li><a href="#!"><i class="material-icons">person</i> Student Inbox</a></li>
+                <li>
+                    <a href="#!"><i class="material-icons">school</i> Teacher Inbox</a>
+                </li>
+                <li>
+                    <a href="#!"><i class="material-icons">person</i> Student Inbox</a>
+                </li>
                 <li class="divider"></li>
 
-                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm"}))
-                {
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new {id = "logoutForm"})) {
                     @Html.AntiForgeryToken()
                     <li>
                         <a href="javascript:document.getElementById('logoutForm').submit()">
                             <i class="material-icons">power_settings_new</i> Logout
                         </a>
                     </li>
-
                 }
             </ul>
 
@@ -82,7 +94,20 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/materialize")
-    @Scripts.Render("~/bundles/codex")
+
+    @if (ViewContext.RouteData.Values["controller"].ToString() == "Admin") {
+        @Scripts.Render("~/bundles/admin")
+    }
+    else if (ViewContext.RouteData.Values["controller"].ToString() == "Teacher") {
+        @Scripts.Render("~/bundles/teacher")
+    }
+    else if (ViewContext.RouteData.Values["controller"].ToString() == "Student") {
+        @Scripts.Render("~/bundles/student")
+    }
+    else {
+        @Scripts.Render("~/bundles/codex")
+    }
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

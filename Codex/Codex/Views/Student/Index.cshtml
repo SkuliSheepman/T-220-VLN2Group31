@@ -11,7 +11,7 @@
                 <li class="grey lighten-2">
                     <div class="collapsible-header">
                         <div class="row clear-margin">
-                            <div class="col s3 truncate">
+                            <div class="col s2 truncate">
                                 <span>@assignment.Name</span>
                             </div>
                             <div class="col s2">
@@ -26,15 +26,17 @@
                             <div class="col s2 grey-text">
                                 <span>@assignment.NumberOfProblems</span>
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 @if (assignment.IsDone) {
                                     <span class="green-text">
                                         Done
+                                        <i class="material-icons">done</i>
                                     </span>
                                 }
                                 else {
                                     <span class="red-text">
                                         Unfinished
+                                        <i class="material-icons">clear</i>
                                     </span>
                                 }
                             </div>
@@ -75,10 +77,10 @@
                                                     </div>
                                                     <div class="col s3">
                                                         @if (problem.IsAccepted) {
-                                                            <span class="green-text">
+                                                            <a href="#" class="green-text problemStatus">
                                                                 Accepted
-                                                                <i class="material-icons">done</i>
-                                                            </span>
+                                                                <span class="material-icons">done</span>
+                                                            </a>
                                                         }
                                                         else {
                                                             <span class="red-text">

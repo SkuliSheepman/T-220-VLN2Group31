@@ -23,9 +23,20 @@ namespace Codex
                       "~/Scripts/materialize/materialize.js",
                       "~/Scripts/respond.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/codex").Include(
+            bundles.Add(new ScriptBundle("~/bundles/admin").Include(
+                      "~/Scripts/codex.js",
+                      "~/Scripts/admin.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/teacher").Include(
                       "~/Scripts/codex.js",
                       "~/Scripts/teacher.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/student").Include(
+                      "~/Scripts/codex.js",
+                      "~/Scripts/student.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/codex").Include(
+                      "~/Scripts/codex.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/materialize/css/materialize.css",
