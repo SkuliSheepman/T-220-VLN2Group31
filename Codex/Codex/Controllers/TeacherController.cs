@@ -37,12 +37,13 @@ namespace Codex.Controllers
 
             var teacherId = _userService.GetUserIdByName(User.Identity.Name);
             var userCourses = _courseService.GetCoursesByUserId(teacherId);
-            var UserYearsActive = new List<int>();
+            var UserYearsActive = new List<Tuple<int, int>>();
 
             foreach (var course in userCourses)
             {
-                if (!UserYearsActive.Contains(course.Year))
-                    UserYearsActive.Add(course.Year);
+                var YearAndSemester = new Tuple<int, int>(course.Year, course.Semester);
+                if (!UserYearsActive.Contains(YearAndSemester))
+                    UserYearsActive.Add(YearAndSemester);
             }
 
             UserYearsActive.OrderByDescending(x => x);

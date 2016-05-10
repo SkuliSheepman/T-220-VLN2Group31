@@ -9,6 +9,6 @@ namespace Codex.Models.TeacherModels.ViewModels
     {
         public int YearSelected { get; set; }
         public int SemesterSelected { get; set; }
-        public List<int> TeacherYearsActive { get; set; }
+        public List<Tuple<int, int>> TeacherYearsActive { get; set; }
     }
 }
