@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Codex.Services;
 using Codex.Models;
 using Codex.Models.SharedModels.SharedViewModels;
+using Codex.Models.Teacher.ViewModels;
 
 namespace Codex.Controllers
 {
@@ -30,10 +31,30 @@ namespace Codex.Controllers
         public ActionResult Index() {
 
             var teacherId = _userService.GetUserIdByName(User.Identity.Name);
+            var userCourses = _courseService.GetCoursesByUserId(teacherId);
+            var UserYearsActive = new List<int>();
 
+            foreach (var course in userCourses)
+            {
+                if (!UserYearsActive.Contains(course.Year))
+                    UserYearsActive.Add(course.Year);
+            }
 
-            return View();
+            UserYearsActive.OrderByDescending(x => x);
+
+            var model = new TeacherViewModel
+            {
+                TeacherYearsActive = UserYearsActive
+            };
+
+            return View(model);
 
         }
+
+        public ActionResult GetTeacherCoursesByDate()
+        {
+            return Json(false);
+        }
+
     }
 }
