@@ -12,8 +12,24 @@ namespace Codex.Controllers
 {
     public class StudentController : Controller
     {
+        private readonly UserService _userService;
+        private readonly AssignmentService _assignmentService;
+
+        public StudentController() {
+            _userService = new UserService();
+            _assignmentService = new AssignmentService();
+        }
+
+
         // GET: Student
         public ActionResult Index() {
+
+            var studentId = _userService.GetUserIdByName(User.Identity.Name);
+            var userAssignments = _assignmentService.GetStudentAssignmentsByStudentId(studentId);
+
+            StudentViewModel model = new StudentViewModel {
+                Assignments = userAssignments
+            };
             //Temporary model for testing
             var tempEnd = DateTime.Now;
             tempEnd = tempEnd.AddHours(1);
@@ -113,7 +129,7 @@ namespace Codex.Controllers
 
             var tempAssignmentList = new List<AssignmentHelperModel> {tempAssignment};
 
-            StudentViewModel model = new StudentViewModel {
+            model = new StudentViewModel {
                 Assignments = tempAssignmentList
             };
             //Temporary model for testing

@@ -31,27 +31,44 @@ namespace Codex.Controllers
         // GET: Teacher
         public ActionResult Index(
             int year = 0,
-            int semesterId = 0,
+            string semester = null,
             int courseInstanceId = 0
             ) {
 
             var teacherId = _userService.GetUserIdByName(User.Identity.Name);
             var userCourses = _courseService.GetCoursesByUserId(teacherId);
-            var UserYearsActive = new List<int>();
+            var TeacherActiveSemesters = new List<Tuple<int, string>>();
 
             foreach (var course in userCourses)
             {
-                if (!UserYearsActive.Contains(course.Year))
-                    UserYearsActive.Add(course.Year);
+                var YearAndSemester = new Tuple<int, string>(course.Year, course.SemesterName);
+                if (!TeacherActiveSemesters.Contains(YearAndSemester))
+                    TeacherActiveSemesters.Add(YearAndSemester);
             }
 
-            UserYearsActive.OrderByDescending(x => x);
+            TeacherActiveSemesters.Sort();
+            TeacherActiveSemesters.Reverse();
+            if (year != 0 && semester != null)
+            {
+
+                var selected = TeacherActiveSemesters.Find(delegate (Tuple<int, string> find)
+                {
+                    return find.Item1 == year && find.Item2 == semester;
+                });
+
+                TeacherActiveSemesters.RemoveAt(TeacherActiveSemesters.IndexOf(selected));
+                TeacherActiveSemesters.Insert(0, selected);
+
+            }
+
+            var teacherCourses = _courseService.GetTeacherCoursesByDate(User.Identity.Name, TeacherActiveSemesters.First().Item1, TeacherActiveSemesters.First().Item2);
 
             var model = new TeacherViewModel
             {
                 YearSelected = year,
-                SemesterSelected = semesterId,
-                TeacherYearsActive = UserYearsActive
+                SemesterSelected = semester,
+                TeacherActiveSemesters = TeacherActiveSemesters,
+                TeacherCourses = teacherCourses
             };
 
             return View(model);
@@ -61,34 +78,26 @@ namespace Codex.Controllers
         /// <summary>
         /// 
         /// </summary>
-        public ActionResult GetTeacherCoursesByDate(int year, int semesterId)
+        public ActionResult GetTeacherCoursesByDate(int year, string semester)
         {
 
-            var teacherId = _userService.GetUserIdByName(User.Identity.Name);
-            var userCourses = _courseService.GetCoursesByUserId(teacherId);
-            var teacherCourses = new List<CourseHelperModel>();
+            var teacherCourses = _courseService.GetTeacherCoursesByDate(
+                User.Identity.Name,
+                year,
+                semester
+                );
 
-            foreach (var course in userCourses)
-            {
-                if (course.Year == year && course.Semester == semesterId)
-                {
-                    if (course.Position != 1)
-                    {
-                        var teacherCourseHelperModel = new CourseHelperModel
-                        {
-                            CourseInstanceId = course.CourseInstanceId,
-                            Name = course.Name
-                        };
+            if (Request.IsAjaxRequest()) {
 
-                        if (!teacherCourses.Contains(teacherCourseHelperModel))
-                        {
-                            teacherCourses.Add(teacherCourseHelperModel);
-                        }
-                    }
-                }
+                return Json(teacherCourses);
+
             }
+            else
+            {
 
-            return Json(teacherCourses);
+                return View(teacherCourses);
+
+            }
 
         }
 
