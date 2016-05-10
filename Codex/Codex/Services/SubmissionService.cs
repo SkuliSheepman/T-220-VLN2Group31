@@ -33,6 +33,12 @@ namespace Codex.Services
             return groupSubmissions;
         }
 
+        public List<SubmissionViewModel> GetAllGroupSubmissionsInProblem(string groupId, int assignmentId)
+        {
+
+            return new List<SubmissionViewModel>();
+
+        }
         /// <summary>
         /// SubmitSubmission
         /// </summary>

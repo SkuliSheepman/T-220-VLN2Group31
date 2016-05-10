@@ -103,7 +103,9 @@ namespace Codex.Services
                     Name = problem.Problem.Name,
                     Description = problem.Problem.Description,
                     Filetype = problem.Problem.Filetype,
-                    Attachment = problem.Problem.Attachment
+                    Attachment = problem.Problem.Attachment,
+                    Weight = problem.Weight,
+                    MaxSubmissions = problem.MaxSubmissions
                 });
             }
             return problems;
