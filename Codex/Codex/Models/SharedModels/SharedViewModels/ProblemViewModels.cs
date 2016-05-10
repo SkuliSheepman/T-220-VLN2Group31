@@ -31,11 +31,9 @@ namespace Codex.Models.SharedModels.SharedViewModels
     public class StudentProblemViewModel : ProblemViewModel
     {
         public int Weight { get; set; }
-<<<<<<< HEAD
         public int MaxSubmissions { get; set; }
-=======
         public bool IsAccepted { get; set; }
->>>>>>> 9970aab409b60082612e83e974682c0827e51e80
+        public SubmissionViewModel BestSubmission { get; set; }
         public List<SubmissionViewModel> Submissions { get; set; }
     }
 }

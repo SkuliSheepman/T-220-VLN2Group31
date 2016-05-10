@@ -10,9 +10,4 @@ namespace Codex.Models.SharedModels.SharedViewModels
         //public SomeViewModel User { get; set; }  todo
         public List<StudentAssignmentViewModel> Assignments { get; set; }
     }
-
-    public class HomeStudentViewModel
-    {
-        public List<StudentAssignmentViewModel> Assignments { get; set; }
-    }
 }

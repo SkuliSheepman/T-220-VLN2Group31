@@ -24,6 +24,8 @@ namespace Codex.DAL
 
         public int AssignmentId { get; set; }
 
+        public string OriginalFileName { get; set; }
+
         public DateTime Time { get; set; }
 
         public int? FailedTests { get; set; }
