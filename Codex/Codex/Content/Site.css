@@ -140,7 +140,7 @@ input[type="file"] {
     float: right;*/
 }
 
-.problemStatus span {
+.status > span > span.material-icons, .status > a > span.material-icons {
     position: relative;
     top: 0.4rem;
 }
@@ -161,12 +161,14 @@ input[type="file"] {
 }
 
 /* Radio Buttons */
+
 .radio_buttons label {
     margin-right: 2em;
     padding: 0;
 }
 
 /* Fixed action button */
+
 .fixed-action-btn {
     bottom: 45px;
     right: 24px;
@@ -174,4 +176,54 @@ input[type="file"] {
 
 .clear-margin {
     margin: 0;
+}
+
+.assignment-info-button i {
+    margin: -0.2em auto 0;
+}
+
+.submission-download-button i{
+    font-size: 1.6em;
+}
+
+.assignment-category-title {
+    font-size: 1em;
+    margin-bottom: 0.5em;
+    overflow: hidden;
+}
+
+/* Sidenav styling */
+#slide-out i{
+    display: inline-block; 
+}
+
+#slide-out span{
+    position: relative;
+    bottom: 0.5em;
+    left: 0.5em; 
+}
+
+/* Materialize Collection styling */
+
+.collection .collection-item {
+    padding-top: 4px;
+    padding-bottom: 3px;
+}
+
+/* Materialize button styling */
+
+.narrow-button {
+    padding: 0 1rem;
+}
+
+@media only screen and (max-width: 601px) {
+    .narrow-button {
+        padding: 0;
+    }
+}
+
+/* Materialize custom wave colors */
+
+.waves-effect.waves-light-blue .waves-ripple {
+    background-color: rgba(79, 195, 247, 0.65);
 }

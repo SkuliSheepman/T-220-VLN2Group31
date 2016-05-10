@@ -8,6 +8,9 @@ function isEmail(email) {
 $(document).ready(function () {
     /* Initialization */
 
+    // The side nav for mobile
+    $(".button-collapse").sideNav();
+
     // Modals
     $(".modal-trigger").leanModal();
 

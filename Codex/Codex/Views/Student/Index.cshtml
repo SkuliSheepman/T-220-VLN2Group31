@@ -3,7 +3,7 @@
     ViewBag.Title = "Student Overview";
 }
 
-<h4>Open</h4>
+<h2 class="assignment-category-title grey-text text-darken-1">Open</h2>
 <div class="row">
     <div class="col s12">
         <ul class="collapsible popout" data-collapsible="accordion">
@@ -11,32 +11,34 @@
                 <li class="grey lighten-2">
                     <div class="collapsible-header">
                         <div class="row clear-margin">
-                            <div class="col s2 truncate">
-                                <span>@assignment.Name</span>
+                            <div class="col s3 truncate">
+                                <span class="search-criteria">@assignment.Name</span>
                             </div>
-                            <div class="col s2">
-                                <a class="waves-effect waves-light btn" href="#">Details</a>
+                            <div class="col s1 left-align">
+                                <a class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
+                                    <i class="material-icons blue-text">info</i>
+                                </a>
                             </div>
-                            <div class="col s2 grey-text">
+                            <div class="col s3 l2 grey-text truncate center-align">
                                 <span>@assignment.TimeRemaining</span>
                             </div>
-                            <div class="col s2 grey-text">
-                                <span>@assignment.CourseName</span>
+                            <div class="col s3 l2 grey-text truncate center-align">
+                                <span class="search-criteria">@assignment.CourseName</span>
                             </div>
-                            <div class="col s2 grey-text">
+                            <div class="col l2 grey-text center-align hide-on-med-and-down">
                                 <span>@assignment.NumberOfProblems</span>
                             </div>
-                            <div class="col s2">
+                            <div class="col s2 l2 status truncate right-align">
                                 @if (assignment.IsDone) {
                                     <span class="green-text">
-                                        Done
-                                        <i class="material-icons">done</i>
+                                        <span class="hide-on-small-and-down search-criteria">Done</span>
+                                        <span class="material-icons">done</span>
                                     </span>
                                 }
                                 else {
                                     <span class="red-text">
-                                        Unfinished
-                                        <i class="material-icons">clear</i>
+                                        <span class="hide-on-small-and-down search-criteria">Unfinished</span>
+                                        <span class="material-icons">clear</span>
                                     </span>
                                 }
                             </div>
@@ -51,43 +53,43 @@
                                         <li class="grey lighten-1">
                                             <div class="collapsible-header">
                                                 <div class="row clear-margin">
-                                                    <div class="col s3">
-                                                        <span>@problem.Name</span>
+                                                    <div class="col s3 truncate">
+                                                        <span class="search-criteria">@problem.Name</span>
                                                     </div>
                                                     <div class="col s1 grey-text">
                                                         <span>@problem.Weight%</span>
                                                     </div>
-                                                    <div class="col s2 grey-text">
-                                                        <span>Submissions: @problem.Submissions.Count</span>
+                                                    <div class="col s2 grey-text truncate">
+                                                        <span>@problem.Submissions.Count submissions</span>
                                                     </div>
                                                     <!-- todo: submit solution -->
-                                                    <div class="col s3">
+                                                    <div class="col s3 m4">
                                                         <form action="#" method="post">
                                                             <label for="fileChooser" class="custom-file-upload">
                                                                 <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
-                                                                    <i class="material-icons">insert_drive_file</i>
+                                                                    <i class="material-icons hide-on-small-and-down">insert_drive_file</i>
                                                                 </span>
                                                             </label>
                                                             <input id="fileChooser" type="file"/>
-                                                            <button class="btn-flat waves-effect waves-teal white testButton teal-text" type="submit" name="action">
+                                                            <button class="btn-flat waves-effect waves-teal white testButton blue-text narrow-button" type="submit" name="action">
                                                                 <span>Submit</span>
-                                                                <i class="material-icons right">send</i>
+                                                                <i class="material-icons right hide-on-med-and-down">send</i>
                                                             </button>
                                                         </form>
                                                     </div>
-                                                    <div class="col s3">
+                                                    <div class="col s3 m2 status right-align truncate">
                                                         @if (problem.IsAccepted) {
-                                                            <a href="#" class="green-text problemStatus">
-                                                                Accepted
+                                                            <a href="#" class="green-text">
+                                                                <span class="hide-on-small-and-down">Accepted</span>
                                                                 <span class="material-icons">done</span>
                                                             </a>
                                                         }
                                                         else {
-                                                            <span class="red-text">
+                                                            <a href="#" class="red-text">
                                                                 @problem.BestSubmission.FailedTests
                                                                 tests failed
-                                                                <i class="material-icons">clear</i>
-                                                            </span>
+                                                                <span class="material-icons">clear</span>
+                                                            </a>
                                                         }
                                                     </div>
                                                 </div>
@@ -96,39 +98,41 @@
                                             <div class="collapsible-body">
                                                 <div class="collapsible-body-container">
                                                     @if (problem.Submissions.Count != 0) {
-                                                        <ul class="collection">
+                                                        <ul class="collection z-depth-1">
                                                             @foreach (var submission in problem.Submissions) {
                                                                 <li class="collection-item row">
-                                                                    <div class="col s4">
+                                                                    <div class="col s4 truncate">
                                                                         <span>@submission.OriginalFilename</span>
                                                                     </div>
-                                                                    <div class="col s3 grey-text">
+                                                                    <div class="col s3 grey-text truncate">
                                                                         <span>@submission.SubmissionTime.ToString()</span>
                                                                     </div>
-                                                                    <div class="col s2">
-                                                                        <a class="waves-effect waves-light btn" href="#">Download</a>
+                                                                    <div class="col s2 truncate">
+                                                                        <a href="#" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
+                                                                            <i class="material-icons">file_download</i>
+                                                                        </a>
                                                                     </div>
-                                                                    <div class="col s3">
+                                                                    <div class="col s3 status truncate right-align">
                                                                         @if (submission.FailedTests.HasValue) {
                                                                             if (submission.FailedTests.Value == 0) {
-                                                                                <span class="green-text">
-                                                                                        Accepted
-                                                                                        <i class="material-icons">done</i>
-                                                                                    </span>
+                                                                                <a href="#" class="green-text">
+                                                                                    <span class="hide-on-small-and-down">Accepted</span>
+                                                                                    <span class="material-icons">done</span>
+                                                                                </a>
                                                                             }
                                                                             else {
-                                                                                <span class="red-text">
-                                                                                        @submission.FailedTests.Value
-                                                                                        tests failed
-                                                                                        <i class="material-icons">clear</i>
-                                                                                    </span>
+                                                                                <a href="#" class="red-text">
+                                                                                    @submission.FailedTests.Value
+                                                                                    tests failed
+                                                                                    <span class="material-icons">clear</span>
+                                                                                </a>
                                                                             }
                                                                         }
                                                                         else {
-                                                                            <span class="red-text">
-                                                                                    Compile error
-                                                                                    <i class="material-icons">clear</i>
-                                                                                </span>
+                                                                            <a href="#" class="red-text">
+                                                                                Compile error
+                                                                                <span class="material-icons">clear</span>
+                                                                            </a>
                                                                         }
                                                                     </div>
                                                                 </li>
@@ -155,7 +159,9 @@
     </div>
 </div>
 
-<h4>Closed</h4>
+<!-- Closed -->
+
+<h2 class="assignment-category-title grey-text text-darken-1">Closed</h2>
 <div class="row">
     <div class="col s12">
         <ul class="collapsible popout" data-collapsible="accordion">
