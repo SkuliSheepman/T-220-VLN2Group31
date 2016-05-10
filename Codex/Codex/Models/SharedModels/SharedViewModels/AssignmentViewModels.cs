@@ -41,6 +41,7 @@ namespace Codex.Models.SharedModels.SharedViewModels
     public class StudentAssignmentViewModel : AssignmentViewModel
     {
         public double? AssignmentGrade { get; set; }
+        public bool IsDone { get; set; }
         public List<CollaboratorViewModel> Collaborators { get; set; }
         public new List<StudentProblemViewModel> AssignmentProblems { get; set; }
     }
