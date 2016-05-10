@@ -9,7 +9,7 @@
     <div id="dateFilter" class="row">
         <div class="input-field col s6">
             <select id="dateYear">
-                @foreach (var year in Model.TeacherYearsActive)
+                @foreach (var year in Model.TeacherActiveSemesters)
                 {
                     <option value=@year>@year</option>
                 }
@@ -31,9 +31,9 @@
     <div id="dateFilter" class="row">
         <div class="input-field col s12">
             <select id="date">
-                @foreach (var year in Model.TeacherYearsActive)
+                @foreach (var _yearAndSemester in Model.TeacherActiveSemesters)
                 {
-                    <option value=@year>@year</option>
+                    <option value="@_yearAndSemester.Item1 @_yearAndSemester.Item2">@_yearAndSemester.Item1 - @_yearAndSemester.Item2</option>
                 }
             </select>
             <label>Select Year</label>
@@ -44,5 +44,30 @@
 <!-- Course Selection -->
 <div class="section">
     <div id="teacherCourses" class="row">
+        @foreach (var _course in Model.TeacherCourses)
+        {
+            <div class="col s4">
+                <a href="" class="waves-effect waves-light btn">@_course.Name</a>
+            </div>
+        }
     </div>
+</div>
+
+<!-- Pencil menu -->
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large red">
+        <i class="large material-icons">mode_edit</i>
+    </a>
+    <ul>
+        <li>
+            <a id="delete-selected-users-modal-button" class="btn-floating red tooltipped" data-position="left" data-delay="50" data-tooltip="Create new problem">
+                <i class="material-icons">assignment_late</i>
+            </a>
+        </li>
+        <li>
+            <a class="modal-trigger btn-floating green tooltipped" href="#new-user-modal" data-position="left" data-delay="50" data-tooltip="What">
+                <i class="material-icons">assignment</i>
+            </a>
+        </li>
+    </ul>
 </div>

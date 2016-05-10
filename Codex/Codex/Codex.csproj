@@ -329,9 +329,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\materialize\fonts\roboto\" />
-    <Folder Include="Models\TeacherModels\HelperModels\" />
-    <Folder Include="Models\StudentModels\HelperModels\" />
-    <Folder Include="Models\StudentModels\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

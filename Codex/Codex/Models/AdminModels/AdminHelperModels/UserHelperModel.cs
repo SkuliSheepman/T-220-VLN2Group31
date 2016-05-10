@@ -18,6 +18,7 @@ namespace Codex.Models.AdminModels.AdminHelperModels
         public string Name { get; set; }
         public int Year { get; set; }
         public int Semester { get; set; }
+        public string SemesterName { get; set; }
         public int Position { get; set; }
     }
 

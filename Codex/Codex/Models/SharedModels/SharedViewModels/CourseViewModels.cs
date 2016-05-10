@@ -16,6 +16,5 @@ namespace Codex.Models.SharedModels.SharedViewModels
         public string Semester { get; set; }
     }
 
-    public class CourseCreationViewModel
-    {}
+    public class CourseCreationViewModel {}
 }
