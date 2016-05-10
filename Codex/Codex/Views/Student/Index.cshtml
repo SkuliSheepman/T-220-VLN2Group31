@@ -15,20 +15,19 @@
                                 <span>@assignment.Name</span>
                             </div>
                             <div class="col s2">
-                                <a class="waves-effect waves-light btn" href="#!">Details</a>
+                                <a class="waves-effect waves-light btn" href="#">Details</a>
                             </div>
-                            <div class="col s2">
+                            <div class="col s2 grey-text">
                                 <span>@assignment.TimeRemaining</span>
                             </div>
-                            <div class="col s2">
+                            <div class="col s2 grey-text">
                                 <span>@assignment.CourseName</span>
                             </div>
-                            <div class="col s2">
+                            <div class="col s2 grey-text">
                                 <span>@assignment.NumberOfProblems</span>
                             </div>
                             <div class="col s1">
-                                @if (assignment.IsDone)
-                                {
+                                @if (assignment.IsDone) {
                                     <span class="green-text">
                                         Done
                                     </span>
@@ -43,53 +42,110 @@
                     </div>
 
                     <div class="collapsible-body">
-                        @if (assignment.AssignmentProblems.Count > 0) {
-                            <ul class="collapsible" data-collapsible="accordion">
-                                @foreach (var problem in assignment.AssignmentProblems) {
-                                    <li>
-                                        <div class="collapsible-header">
-                                            <div class="row clear-margin">
-                                                <div class="col s3">
-                                                    <span>@problem.Name</span>
-                                                </div>
-                                                <div class="col s1">
-                                                    <span>@problem.Weight</span>
-                                                </div>
-                                                <div class="col s2">
-                                                    <span>Submissions: @problem.Submissions.Count</span>
-                                                </div>
-                                                <!-- todo: submit solution -->
-                                                <div class="col s3">
-                                                    <form action="#" method="post">
-                                                        <label for="fileChooser" class="custom-file-upload">
-                                                            <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
-                                                                <i class="material-icons">insert_drive_file</i>
+                        <div class="collapsible-body-container">
+                            @if (assignment.AssignmentProblems.Count != 0) {
+                                <ul class="collapsible" data-collapsible="accordion">
+                                    @foreach (var problem in assignment.AssignmentProblems) {
+                                        <li class="grey lighten-1">
+                                            <div class="collapsible-header">
+                                                <div class="row clear-margin">
+                                                    <div class="col s3">
+                                                        <span>@problem.Name</span>
+                                                    </div>
+                                                    <div class="col s1 grey-text">
+                                                        <span>@problem.Weight</span>
+                                                    </div>
+                                                    <div class="col s2 grey-text">
+                                                        <span>Submissions: @problem.Submissions.Count</span>
+                                                    </div>
+                                                    <!-- todo: submit solution -->
+                                                    <div class="col s3">
+                                                        <form action="#" method="post">
+                                                            <label for="fileChooser" class="custom-file-upload">
+                                                                <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
+                                                                    <i class="material-icons">insert_drive_file</i>
+                                                                </span>
+                                                            </label>
+                                                            <input id="fileChooser" type="file"/>
+                                                            <button class="btn-flat waves-effect waves-teal white testButton teal-text" type="submit" name="action">
+                                                                <span>Submit</span>
+                                                                <i class="material-icons right">send</i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                    <div class="col s3">
+                                                        @if (problem.IsAccepted) {
+                                                            <span class="green-text">
+                                                                Accepted
+                                                                <i class="material-icons">done</i>
                                                             </span>
-                                                        </label>
-                                                        <input id="fileChooser" type="file"/>
-                                                        <button class="btn-flat waves-effect waves-teal white testButton teal-text" type="submit" name="action">
-                                                            <span>Submit</span>
-                                                            <i class="material-icons right">send</i>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                                <div class="col s3 green-text">
-                                                    <span>Accepted</span>
+                                                        }
+                                                        else {
+                                                            <span class="red-text">
+                                                                @problem.BestSubmission.FailedTests
+                                                                tests failed
+                                                                <i class="material-icons">clear</i>
+                                                            </span>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="collapsible-body">
-                                            <!-- todo: problem details -->
-                                            lorem ipsum
-                                        </div>
-                                    </li>
-                                }
-                            </ul>
-                        }
-                        else {
-                            <span>This assignment has no problems.</span>
-                        }
+                                            <div class="collapsible-body">
+                                                <div class="collapsible-body-container">
+                                                    @if (problem.Submissions.Count != 0) {
+                                                        <div class="collection">
+                                                            @foreach (var submission in problem.Submissions) {
+                                                                <a href="#" class="collection-item row">
+                                                                    <div class="col s4">
+                                                                        <span>@submission.OriginalFilename</span>
+                                                                    </div>
+                                                                    <div class="col s3 grey-text">
+                                                                        <span>@submission.SubmissionTime.ToString()</span>
+                                                                    </div>
+                                                                    <div class="col s2">
+                                                                        <a class="waves-effect waves-light btn" href="#">Download</a>
+                                                                    </div>
+                                                                    <div class="col s3">
+                                                                        @if (submission.FailedTests.HasValue) {
+                                                                            if (submission.FailedTests.Value == 0) {
+                                                                                <span class="red-text">
+                                                                                        Accepted
+                                                                                        <i class="material-icons">done</i>
+                                                                                    </span>
+                                                                            }
+                                                                            else {
+                                                                                <span class="red-text">
+                                                                                        @submission.FailedTests.Value
+                                                                                        tests failed
+                                                                                        <i class="material-icons">clear</i>
+                                                                                    </span>
+                                                                            }
+                                                                        }
+                                                                        else {
+                                                                            <span class="red-text">
+                                                                                    Compile error
+                                                                                    <i class="material-icons">clear</i>
+                                                                                </span>
+                                                                        }
+                                                                    </div>
+                                                                </a>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    else {
+                                                        <span>No submissions</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else {
+                                <span>This assignment has no problems.</span>
+                            }
+                        </div>
                     </div>
                 </li>
             }

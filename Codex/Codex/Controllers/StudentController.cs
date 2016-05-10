@@ -13,7 +13,6 @@ namespace Codex.Controllers
     {
         // GET: Student
         public ActionResult Index() {
-            
             //Temporary model for testing
             var tempEnd = DateTime.Now;
             tempEnd = tempEnd.AddHours(1);
@@ -39,8 +38,14 @@ namespace Codex.Controllers
                 tempRemaining += (tempTimeLeft.Seconds == 1 ? " second left" : " seconds left");
             }
 
-            var tempProblem = new StudentProblemViewModel
-            {
+            var tempSubmission = new SubmissionViewModel {
+                Id = 1,
+                FailedTests = 4,
+                OriginalFilename = "my_submission.zip",
+                SubmissionTime = DateTime.Now
+            };
+
+            var tempProblem = new StudentProblemViewModel {
                 Id = 1,
                 CourseId = 1,
                 Name = "Problem 1.1",
@@ -49,16 +54,17 @@ namespace Codex.Controllers
                 Attachment = "Attachment.zip",
                 Language = "C++",
                 Weight = 100,
-                Submissions = new List<SubmissionViewModel>()
+                BestSubmission = tempSubmission,
+                Submissions = new List<SubmissionViewModel> {tempSubmission}
             };
 
             var tempProblemList = new List<StudentProblemViewModel> {tempProblem};
 
             var tempNumberOfProblems = tempProblemList.Count.ToString();
-            tempNumberOfProblems += (tempProblemList.Count == 1 ? " problem" : " problems");
+            tempNumberOfProblems += (tempProblemList.Count == 1 ? " Problem" : " Problems");
 
             var tempIsDone = true;
-            
+
             foreach (var problem in tempProblemList) {
                 var tempProblemPass = true;
                 foreach (var submission in problem.Submissions) {
@@ -73,8 +79,7 @@ namespace Codex.Controllers
                 }
             }
 
-            var tempAssignment = new StudentAssignmentViewModel
-            {
+            var tempAssignment = new StudentAssignmentViewModel {
                 Id = 1,
                 CourseInstanceId = 13,
                 CourseName = "Gagnaskipan",
