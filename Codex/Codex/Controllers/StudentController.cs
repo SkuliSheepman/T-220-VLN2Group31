@@ -9,15 +9,21 @@ using Codex.Models.SharedModels.SharedViewModels;
 
 namespace Codex.Controllers
 {
-    public class StudentController : Controller
-    {
+    public class StudentController : Controller {
         // GET: Student
         public ActionResult Index() {
             /*
             //Temporary model for testing
-            var tempstart = DateTime.Today;
-            tempstart.AddDays(3);
-            var templist = new List<ProblemViewModel>();
+            var tempstart = DateTime.Now;
+            tempstart = tempstart.AddHours(1);
+            tempstart = tempstart.AddMinutes(1);
+            var tempnow = DateTime.Now;
+
+
+            var tempticks = tempstart.Ticks - tempnow.Ticks;
+            var tempstimespan = new TimeSpan(tempticks);
+             
+            var templist = new List<ProblemViewModel> { };
             var tempprob = new ProblemViewModel {
                 Id = 1,
                 CourseId = 1,
@@ -33,7 +39,7 @@ namespace Codex.Controllers
                 CourseInstanceId = 1,
                 Name = "Assignment 1",
                 Description = "Temp Description",
-                StartTime = DateTime.Today,
+                StartTime = DateTime.Now,
                 EndTime = tempstart,
                 MaxCollaborators = 3,
                 AssignmentProblems = templist
