@@ -5,7 +5,7 @@
 }
 
 <!-- Date Filter -->
-<div class="section">
+<!--<div class="section">
     <div id="dateFilter" class="row">
         <div class="input-field col s6">
             <select id="dateYear">
@@ -23,6 +23,20 @@
                 <option value="3">Autumn</option>
             </select>
             <label>Select Semester</label>
+        </div>
+    </div>
+</div>-->
+
+<div class="section">
+    <div id="dateFilter" class="row">
+        <div class="input-field col s12">
+            <select id="date">
+                @foreach (var year in Model.TeacherYearsActive)
+                {
+                    <option value=@year>@year</option>
+                }
+            </select>
+            <label>Select Year</label>
         </div>
     </div>
 </div>
