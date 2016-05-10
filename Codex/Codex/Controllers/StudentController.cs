@@ -9,47 +9,75 @@ using Codex.Models.SharedModels.SharedViewModels;
 
 namespace Codex.Controllers
 {
-    public class StudentController : Controller {
+    public class StudentController : Controller
+    {
         // GET: Student
         public ActionResult Index() {
             //Temporary model for testing
-            var tempstart = DateTime.Now;
-            tempstart = tempstart.AddHours(1);
-            tempstart = tempstart.AddMinutes(1);
-            var tempnow = DateTime.Now;
+            var tempEnd = DateTime.Now;
+            tempEnd = tempEnd.AddHours(1);
+            tempEnd = tempEnd.AddMinutes(1);
 
+            var tempTimeLeft = new TimeSpan(tempEnd.Ticks - DateTime.Now.Ticks);
+            var tempRemaining = String.Empty;
 
-            var tempticks = tempstart.Ticks - tempnow.Ticks;
-            var tempstimespan = new TimeSpan(tempticks);
-             
-            var templist = new List<ProblemViewModel> { };
-            var tempprob = new ProblemViewModel {
+            if (0 < tempTimeLeft.Days) {
+                tempRemaining = tempTimeLeft.Days.ToString();
+                tempRemaining += (tempTimeLeft.Days == 1 ? " day left" : " days left");
+            }
+            else if (0 < tempTimeLeft.Hours) {
+                tempRemaining = tempTimeLeft.Hours.ToString();
+                tempRemaining += (tempTimeLeft.Hours == 1 ? " hour left" : " hours left");
+            }
+            else if (0 < tempTimeLeft.Minutes) {
+                tempRemaining = tempTimeLeft.Minutes.ToString();
+                tempRemaining += (tempTimeLeft.Minutes == 1 ? " minute left" : " minutes left");
+            }
+            else if (0 < tempTimeLeft.Seconds) {
+                tempRemaining = tempTimeLeft.Seconds.ToString();
+                tempRemaining += (tempTimeLeft.Seconds == 1 ? " second left" : " seconds left");
+            }
+
+            var tempProblem = new StudentProblemViewModel
+            {
                 Id = 1,
                 CourseId = 1,
                 Name = "Problem 1.1",
                 Description = "Temp Description problem 1.1",
                 Filetype = ".cpp",
-                Attachment = "Attachment",
-                Language = "C++"
+                Attachment = "Attachment.zip",
+                Language = "C++",
+                Weight = 100
             };
-            templist.Add(tempprob);
-            var tempass = new AssignmentViewModel {
+
+            var tempProblemList = new List<StudentProblemViewModel> {tempProblem};
+
+            var tempNumberOfProblems = tempProblemList.Count.ToString();
+            tempNumberOfProblems += (tempProblemList.Count == 1 ? " problem" : " problems");
+
+            var tempAssignment = new StudentAssignmentViewModel
+            {
                 Id = 1,
-                CourseInstanceId = 1,
+                CourseInstanceId = 13,
+                CourseName = "Gagnaskipan",
                 Name = "Assignment 1",
                 Description = "Temp Description",
                 StartTime = DateTime.Now,
-                EndTime = tempstart,
+                EndTime = tempEnd,
+                TimeRemaining = tempRemaining,
+                NumberOfProblems = tempNumberOfProblems,
                 MaxCollaborators = 3,
-                AssignmentProblems = templist
+                AssignmentProblems = tempProblemList
             };
-            var templist2 = new List<AssignmentViewModel>();
-            templist2.Add(tempass);
+
+            var tempAssignmentList = new List<StudentAssignmentViewModel> {tempAssignment};
+
             StudentViewModel model = new StudentViewModel {
-                Assignments = templist2
+                Assignments = tempAssignmentList
             };
             //Temporary model for testing
 
+            ViewBag.UserName = User.Identity.Name;
             return View(model);
         }
     }

@@ -13,11 +13,16 @@ namespace Codex.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        public ActionResult Users() {
-            UserService userService = new UserService();
-            CourseService courseService = new CourseService();
+        private readonly UserService _userService;
+        private readonly CourseService _courseService;
 
-            List<CourseHelperModel> allCourses = courseService.GetAllCourseInstances();
+        public AdminController() {
+            _userService = new UserService();
+            _courseService = new CourseService();
+        }
+
+        public ActionResult Users() {
+            List<CourseHelperModel> allCourses = _courseService.GetAllCourseInstances();
 
             List<SelectListItem> allCourseItems = new List<SelectListItem>();
             foreach (var course in allCourses) {
@@ -25,9 +30,10 @@ namespace Codex.Controllers
             }
 
             UserViewModel model = new UserViewModel();
-            model.Users = userService.GetAllUsers();
+            model.Users = _userService.GetAllUsers();
             model.AvailableCourses = allCourseItems;
 
+            ViewBag.UserName = User.Identity.Name;
             return View(model);
         }
 
@@ -37,6 +43,7 @@ namespace Codex.Controllers
             CourseViewModel model = new CourseViewModel();
             model.Courses = courseService.GetAllCourseInstances();
 
+            ViewBag.UserName = User.Identity.Name;
             return View(model);
         }
 
@@ -45,13 +52,11 @@ namespace Codex.Controllers
                 return Json(false);
             }
 
-            UserService userService = new UserService();
-
-            if (!userService.UserExistsByUsername(newUser.Email)) {
+            if (!_userService.UserExistsByUsername(newUser.Email)) {
                 ApplicationUser userToBeCreated = new ApplicationUser {UserName = newUser.Email, Email = newUser.Email, FullName = newUser.Name};
-                if (userService.CreateUser(userToBeCreated)) {
+                if (_userService.CreateUser(userToBeCreated)) {
                     if (newUser.Admin) {
-                        userService.AddUserToRoleByUserId(userToBeCreated.Id, "Admin");
+                        _userService.AddUserToRoleByUserId(userToBeCreated.Id, "Admin");
                     }
 
                     return Json(true);
@@ -66,9 +71,7 @@ namespace Codex.Controllers
                 return Json(false);
             }
 
-            CourseService courseService = new CourseService();
-
-            return Json(courseService.CreateCourse(newCourse));
+            return Json(_courseService.CreateCourse(newCourse));
         }
 
         public ActionResult DeleteSelectedUsers(List<string> userIds) {
@@ -76,9 +79,7 @@ namespace Codex.Controllers
                 return Json(false);
             }
 
-            UserService userService = new UserService();
-
-            return Json(userService.DeleteUsersByIds(userIds));
+            return Json(_userService.DeleteUsersByIds(userIds));
         }
 
         public ActionResult DeleteSelectedCourses(List<int> courseInstanceIds) {
@@ -86,15 +87,11 @@ namespace Codex.Controllers
                 return Json(false);
             }
 
-            CourseService courseService = new CourseService();
-
-            return Json(courseService.DeleteCourseInstancesById(courseInstanceIds));
+            return Json(_courseService.DeleteCourseInstancesById(courseInstanceIds));
         }
 
         public ActionResult EditUser(ApplicationUser user) {
-            UserService userService = new UserService();
-
-            return Json(userService.EditUser(user));
+            return Json(_userService.EditUser(user));
         }
 
         public ActionResult ChangePassword(string userId) {
@@ -104,24 +101,18 @@ namespace Codex.Controllers
         }
 
         public ActionResult RemoveUserFromCourse(UserAddCourseHelperModel model) {
-            CourseService courseService = new CourseService();
-
-            return Json(courseService.RemoveUserFromCourse(model));
+            return Json(_courseService.RemoveUserFromCourse(model));
         }
 
         public ActionResult AddUserToCourse(UserAddCourseHelperModel model) {
-            CourseService courseService = new CourseService();
-
-            return Json(courseService.AddUserToCourse(model));
+            return Json(_courseService.AddUserToCourse(model));
         }
 
         public ActionResult EditCourse(CourseHelperModel course) {
             if (string.IsNullOrEmpty(course.Name) || course.Year == null || course.Year < 2000) {
                 return Json(false);
             }
-
-            CourseService courseService = new CourseService();
-            return Json(courseService.UpdateCourse(course));
+            return Json(_courseService.UpdateCourse(course));
         }
     }
 }

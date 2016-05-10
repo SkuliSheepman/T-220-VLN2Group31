@@ -11,9 +11,9 @@ namespace Codex.Controllers
 {
     public class TeacherController : Controller
     {
-        private UserService _userService;
-        private SubmissionService _submissionService;
-        private AssignmentService _assignmentService;
+        private readonly UserService _userService;
+        private readonly SubmissionService _submissionService;
+        private readonly AssignmentService _assignmentService;
 
         public TeacherController() {
             _userService = new UserService();

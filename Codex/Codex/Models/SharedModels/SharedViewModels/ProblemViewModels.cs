@@ -30,6 +30,7 @@ namespace Codex.Models.SharedModels.SharedViewModels
 
     public class StudentProblemViewModel : ProblemViewModel
     {
+        public int Weight { get; set; }
         public List<SubmissionViewModel> Submissions { get; set; }
     }
 }

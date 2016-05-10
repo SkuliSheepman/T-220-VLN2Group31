@@ -16,10 +16,13 @@ namespace Codex.Models.SharedModels.SharedViewModels
     {
         public int Id { get; set; }
         public int CourseInstanceId { get; set; }
+        public string CourseName { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
+        public string TimeRemaining { get; set; }
+        public string NumberOfProblems { get; set; }
         public int MaxCollaborators { get; set; }
         public List<ProblemViewModel> AssignmentProblems { get; set; }
     }
