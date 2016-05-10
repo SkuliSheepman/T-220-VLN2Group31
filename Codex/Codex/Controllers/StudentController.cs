@@ -23,7 +23,6 @@ namespace Codex.Controllers
 
         // GET: Student
         public ActionResult Index() {
-
             var studentId = _userService.GetUserIdByName(User.Identity.Name);
             var userAssignments = _assignmentService.GetStudentAssignmentsByStudentId(studentId);
 
@@ -32,29 +31,31 @@ namespace Codex.Controllers
             };
             //Temporary model for testing
             var tempEnd = DateTime.Now;
-            tempEnd = tempEnd.AddHours(1);
-            tempEnd = tempEnd.AddMinutes(1);
+            /*tempEnd = tempEnd.AddHours(1);
+            tempEnd = tempEnd.AddMinutes(1);*/
 
             var tempTimeLeft = new TimeSpan(tempEnd.Ticks - DateTime.Now.Ticks);
             var tempRemaining = String.Empty;
 
-            if (0 < tempTimeLeft.Days) {
-                tempRemaining = tempTimeLeft.Days.ToString();
-                tempRemaining += (tempTimeLeft.Days == 1 ? " day left" : " days left");
+            if (0 < tempEnd.CompareTo(DateTime.Now)) {
+                if (0 < tempTimeLeft.Days) {
+                    tempRemaining = tempTimeLeft.Days.ToString();
+                    tempRemaining += (tempTimeLeft.Days == 1 ? " day left" : " days left");
+                }
+                else if (0 < tempTimeLeft.Hours) {
+                    tempRemaining = tempTimeLeft.Hours.ToString();
+                    tempRemaining += (tempTimeLeft.Hours == 1 ? " hour left" : " hours left");
+                }
+                else if (0 < tempTimeLeft.Minutes) {
+                    tempRemaining = tempTimeLeft.Minutes.ToString();
+                    tempRemaining += (tempTimeLeft.Minutes == 1 ? " minute left" : " minutes left");
+                }
+                else if (0 < tempTimeLeft.Seconds) {
+                    tempRemaining = tempTimeLeft.Seconds.ToString();
+                    tempRemaining += (tempTimeLeft.Seconds == 1 ? " second left" : " seconds left");
+                }
             }
-            else if (0 < tempTimeLeft.Hours) {
-                tempRemaining = tempTimeLeft.Hours.ToString();
-                tempRemaining += (tempTimeLeft.Hours == 1 ? " hour left" : " hours left");
-            }
-            else if (0 < tempTimeLeft.Minutes) {
-                tempRemaining = tempTimeLeft.Minutes.ToString();
-                tempRemaining += (tempTimeLeft.Minutes == 1 ? " minute left" : " minutes left");
-            }
-            else if (0 < tempTimeLeft.Seconds) {
-                tempRemaining = tempTimeLeft.Seconds.ToString();
-                tempRemaining += (tempTimeLeft.Seconds == 1 ? " second left" : " seconds left");
-            }
-
+            
             var tempSubmission = new SubmissionHelperModel {
                 Id = 1,
                 FailedTests = 4,
@@ -62,16 +63,14 @@ namespace Codex.Controllers
                 SubmissionTime = DateTime.Now
             };
 
-            var tempSubmission2 = new SubmissionHelperModel
-            {
+            var tempSubmission2 = new SubmissionHelperModel {
                 Id = 1,
                 FailedTests = 2,
                 OriginalFilename = "my_submission.zip",
                 SubmissionTime = DateTime.Now
             };
 
-            var tempSubmission3 = new SubmissionHelperModel
-            {
+            var tempSubmission3 = new SubmissionHelperModel {
                 Id = 1,
                 FailedTests = 0,
                 OriginalFilename = "my_submission.zip",
@@ -87,8 +86,8 @@ namespace Codex.Controllers
                 Attachment = "Attachment.zip",
                 Language = "C++",
                 Weight = 100,
-                BestSubmission = tempSubmission3,
-                Submissions = new List<SubmissionHelperModel> {tempSubmission, tempSubmission2, tempSubmission3}
+                BestSubmission = null,
+                Submissions = new List<SubmissionHelperModel>() /*{tempSubmission, tempSubmission2, tempSubmission3}*/
             };
 
             var tempProblemList = new List<ProblemHelperModel> {tempProblem};

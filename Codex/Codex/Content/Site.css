@@ -89,24 +89,22 @@ nav > div.nav-wrapper > div.row > div:last-child > ul > li:first-child {
     margin-right: 0.3em;
 }
 
-#avatar-dropdown > li > a {
-}
 
 .fill-width {
     width: 100%;
 }
 
-.testButton {
+.submission-submit-button {
     padding: 0 1em;
     margin: 0;
 }
 
-.testButton i {
+.submission-submit-button i {
     margin: -0.25em 0 0 0;
     font-size: 1.2em;
 }
 
-.testButton span {
+.submission-submit-button span {
     margin-left: 0.5em;
 }
 
@@ -114,30 +112,19 @@ input[type="file"] {
     display: none;
 }
 
-.custom-file-upload {
+.file-upload {
     cursor: pointer;
     display: inline-block;
 }
 
-.custom-file-upload span {
+.file-upload span {
     padding: 0;
     margin: 0;
 }
 
-/*.custom-file-upload span{
-    padding: 0 1em;
-    width: 100%;
-    font-size: 1.2em;
-}*/
-
-.custom-file-upload span i {
+.file-upload span i {
     margin-top: -0.2em;
     padding: 0;
-}
-
-.problemStatus {
-    /*display: block;
-    float: right;*/
 }
 
 .status > span > span.material-icons, .status > a > span.material-icons {
