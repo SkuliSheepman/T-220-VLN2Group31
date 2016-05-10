@@ -13,6 +13,7 @@ namespace Codex.Controllers
     {
         // GET: Student
         public ActionResult Index() {
+            /*
             //Temporary model for testing
             var tempstart = DateTime.Today;
             tempstart.AddDays(3);
@@ -43,7 +44,28 @@ namespace Codex.Controllers
                 Assignments = templist2
             };
             //Temporary model for testing
+            */
 
+            var assService = new AssignmentService();
+            var userService = new UserService();
+            var problemService = new ProblemService();
+            var submissionService = new SubmissionService();
+
+            var model = new HomeStudentViewModel();
+
+            String studentId = userService.GetUserIdByName(User.Identity.Name);
+            model.Assignments = assService.GetStudentAssignmentsByStudentId(studentId);
+
+            foreach (var assignment in model.Assignments)
+            {
+                assignment.AssignmentProblems = problemService.GetAllProblemsInStudentAssignment(assignment.Id);
+                foreach (var problem in assignment.AssignmentProblems)
+                {
+                    problem.Submissions = submissionService.GetGroupSubmissionsInProblem(studentId, problem.Id, assignment.Id);
+                }
+            }
+
+            ViewBag.UserName = User.Identity.Name;
             return View(model);
         }
     }
