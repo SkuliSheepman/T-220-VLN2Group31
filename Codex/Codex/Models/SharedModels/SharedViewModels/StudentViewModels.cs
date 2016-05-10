@@ -8,7 +8,7 @@ namespace Codex.Models.SharedModels.SharedViewModels
     public class StudentViewModel
     {
         //public SomeViewModel User { get; set; }  todo
-        public List<AssignmentViewModel> Assignments { get; set; }
+        public List<StudentAssignmentViewModel> Assignments { get; set; }
     }
 
     public class HomeStudentViewModel

@@ -59,7 +59,14 @@ namespace Codex.Controllers
         {
             if (Request.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Home");
+                if (User.IsInRole("Admin")) {
+                    return RedirectToAction("Users", "Admin");
+                }
+                else if(User.IsInRole("Teacher")) {
+                    return RedirectToAction("Index", "Teacher");
+                }
+
+                return RedirectToAction("Index", "Student");
             }
             else
             {
