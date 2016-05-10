@@ -17,13 +17,13 @@
                             <div class="col s2">
                                 <a class="waves-effect waves-light btn" href="#">Details</a>
                             </div>
-                            <div class="col s2">
+                            <div class="col s2 grey-text">
                                 <span>@assignment.TimeRemaining</span>
                             </div>
-                            <div class="col s2">
+                            <div class="col s2 grey-text">
                                 <span>@assignment.CourseName</span>
                             </div>
-                            <div class="col s2">
+                            <div class="col s2 grey-text">
                                 <span>@assignment.NumberOfProblems</span>
                             </div>
                             <div class="col s1">
@@ -52,10 +52,10 @@
                                                     <div class="col s3">
                                                         <span>@problem.Name</span>
                                                     </div>
-                                                    <div class="col s1">
+                                                    <div class="col s1 grey-text">
                                                         <span>@problem.Weight</span>
                                                     </div>
-                                                    <div class="col s2">
+                                                    <div class="col s2 grey-text">
                                                         <span>Submissions: @problem.Submissions.Count</span>
                                                     </div>
                                                     <!-- todo: submit solution -->
@@ -82,7 +82,8 @@
                                                         }
                                                         else {
                                                             <span class="red-text">
-                                                                Failed
+                                                                @problem.BestSubmission.FailedTests
+                                                                tests failed
                                                                 <i class="material-icons">clear</i>
                                                             </span>
                                                         }
@@ -93,52 +94,44 @@
                                             <div class="collapsible-body">
                                                 <div class="collapsible-body-container">
                                                     @if (problem.Submissions.Count != 0) {
-                                                        <ul class="collapsible" data-collapsible="accordion">
+                                                        <div class="collection">
                                                             @foreach (var submission in problem.Submissions) {
-                                                                <li>
-                                                                    <div class="collapsible-header">
-                                                                        <div class="col s4">
-                                                                            <span>@submission.OriginalFilename</span>
-                                                                        </div>
-                                                                        <div class="col s3">
-                                                                            <span>@submission.SubmissionTime.ToString()</span>
-                                                                        </div>
-                                                                        <div class="col s2">
-                                                                            <a class="waves-effect waves-light btn" href="#">Download</a>
-                                                                        </div>
-                                                                        <div class="col s3">
-                                                                            @if (submission.FailedTests.HasValue) {
-                                                                                if (submission.FailedTests.Value == 0) {
-                                                                                    <span class="red-text">
+                                                                <a href="#" class="collection-item row">
+                                                                    <div class="col s4">
+                                                                        <span>@submission.OriginalFilename</span>
+                                                                    </div>
+                                                                    <div class="col s3 grey-text">
+                                                                        <span>@submission.SubmissionTime.ToString()</span>
+                                                                    </div>
+                                                                    <div class="col s2">
+                                                                        <a class="waves-effect waves-light btn" href="#">Download</a>
+                                                                    </div>
+                                                                    <div class="col s3">
+                                                                        @if (submission.FailedTests.HasValue) {
+                                                                            if (submission.FailedTests.Value == 0) {
+                                                                                <span class="red-text">
                                                                                         Accepted
                                                                                         <i class="material-icons">done</i>
                                                                                     </span>
-                                                                                }
-                                                                                else {
-                                                                                    <span class="red-text">
+                                                                            }
+                                                                            else {
+                                                                                <span class="red-text">
                                                                                         @submission.FailedTests.Value
                                                                                         tests failed
                                                                                         <i class="material-icons">clear</i>
                                                                                     </span>
-                                                                                }
                                                                             }
-                                                                            else {
-                                                                                <span class="red-text">
+                                                                        }
+                                                                        else {
+                                                                            <span class="red-text">
                                                                                     Compile error
                                                                                     <i class="material-icons">clear</i>
                                                                                 </span>
-                                                                            }
-                                                                        </div>
+                                                                        }
                                                                     </div>
-
-                                                                    <div class="collapsible-body">
-                                                                        <div class="collapsible-body-container">
-
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
+                                                                </a>
                                                             }
-                                                        </ul>
+                                                        </div>
                                                     }
                                                     else {
                                                         <span>No submissions</span>
