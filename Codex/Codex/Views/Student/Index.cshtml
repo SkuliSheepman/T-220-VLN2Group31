@@ -53,7 +53,7 @@
                                                         <span>@problem.Name</span>
                                                     </div>
                                                     <div class="col s1 grey-text">
-                                                        <span>@problem.Weight</span>
+                                                        <span>@problem.Weight%</span>
                                                     </div>
                                                     <div class="col s2 grey-text">
                                                         <span>Submissions: @problem.Submissions.Count</span>
@@ -94,9 +94,9 @@
                                             <div class="collapsible-body">
                                                 <div class="collapsible-body-container">
                                                     @if (problem.Submissions.Count != 0) {
-                                                        <div class="collection">
+                                                        <ul class="collection">
                                                             @foreach (var submission in problem.Submissions) {
-                                                                <a href="#" class="collection-item row">
+                                                                <li class="collection-item row">
                                                                     <div class="col s4">
                                                                         <span>@submission.OriginalFilename</span>
                                                                     </div>
@@ -109,7 +109,7 @@
                                                                     <div class="col s3">
                                                                         @if (submission.FailedTests.HasValue) {
                                                                             if (submission.FailedTests.Value == 0) {
-                                                                                <span class="red-text">
+                                                                                <span class="green-text">
                                                                                         Accepted
                                                                                         <i class="material-icons">done</i>
                                                                                     </span>
@@ -129,9 +129,9 @@
                                                                                 </span>
                                                                         }
                                                                     </div>
-                                                                </a>
+                                                                </li>
                                                             }
-                                                        </div>
+                                                        </ul>
                                                     }
                                                     else {
                                                         <span>No submissions</span>

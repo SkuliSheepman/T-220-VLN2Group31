@@ -45,6 +45,22 @@ namespace Codex.Controllers
                 SubmissionTime = DateTime.Now
             };
 
+            var tempSubmission2 = new SubmissionViewModel
+            {
+                Id = 1,
+                FailedTests = 2,
+                OriginalFilename = "my_submission.zip",
+                SubmissionTime = DateTime.Now
+            };
+
+            var tempSubmission3 = new SubmissionViewModel
+            {
+                Id = 1,
+                FailedTests = 0,
+                OriginalFilename = "my_submission.zip",
+                SubmissionTime = DateTime.Now
+            };
+
             var tempProblem = new StudentProblemViewModel {
                 Id = 1,
                 CourseId = 1,
@@ -54,8 +70,8 @@ namespace Codex.Controllers
                 Attachment = "Attachment.zip",
                 Language = "C++",
                 Weight = 100,
-                BestSubmission = tempSubmission,
-                Submissions = new List<SubmissionViewModel> {tempSubmission}
+                BestSubmission = tempSubmission3,
+                Submissions = new List<SubmissionViewModel> {tempSubmission, tempSubmission2, tempSubmission3}
             };
 
             var tempProblemList = new List<StudentProblemViewModel> {tempProblem};
@@ -66,10 +82,10 @@ namespace Codex.Controllers
             var tempIsDone = true;
 
             foreach (var problem in tempProblemList) {
-                var tempProblemPass = true;
+                var tempProblemPass = false;
                 foreach (var submission in problem.Submissions) {
-                    if (0 < submission.FailedTests) {
-                        tempProblemPass = false;
+                    if (submission.FailedTests == 0) {
+                        tempProblemPass = true;
                         break;
                     }
                 }
