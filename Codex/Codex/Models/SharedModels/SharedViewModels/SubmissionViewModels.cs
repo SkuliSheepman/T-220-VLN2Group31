@@ -11,5 +11,6 @@ namespace Codex.Models.SharedModels.SharedViewModels
         public DateTime SubmissionTime { get; set; }
         public int? FailedTests { get; set; }
         public string Owner { get; set; }
+        public bool Passed { get; set; }
     }
 }

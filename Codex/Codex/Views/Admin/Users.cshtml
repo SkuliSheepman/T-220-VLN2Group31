@@ -1,7 +1,6 @@
 ﻿@model Codex.Models.AdminModels.AdminViewModels.UserViewModel
 @{
     ViewBag.Title = "Admin - Users";
-    ViewBag.UserName = "Admin Man";
 }
 
 <div class="row">
@@ -18,7 +17,7 @@
         <ul class="collapsible popout" data-collapsible="accordion">
             @foreach (var user in Model.Users) {
                 <li class="grey lighten-2">
-                    <div class="collapsible-header" data-test="@user.UserInfo.Email">
+                    <div class="collapsible-header">
                         <div class="row clear-margin">
                             <div class="col s5 l3 truncate">
                                 <input type="checkbox" id="@user.UserInfo.Id" value="@user.UserInfo.Id" name="user-row"/>

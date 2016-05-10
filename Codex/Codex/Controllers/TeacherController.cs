@@ -13,10 +13,11 @@ namespace Codex.Controllers
     [Authorize(Roles = "Teacher")]
     public class TeacherController : Controller
     {
-        private UserService _userService;
-        private SubmissionService _submissionService;
-        private AssignmentService _assignmentService;
-        private CourseService _courseService;
+
+        private readonly UserService _userService;
+        private readonly SubmissionService _submissionService;
+        private readonly AssignmentService _assignmentService;
+        private readonly CourseService _courseService;
 
         public TeacherController() {
             _userService = new UserService();

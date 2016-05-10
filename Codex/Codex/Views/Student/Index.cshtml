@@ -1,214 +1,165 @@
 ﻿@model Codex.Models.SharedModels.SharedViewModels.StudentViewModel
 @{
-    ViewBag.Title = "Inbox";
-    ViewBag.UserName = "Student";
+    ViewBag.Title = "Student Overview";
 }
 
-<!DOCTYPE html>
+<h4>Open</h4>
+<div class="row">
+    <div class="col s12">
+        <ul class="collapsible popout" data-collapsible="accordion">
+            @foreach (var assignment in Model.Assignments.Where(x => x.StartTime < DateTime.Now && DateTime.Now < x.EndTime)) {
+                <li class="grey lighten-2">
+                    <div class="collapsible-header">
+                        <div class="row clear-margin">
+                            <div class="col s3 truncate">
+                                <span>@assignment.Name</span>
+                            </div>
+                            <div class="col s2">
+                                <a class="waves-effect waves-light btn" href="#!">Details</a>
+                            </div>
+                            <div class="col s2">
+                                <span>@assignment.TimeRemaining</span>
+                            </div>
+                            <div class="col s2">
+                                <span>@assignment.CourseName</span>
+                            </div>
+                            <div class="col s2">
+                                <span>@assignment.NumberOfProblems</span>
+                            </div>
+                            <div class="col s1">
+                                @if (assignment.IsDone)
+                                {
+                                    <span class="green-text">
+                                        Done
+                                    </span>
+                                }
+                                else {
+                                    <span class="red-text">
+                                        Unfinished
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <div>
-        <h4>Open</h4>
-            @try
-            {
-                <ul class="collapsible popout" data-collapsible="accordion">
-                    @foreach (var assignment in Model.Assignments)
-                    {
-                        if (assignment.EndTime > DateTime.Now)
-                        {
-                            <li class="collapsible-level1">
-                                <div class="collapsible-header">
-                                    <div class="row clear-margin">
-                                        <div class="col s2">
-                                            <span>@assignment.Name</span>
+                    <div class="collapsible-body">
+                        @if (assignment.AssignmentProblems.Count > 0) {
+                            <ul class="collapsible" data-collapsible="accordion">
+                                @foreach (var problem in assignment.AssignmentProblems) {
+                                    <li>
+                                        <div class="collapsible-header">
+                                            <div class="row clear-margin">
+                                                <div class="col s3">
+                                                    <span>@problem.Name</span>
+                                                </div>
+                                                <div class="col s1">
+                                                    <span>@problem.Weight</span>
+                                                </div>
+                                                <div class="col s2">
+                                                    <span>Submissions: @problem.Submissions.Count</span>
+                                                </div>
+                                                <!-- todo: submit solution -->
+                                                <div class="col s3">
+                                                    <form action="#" method="post">
+                                                        <label for="fileChooser" class="custom-file-upload">
+                                                            <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
+                                                                <i class="material-icons">insert_drive_file</i>
+                                                            </span>
+                                                        </label>
+                                                        <input id="fileChooser" type="file"/>
+                                                        <button class="btn-flat waves-effect waves-teal white testButton teal-text" type="submit" name="action">
+                                                            <span>Submit</span>
+                                                            <i class="material-icons right">send</i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                <div class="col s3 green-text">
+                                                    <span>Accepted</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col s2"><a class="waves-effect waves-light btn" href="#!">Details</a></div>
-                                        <div class="col s2">
-                                            @{
-                                                var TimeLeft = new TimeSpan(assignment.EndTime.Value.Ticks - DateTime.Now.Ticks);
-                                                var TimeRemaining = "";
 
-                                                if (TimeLeft.Days > 0)
-                                                {
-                                                    TimeRemaining = Math.Round(TimeLeft.TotalDays).ToString();
-                                                    if (Math.Round(TimeLeft.TotalDays) == 1)
-                                                    {
-                                                        TimeRemaining += " day left";
-                                                    }
-                                                    else
-                                                    {
-                                                        TimeRemaining += " days left";
-                                                    }
-                                                }
-                                                else if (TimeLeft.Hours > 0)
-                                                {
-                                                    TimeRemaining = Math.Round(TimeLeft.TotalHours).ToString();
-                                                    if (Math.Round(TimeLeft.TotalHours) == 1)
-                                                    {
-                                                        TimeRemaining += " hour left";
-                                                    }
-                                                    else
-                                                    {
-                                                        TimeRemaining += " hours left";
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    TimeRemaining = Math.Round(TimeLeft.TotalMinutes).ToString();
-                                                    if (Math.Round(TimeLeft.TotalMinutes) == 1)
-                                                    {
-                                                        TimeRemaining += " minute left";
-                                                    }
-                                                    else
-                                                    {
-                                                        TimeRemaining += " minutes left";
-                                                    }
-                                                }
-
-                                             }
-                                            @TimeRemaining
-                                            
+                                        <div class="collapsible-body">
+                                            <!-- todo: problem details -->
+                                            lorem ipsum
                                         </div>
-                                        <!-- todo: get course by id -->
-                                        <div class="col s2">@assignment.CourseInstanceId</div>
-                                        <div class="col s2">
-                                            @{
-                                                var NumberOfProblems = assignment.AssignmentProblems.Count.ToString();
-                                                if (assignment.AssignmentProblems.Count == 1)
-                                                {
-                                                    NumberOfProblems += " problem";
-                                                }
-                                                else
-                                                {
-                                                    NumberOfProblems += " problems";
-                                                }
-                                             }
-                                            @NumberOfProblems
-                                        </div>
-                                        <div class="col s1">
-                                            <span class="green-text">
-                                                Done
-                                            </span>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="collapsible-body">
-                                        @if (assignment.AssignmentProblems.Count > 0)
-                                        {
-                                            <ul class="collapsible" data-collapsible="accordion">
-                                                @foreach (var problem in assignment.AssignmentProblems)
-                                                {
-                                                    <li>
-                                                        <div class="collapsible-header">
-                                                            <div class="row clear-margin">
-                                                                <div class="col s3">@problem.Name</div>
-                                                                <!-- todo: Weight -->
-                                                                <div class="col s1">100%</div>
-                                                                <!-- todo: submisssion count -->
-                                                                <div class="col s2">Submissions: </div>  
-                                                                <!-- todo: submit solution -->
-                                                                <div class="col s3">
-                                                                    <form action="#" method="post">
-                                                                        <label for="fileChooser" class="custom-file-upload">
-                                                                            <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
-                                                                                <i class="material-icons">insert_drive_file</i>
-                                                                            </span>
-                                                                        </label>
-                                                                        <input id="fileChooser" type="file" />
-                                                                        <button class="btn-flat waves-effect waves-teal white testButton teal-text" type="submit" name="action">
-                                                                            <span>Submit</span>
-                                                                            <i class="material-icons right">send</i>
-                                                                        </button>
-                                                                    </form>
-                                                                </div>
-                                                                <div class="col s3 green-text">accepted</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="collapsible-body" style="display: block;">
-                                                            <!-- todo: problem details -->
-                                                            lorem ipsum
-                                                        </div>
-                                                    </li>
-                                                }
-                                            </ul>
-                                        }
-                                        else
-                                        {
-                                            <div>This assignment has no problems.</div>
-                                        }
-                                    </div>
-                            </li>
+                                    </li>
+                                }
+                            </ul>
                         }
-                    }
-                </ul>
+                        else {
+                            <span>This assignment has no problems.</span>
+                        }
+                    </div>
+                </li>
             }
-            catch (Exception e)
-            {
-                <div>There are no open assignments.</div>
-            }
+        </ul>
     </div>
-    <div>
-        
-        @try
-            {
-            <h4>Closed</h4>
-            <ul class="collapsible popout" data-collapsible="accordion">
-                @foreach (var assignment in Model.Assignments)
-                {
-                    if (assignment.EndTime >= DateTime.Now)
-                    {
-                        <li class="collapsible-level1">
-                            <div class="collapsible-header">
-                                <div class="row clear-margin">
-                                    <div class="col s3 truncate">
-                                        <label for="@assignment.Id">
-                                            <span class="transparent-text">.</span>
-                                        </label>
-                                        <span>@assignment.EndTime</span>
-                                    </div>
-                                </div>
+</div>
+
+<h4>Closed</h4>
+<div class="row">
+    <div class="col s12">
+        <ul class="collapsible popout" data-collapsible="accordion">
+            @foreach (var assignment in Model.Assignments.Where(x => x.EndTime < DateTime.Now)) {
+                <li class="grey lighten-2">
+                    <div class="collapsible-header">
+                        <div class="row clear-margin">
+                            <div class="col s3 truncate">
+                                <span>@assignment.Name</span>
                             </div>
-                            <div class="collapsible-body">
-                                <div class="card-panel collapsible-body-container">
-                                    @if (assignment.AssignmentProblems.Count > 0)
-                                    {
-                                        <ul class="collapsible popout" data-collapsible="accordion">
-                                            @foreach (var problem in assignment.AssignmentProblems)
-                                            {
-                                                <li class="collapsible-level1">
-                                                    <div class="row clear-margin">
-                                                        <div class="col s3 truncate">
-                                                            <label for="@problem.Name">
-                                                                <span class="transparent-text">.</span>
-                                                            </label>
-                                                            <span>@problem.Filetype</span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            }
-                                        </ul>
-                                    }
-                                    else
-                                    {
-                                        <div>This assignment has no problems.</div>
-                                    }
-                                </div>
+                            <div class="col s2">
+                                <a class="waves-effect waves-light btn" href="#!">Details</a>
                             </div>
-                        </li>
-                    }
-                }
-            </ul>
-        }
-        catch (Exception e)
-        {
-            //do nothing
-        }
-        </div>
-</body>
-</html>
+                            <div class="col s2">
+                                <span>Closed</span>
+                            </div>
+                            <div class="col s2">
+                                <span>@assignment.CourseName</span>
+                            </div>
+                            <div class="col s2">
+                                <span>@assignment.NumberOfProblems</span>
+                            </div>
+                            <div class="col s1">
+                                @if (assignment.IsDone) {
+                                    <span class="green-text">
+                                        Done
+                                    </span>
+                                }
+                                else {
+                                    <span class="red-text">
+                                        Unfinished
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible-body">
+                        <div class="card-panel collapsible-body-container">
+                            @if (assignment.AssignmentProblems.Count > 0) {
+                                <ul class="collapsible popout" data-collapsible="accordion">
+                                    @foreach (var problem in assignment.AssignmentProblems) {
+                                        <li class="collapsible-level1">
+                                            <div class="row clear-margin">
+                                                <div class="col s3 truncate">
+                                                    <label for="@problem.Name">
+                                                        <span class="transparent-text">.</span>
+                                                    </label>
+                                                    <span>@problem.Filetype</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else {
+                                <div>This assignment has no problems.</div>
+                            }
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
