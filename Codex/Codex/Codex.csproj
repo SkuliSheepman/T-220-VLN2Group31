@@ -231,10 +231,6 @@
     <Compile Include="Models\AdminModels\AdminHelperModels\CourseHelperModel.cs" />
     <Compile Include="Models\AdminModels\AdminHelperModels\UserHelperModel.cs" />
     <Compile Include="Models\AdminModels\AdminViewModels\AdminViewModels.cs" />
-    <Compile Include="Models\AdminViewModels.cs" />
-    <Compile Include="Models\AssignmentViewModels.cs" />
-    <Compile Include="Models\CourseViewModels.cs" />
-    <Compile Include="Models\ProblemViewModels.cs" />
     <Compile Include="Models\SharedModels\SharedViewModels\AssignmentViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -248,15 +244,14 @@
     <Compile Include="Models\StudentModels\HelperModels\SubmissionHelperModel.cs" />
     <Compile Include="Models\StudentModels\ViewModels\StudentViewModels.cs" />
     <Compile Include="Models\StudentViewModels.cs" />
-    <Compile Include="Models\SubmissionViewModels.cs" />
     <Compile Include="Models\TeacherModels\HelperModels\CourseHelperModels.cs" />
     <Compile Include="Models\TeacherModels\ViewModels\TeacherViewModels.cs" />
     <Compile Include="Models\TeacherViewModels.cs" />
-    <Compile Include="Models\TestCaseViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AssignmentService.cs" />
     <Compile Include="Services\CourseService.cs" />
     <Compile Include="Services\ProblemService.cs" />
+    <Compile Include="Services\StudentService.cs" />
     <Compile Include="Services\SubmissionService.cs" />
     <Compile Include="Services\TestCaseService.cs" />
     <Compile Include="Services\UserService.cs" />
