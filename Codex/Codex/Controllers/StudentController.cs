@@ -13,7 +13,7 @@ namespace Codex.Controllers
     {
         // GET: Student
         public ActionResult Index() {
-            /*
+            
             //Temporary model for testing
             var tempEnd = DateTime.Now;
             tempEnd = tempEnd.AddHours(1);
@@ -48,7 +48,8 @@ namespace Codex.Controllers
                 Filetype = ".cpp",
                 Attachment = "Attachment.zip",
                 Language = "C++",
-                Weight = 100
+                Weight = 100,
+                Submissions = new List<SubmissionViewModel>()
             };
 
             var tempProblemList = new List<StudentProblemViewModel> {tempProblem};
@@ -58,11 +59,11 @@ namespace Codex.Controllers
 
             var tempIsDone = true;
             
-            /*foreach (var problem in tempProblemList) {
-                var tempProblemPass = false;
+            foreach (var problem in tempProblemList) {
+                var tempProblemPass = true;
                 foreach (var submission in problem.Submissions) {
-                    if (submission.FailedTests == 0) {
-                        tempProblemPass = true;
+                    if (0 < submission.FailedTests) {
+                        tempProblemPass = false;
                         break;
                     }
                 }
@@ -70,7 +71,7 @@ namespace Codex.Controllers
                 if (!tempProblemPass) {
                     tempIsDone = false;
                 }
-            }*/
+            }
 
             var tempAssignment = new StudentAssignmentViewModel
             {
@@ -94,7 +95,7 @@ namespace Codex.Controllers
                 Assignments = tempAssignmentList
             };
             //Temporary model for testing
-            */
+            /*
 
             var assService = new AssignmentService();
             var userService = new UserService();
@@ -113,7 +114,7 @@ namespace Codex.Controllers
                 {
                     problem.Submissions = submissionService.GetGroupSubmissionsInProblem(studentId, problem.Id, assignment.Id);
                 }
-            }
+            }*/
 
             ViewBag.UserName = User.Identity.Name;
             return View(model);
