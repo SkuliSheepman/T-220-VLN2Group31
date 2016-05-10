@@ -1,4 +1,4 @@
-﻿@model Codex.Models.Teacher.ViewModels.TeacherViewModel
+﻿@model Codex.Models.TeacherModels.ViewModels.TeacherViewModel
 @{
     ViewBag.Title = "Inbox";
     ViewBag.UserName = "Teacher";
@@ -7,8 +7,8 @@
 <!-- Date Filter -->
 <div class="section">
     <div id="dateFilter" class="row">
-        <div id="dateYear" class="input-field col s6">
-            <select>
+        <div class="input-field col s6">
+            <select id="dateYear">
                 @foreach (var year in Model.TeacherYearsActive)
                 {
                     <option value=@year>@year</option>
@@ -16,8 +16,8 @@
             </select>
             <label>Select Year</label>
         </div>
-        <div id="dateSemester" class="input-field col s6">
-            <select>
+        <div class="input-field col s6">
+            <select id="dateSemester" >
                 <option value="1">Spring</option>
                 <option value="2">Summer</option>
                 <option value="3">Autumn</option>
@@ -29,7 +29,6 @@
 
 <!-- Course Selection -->
 <div class="section">
-    <div class="admin-buttons">
-        <a class="waves-effect waves-light btn">Vefforritun</a>
+    <div id="teacherCourses" class="row">
     </div>
 </div>

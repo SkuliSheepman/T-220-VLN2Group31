@@ -6,7 +6,8 @@ using System.Web.Mvc;
 using Codex.Services;
 using Codex.Models;
 using Codex.Models.SharedModels.SharedViewModels;
-using Codex.Models.Teacher.ViewModels;
+using Codex.Models.TeacherModels.ViewModels;
+using Codex.Models.TeacherModels.HelperModels;
 
 namespace Codex.Controllers
 {
@@ -28,7 +29,11 @@ namespace Codex.Controllers
         }
 
         // GET: Teacher
-        public ActionResult Index() {
+        public ActionResult Index(
+            int year = 0,
+            int semesterId = 0,
+            int courseInstanceId = 0
+            ) {
 
             var teacherId = _userService.GetUserIdByName(User.Identity.Name);
             var userCourses = _courseService.GetCoursesByUserId(teacherId);
@@ -51,9 +56,35 @@ namespace Codex.Controllers
 
         }
 
-        public ActionResult GetTeacherCoursesByDate()
+        public ActionResult GetTeacherCoursesByDate(int year, int semesterId)
         {
-            return Json(false);
+
+            var teacherId = _userService.GetUserIdByName(User.Identity.Name);
+            var userCourses = _courseService.GetCoursesByUserId(teacherId);
+            var teacherCourses = new List<CourseHelperModel>();
+
+            foreach (var course in userCourses)
+            {
+                if (course.Year == year && course.Semester == semesterId)
+                {
+                    if (course.Position != 1)
+                    {
+                        var teacherCourseHelperModel = new CourseHelperModel
+                        {
+                            CourseInstanceId = course.CourseInstanceId,
+                            Name = course.Name
+                        };
+
+                        if (!teacherCourses.Contains(teacherCourseHelperModel))
+                        {
+                            teacherCourses.Add(teacherCourseHelperModel);
+                        }
+                    }
+                }
+            }
+
+            return Json(teacherCourses);
+
         }
 
     }

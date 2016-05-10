@@ -46,7 +46,27 @@ namespace Codex.Controllers
                 SubmissionTime = DateTime.Now
             };
 
+<<<<<<< HEAD
             var tempProblem = new ProblemHelperModel {
+=======
+            var tempSubmission2 = new SubmissionViewModel
+            {
+                Id = 1,
+                FailedTests = 2,
+                OriginalFilename = "my_submission.zip",
+                SubmissionTime = DateTime.Now
+            };
+
+            var tempSubmission3 = new SubmissionViewModel
+            {
+                Id = 1,
+                FailedTests = 0,
+                OriginalFilename = "my_submission.zip",
+                SubmissionTime = DateTime.Now
+            };
+
+            var tempProblem = new StudentProblemViewModel {
+>>>>>>> 4a96ce3d31324f768dad35af79edf73d555ba1b5
                 Id = 1,
                 CourseId = 1,
                 Name = "Problem 1.1",
@@ -55,8 +75,13 @@ namespace Codex.Controllers
                 Attachment = "Attachment.zip",
                 Language = "C++",
                 Weight = 100,
+<<<<<<< HEAD
                 BestSubmission = tempSubmission,
                 Submissions = new List<SubmissionHelperModel> {tempSubmission}
+=======
+                BestSubmission = tempSubmission3,
+                Submissions = new List<SubmissionViewModel> {tempSubmission, tempSubmission2, tempSubmission3}
+>>>>>>> 4a96ce3d31324f768dad35af79edf73d555ba1b5
             };
 
             var tempProblemList = new List<ProblemHelperModel> {tempProblem};
@@ -67,10 +92,10 @@ namespace Codex.Controllers
             var tempIsDone = true;
 
             foreach (var problem in tempProblemList) {
-                var tempProblemPass = true;
+                var tempProblemPass = false;
                 foreach (var submission in problem.Submissions) {
-                    if (0 < submission.FailedTests) {
-                        tempProblemPass = false;
+                    if (submission.FailedTests == 0) {
+                        tempProblemPass = true;
                         break;
                     }
                 }

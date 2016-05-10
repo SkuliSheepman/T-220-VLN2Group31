@@ -243,6 +243,7 @@
     <Compile Include="Models\StudentModels\HelperModels\ProblemHelperModel.cs" />
     <Compile Include="Models\StudentModels\HelperModels\SubmissionHelperModel.cs" />
     <Compile Include="Models\StudentModels\ViewModels\StudentViewModels.cs" />
+    <Compile Include="Models\TeacherModels\HelperModels\CourseHelperModels.cs" />
     <Compile Include="Models\TeacherModels\ViewModels\TeacherViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AssignmentService.cs" />
@@ -327,6 +328,8 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\materialize\fonts\roboto\" />
     <Folder Include="Models\TeacherModels\HelperModels\" />
+    <Folder Include="Models\StudentModels\HelperModels\" />
+    <Folder Include="Models\StudentModels\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
