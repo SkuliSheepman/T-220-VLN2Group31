@@ -239,7 +239,8 @@
     <Compile Include="Models\SharedModels\SharedViewModels\StudentViewModels.cs" />
     <Compile Include="Models\SharedModels\SharedViewModels\SubmissionViewModels.cs" />
     <Compile Include="Models\SharedModels\SharedViewModels\TestCaseViewModels.cs" />
-    <Compile Include="Models\Teacher\ViewModels\TeacherViewModels.cs" />
+    <Compile Include="Models\TeacherModels\HelperModels\CourseHelperModels.cs" />
+    <Compile Include="Models\TeacherModels\ViewModels\TeacherViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AssignmentService.cs" />
     <Compile Include="Services\CourseService.cs" />
@@ -322,7 +323,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\materialize\fonts\roboto\" />
-    <Folder Include="Models\Teacher\HelperModels\" />
+    <Folder Include="Models\StudentModels\HelperModels\" />
+    <Folder Include="Models\StudentModels\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
