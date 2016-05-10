@@ -102,7 +102,7 @@ namespace Codex.Controllers
             var problemService = new ProblemService();
             var submissionService = new SubmissionService();
 
-            var model = new HomeStudentViewModel();
+            var model2 = new StudentViewModel();
 
             String studentId = userService.GetUserIdByName(User.Identity.Name);
             model.Assignments = assService.GetStudentAssignmentsByStudentId(studentId);
@@ -113,6 +113,13 @@ namespace Codex.Controllers
                 foreach (var problem in assignment.AssignmentProblems)
                 {
                     problem.Submissions = submissionService.GetGroupSubmissionsInProblem(studentId, problem.Id, assignment.Id);
+                    foreach(var submission in problem.Submissions)
+                    {
+                        if (problem.BestSubmission == null || (submission.FailedTests != null && submission.FailedTests < problem.BestSubmission.FailedTests))
+                        {
+                            problem.BestSubmission = submission;
+                        }
+                    }
                 }
             }*/
 
