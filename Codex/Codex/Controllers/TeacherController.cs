@@ -49,6 +49,8 @@ namespace Codex.Controllers
 
             var model = new TeacherViewModel
             {
+                YearSelected = year,
+                SemesterSelected = semesterId,
                 TeacherYearsActive = UserYearsActive
             };
 
@@ -56,6 +58,9 @@ namespace Codex.Controllers
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ActionResult GetTeacherCoursesByDate(int year, int semesterId)
         {
 

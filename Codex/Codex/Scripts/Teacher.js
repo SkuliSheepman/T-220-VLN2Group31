@@ -40,7 +40,7 @@
 
             },
             error: function () {
-                // TODO
+                Materialize.toast("Something awful happened :(", 4000);
             }
         });
 
