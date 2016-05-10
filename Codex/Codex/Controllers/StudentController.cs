@@ -15,22 +15,19 @@ namespace Codex.Controllers
         private readonly UserService _userService;
         private readonly AssignmentService _assignmentService;
 
-        public StudentController()
-        {
+        public StudentController() {
             _userService = new UserService();
             _assignmentService = new AssignmentService();
         }
 
 
         // GET: Student
-        public ActionResult Index()
-        {
+        public ActionResult Index() {
 
             var studentId = _userService.GetUserIdByName(User.Identity.Name);
             var userAssignments = _assignmentService.GetStudentAssignmentsByStudentId(studentId);
 
-            StudentViewModel model = new StudentViewModel
-            {
+            StudentViewModel model = new StudentViewModel {
                 Assignments = userAssignments
             };
             //Temporary model for testing
