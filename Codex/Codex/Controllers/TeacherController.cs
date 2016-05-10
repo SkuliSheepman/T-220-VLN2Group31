@@ -56,13 +56,35 @@ namespace Codex.Controllers
 
         }
 
-        public ActionResult GetTeacherCoursesByDate()
+        public ActionResult GetTeacherCoursesByDate(int year, int semesterId)
         {
+
             var teacherId = _userService.GetUserIdByName(User.Identity.Name);
             var userCourses = _courseService.GetCoursesByUserId(teacherId);
             var teacherCourses = new List<CourseHelperModel>();
 
-            return Json(false);
+            foreach (var course in userCourses)
+            {
+                if (course.Year == year && course.Semester == semesterId)
+                {
+                    if (course.Position != 1)
+                    {
+                        var teacherCourseHelperModel = new CourseHelperModel
+                        {
+                            CourseInstanceId = course.CourseInstanceId,
+                            Name = course.Name
+                        };
+
+                        if (!teacherCourses.Contains(teacherCourseHelperModel))
+                        {
+                            teacherCourses.Add(teacherCourseHelperModel);
+                        }
+                    }
+                }
+            }
+
+            return Json(teacherCourses);
+
         }
 
     }

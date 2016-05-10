@@ -7,6 +7,7 @@ using Codex.DAL;
 using Codex.Models.SharedModels.SharedViewModels;
 using Codex.Models;
 using Codex.Services;
+using Codex.Models.StudentModels.HelperModels;
 
 namespace Codex.Services
 {
@@ -139,13 +140,13 @@ namespace Codex.Services
             }
         }
 
-        public List<CollaboratorViewModel> GetCollaborators(int assignmentId, string studentId) {
+        public List<CollaboratorHelperModel> GetCollaborators(int assignmentId, string studentId) {
             var groupNumber = _db.AssignmentGroups.SingleOrDefault(x => x.AssignmentId == assignmentId && x.AspNetUser.Id == studentId);
 
             var collaborators = (from _assignmentGroup in _db.AssignmentGroups
                                  where _assignmentGroup.AssignmentId == assignmentId && _assignmentGroup.GroupNumber == groupNumber.GroupNumber
                                  join _student in _db.AspNetUsers on _assignmentGroup.UserId equals _student.Id
-                                 select new {_assignmentGroup, _student}).Select(_collaborator => new CollaboratorViewModel {
+                                 select new {_assignmentGroup, _student}).Select(_collaborator => new CollaboratorHelperModel {
                                      Id = _collaborator._student.Id,
                                      Name = _collaborator._student.FullName,
                                      GroupNumber = _collaborator._assignmentGroup.GroupNumber
@@ -153,11 +154,11 @@ namespace Codex.Services
             return collaborators;
         }
 
-        public List<StudentAssignmentViewModel> GetStudentAssignmentsByStudentId(string studentId) {
+        public List<AssignmentHelperModel> GetStudentAssignmentsByStudentId(string studentId) {
             var assignments = (from _assignmentGroup in _db.AssignmentGroups
                                where _assignmentGroup.UserId == studentId
                                join _assignment in _db.Assignments on _assignmentGroup.AssignmentId equals _assignment.Id
-                               select new {_assignmentGroup, _assignment}).Select(_assignmentPair => new StudentAssignmentViewModel {
+                               select new {_assignmentGroup, _assignment}).Select(_assignmentPair => new AssignmentHelperModel {
                                    Id = _assignmentPair._assignment.Id,
                                    CourseInstanceId = _assignmentPair._assignment.CourseInstanceId,
                                    Name = _assignmentPair._assignment.Name,

@@ -5,7 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Codex.Services;
 using Codex.Models;
-using Codex.Models.SharedModels.SharedViewModels;
+using Codex.Models.StudentModels.HelperModels;
+using Codex.Models.StudentModels.ViewModels;
 
 namespace Codex.Controllers
 {
@@ -38,13 +39,16 @@ namespace Codex.Controllers
                 tempRemaining += (tempTimeLeft.Seconds == 1 ? " second left" : " seconds left");
             }
 
-            var tempSubmission = new SubmissionViewModel {
+            var tempSubmission = new SubmissionHelperModel {
                 Id = 1,
                 FailedTests = 4,
                 OriginalFilename = "my_submission.zip",
                 SubmissionTime = DateTime.Now
             };
 
+<<<<<<< HEAD
+            var tempProblem = new ProblemHelperModel {
+=======
             var tempSubmission2 = new SubmissionViewModel
             {
                 Id = 1,
@@ -62,6 +66,7 @@ namespace Codex.Controllers
             };
 
             var tempProblem = new StudentProblemViewModel {
+>>>>>>> 4a96ce3d31324f768dad35af79edf73d555ba1b5
                 Id = 1,
                 CourseId = 1,
                 Name = "Problem 1.1",
@@ -70,11 +75,16 @@ namespace Codex.Controllers
                 Attachment = "Attachment.zip",
                 Language = "C++",
                 Weight = 100,
+<<<<<<< HEAD
+                BestSubmission = tempSubmission,
+                Submissions = new List<SubmissionHelperModel> {tempSubmission}
+=======
                 BestSubmission = tempSubmission3,
                 Submissions = new List<SubmissionViewModel> {tempSubmission, tempSubmission2, tempSubmission3}
+>>>>>>> 4a96ce3d31324f768dad35af79edf73d555ba1b5
             };
 
-            var tempProblemList = new List<StudentProblemViewModel> {tempProblem};
+            var tempProblemList = new List<ProblemHelperModel> {tempProblem};
 
             var tempNumberOfProblems = tempProblemList.Count.ToString();
             tempNumberOfProblems += (tempProblemList.Count == 1 ? " Problem" : " Problems");
@@ -95,7 +105,7 @@ namespace Codex.Controllers
                 }
             }
 
-            var tempAssignment = new StudentAssignmentViewModel {
+            var tempAssignment = new AssignmentHelperModel {
                 Id = 1,
                 CourseInstanceId = 13,
                 CourseName = "Gagnaskipan",
@@ -110,7 +120,7 @@ namespace Codex.Controllers
                 AssignmentProblems = tempProblemList
             };
 
-            var tempAssignmentList = new List<StudentAssignmentViewModel> {tempAssignment};
+            var tempAssignmentList = new List<AssignmentHelperModel> {tempAssignment};
 
             StudentViewModel model = new StudentViewModel {
                 Assignments = tempAssignmentList
