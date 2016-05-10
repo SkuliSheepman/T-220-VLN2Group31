@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using Codex.DAL;
 using Codex.Models;
 using Codex.Models.SharedModels.SharedViewModels;
+using Codex.Models.StudentModels.ViewModels;
+using Codex.Models.StudentModels.HelperModels;
 
 namespace Codex.Services
 {
@@ -93,11 +95,11 @@ namespace Codex.Services
             return rtrn;
         }
 
-        public List<StudentProblemViewModel> GetAllProblemsInStudentAssignment(int assignmentId) {
+        public List<ProblemHelperModel> GetAllProblemsInStudentAssignment(int assignmentId) {
             var assignmentProblems = _db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId);
-            var problems = new List<StudentProblemViewModel>();
+            var problems = new List<ProblemHelperModel>();
             foreach (var problem in assignmentProblems) {
-                problems.Add(new StudentProblemViewModel() {
+                problems.Add(new ProblemHelperModel() {
                     Id = problem.Problem.Id,
                     CourseId = problem.Problem.CourseId,
                     Name = problem.Problem.Name,

@@ -5,7 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Codex.Services;
 using Codex.Models;
-using Codex.Models.SharedModels.SharedViewModels;
+using Codex.Models.StudentModels.HelperModels;
+using Codex.Models.StudentModels.ViewModels;
 
 namespace Codex.Controllers
 {
@@ -38,14 +39,14 @@ namespace Codex.Controllers
                 tempRemaining += (tempTimeLeft.Seconds == 1 ? " second left" : " seconds left");
             }
 
-            var tempSubmission = new SubmissionViewModel {
+            var tempSubmission = new SubmissionHelperModel {
                 Id = 1,
                 FailedTests = 4,
                 OriginalFilename = "my_submission.zip",
                 SubmissionTime = DateTime.Now
             };
 
-            var tempProblem = new StudentProblemViewModel {
+            var tempProblem = new ProblemHelperModel {
                 Id = 1,
                 CourseId = 1,
                 Name = "Problem 1.1",
@@ -55,10 +56,10 @@ namespace Codex.Controllers
                 Language = "C++",
                 Weight = 100,
                 BestSubmission = tempSubmission,
-                Submissions = new List<SubmissionViewModel> {tempSubmission}
+                Submissions = new List<SubmissionHelperModel> {tempSubmission}
             };
 
-            var tempProblemList = new List<StudentProblemViewModel> {tempProblem};
+            var tempProblemList = new List<ProblemHelperModel> {tempProblem};
 
             var tempNumberOfProblems = tempProblemList.Count.ToString();
             tempNumberOfProblems += (tempProblemList.Count == 1 ? " Problem" : " Problems");
@@ -79,7 +80,7 @@ namespace Codex.Controllers
                 }
             }
 
-            var tempAssignment = new StudentAssignmentViewModel {
+            var tempAssignment = new AssignmentHelperModel {
                 Id = 1,
                 CourseInstanceId = 13,
                 CourseName = "Gagnaskipan",
@@ -94,7 +95,7 @@ namespace Codex.Controllers
                 AssignmentProblems = tempProblemList
             };
 
-            var tempAssignmentList = new List<StudentAssignmentViewModel> {tempAssignment};
+            var tempAssignmentList = new List<AssignmentHelperModel> {tempAssignment};
 
             StudentViewModel model = new StudentViewModel {
                 Assignments = tempAssignmentList
