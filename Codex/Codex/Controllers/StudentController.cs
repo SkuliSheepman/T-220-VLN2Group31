@@ -55,6 +55,22 @@ namespace Codex.Controllers
             var tempNumberOfProblems = tempProblemList.Count.ToString();
             tempNumberOfProblems += (tempProblemList.Count == 1 ? " problem" : " problems");
 
+            var tempIsDone = true;
+            
+            /*foreach (var problem in tempProblemList) {
+                var tempProblemPass = false;
+                foreach (var submission in problem.Submissions) {
+                    if (submission.FailedTests == 0) {
+                        tempProblemPass = true;
+                        break;
+                    }
+                }
+                problem.IsAccepted = tempProblemPass;
+                if (!tempProblemPass) {
+                    tempIsDone = false;
+                }
+            }*/
+
             var tempAssignment = new StudentAssignmentViewModel
             {
                 Id = 1,
@@ -67,6 +83,7 @@ namespace Codex.Controllers
                 TimeRemaining = tempRemaining,
                 NumberOfProblems = tempNumberOfProblems,
                 MaxCollaborators = 3,
+                IsDone = tempIsDone,
                 AssignmentProblems = tempProblemList
             };
 
