@@ -31,5 +31,31 @@ namespace Codex.Services
             }
             return courseList;
         }
+
+        public List<ActiveSemesterViewModel> GetTeacherActiveSemestersById(string userId)
+        {
+            var teacherCourses = GetCoursesByUserId(userId);
+            var teacherActiveSemesters = new List<ActiveSemesterViewModel>();
+            foreach (var _course in teacherCourses)
+            {
+                var newActiveSemesterEntry = new ActiveSemesterViewModel
+                {
+                    Year = _course.Year,
+                    Semester = _course.Semester
+                };
+                if (!teacherActiveSemesters.Contains(newActiveSemesterEntry))
+                {
+                    teacherActiveSemesters.Add(newActiveSemesterEntry);
+                }
+            }
+            return teacherActiveSemesters;
+        }
+
+        public List<CourseViewModel> GetTeacherCoursesByDate(string userId, int year, string semester)
+        {
+            var teacherCourses = GetCoursesByUserId(userId);
+            var datedTeacherCourses = teacherCourses.Where(x => x.Year == year && x.Semester == semester).ToList();
+            return datedTeacherCourses;
+        }
     }
 }
