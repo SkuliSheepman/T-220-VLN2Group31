@@ -64,16 +64,16 @@ namespace Codex.Services
 
         public List<AssignmentViewModel> GetAssignmentsInCourseInstanceById(int courseInstanceId)
         {
-            var assignments = _db.Assignments
-                .Where(x => x.CourseInstanceId == courseInstanceId)
-                .Select(_assignment => new AssignmentViewModel
-                {
-                    Id = _assignment.Id,
-                    Name = _assignment.Name,
-                    StartTime = _assignment.StartTime,
-                    EndTime = _assignment.EndTime,
-                    MaxCollaborators = _assignment.MaxCollaborators
-                }).ToList();
+
+            var course = _db.CourseInstances.SingleOrDefault(x => x.Id == courseInstanceId);
+            var assignments = course.Assignments.Select(_assignment => new AssignmentViewModel
+                                                        {
+                                                            Id = _assignment.Id,
+                                                            Name = _assignment.Name,
+                                                            StartTime = _assignment.StartTime,
+                                                            EndTime = _assignment.EndTime,
+                                                            MaxCollaborators = _assignment.MaxCollaborators
+                                                        }).ToList();
 
             return assignments;
         }
