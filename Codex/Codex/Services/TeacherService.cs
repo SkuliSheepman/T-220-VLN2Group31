@@ -230,31 +230,6 @@ namespace Codex.Services
             return problemViewModel;
         }
 
-        public List<AssignmentViewModel> GetAllAssignmentsInCourse(int courseInstanceId)
-        {
-            var assignmentQuery = _db.Assignments.Where(x => x.CourseInstanceId == courseInstanceId);
-            var assignmentList = new List<AssignmentViewModel>();
-            var assignmentState = "";
-
-            foreach (var assignment in assignmentQuery)
-            {
-                if (DateTime.Now < assignment.StartTime) { assignmentState = "Upcoming"; }
-                else if (assignment.StartTime < DateTime.Now && DateTime.Now < assignment.EndTime) { assignmentState = "Open"; }
-                else if (assignment.EndTime < DateTime.Now) { assignmentState = "Ended"; }
-
-                assignmentList.Add(new AssignmentViewModel
-                {
-
-                    Id = assignment.Id,
-                    Name = assignment.Name,
-                    StartTime = assignment.StartTime,
-                    EndTime = assignment.EndTime,
-                    MaxCollaborators = assignment.MaxCollaborators
-                });
-            }
-            return assignmentList;
-        }
-
         public void CheckUngradedAssignments(int courseInstanceId)
         {
             // Gets all closed and ungraded assignments in courseInstance
