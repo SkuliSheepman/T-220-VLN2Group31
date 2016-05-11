@@ -8,12 +8,11 @@
     <div id="dateFilter" class="row">
         <div class="input-field col s12">
             <select id="date">
-                @foreach (var _activeSemester in Model.ActiveSemesters)
-                {
+                @foreach (var _activeSemester in Model.ActiveSemesters) {
                     <option value="@_activeSemester.Year @_activeSemester.Semester">@_activeSemester.Year - @_activeSemester.Semester</option>
                 }
             </select>
-            <label>Select Year</label>
+            <label>Select year and semester</label>
         </div>
     </div>
 </div>
@@ -21,8 +20,7 @@
 <!-- Course Selection -->
 <div class="section">
     <div id="teacherCourses" class="row">
-        @foreach (var _course in Model.TeacherCourses)
-        {
+        @foreach (var _course in Model.TeacherCourses) {
             <div class="col s4">
                 <a href="" class="waves-effect waves-light btn">@_course.Name</a>
             </div>
@@ -31,9 +29,111 @@
 </div>
 
 <!-- Assignments -->
-@foreach (var _assignment in Model.CourseSelected.OpenAssignments)
+@if (Model.CourseSelected.OpenAssignments.Count() > 0)
 {
-    <p>@_assignment.Name</p>
+<h2 class="assignment-category-title grey-text text-darken-1">Open</h2>
+<div class="row">
+    <div class="col s12">
+        <ul class="collapsible popout" data-collapsible="accordion">
+            @foreach (var _assignment in Model.CourseSelected.OpenAssignments)
+            {
+                    <li class="grey lighten-2">
+                        <div class="collapsible-header">
+                            <div class="row clear-margin">
+                                <div class="col s3 truncate">
+                                    <span class="search-criteria">@_assignment.Name</span>
+                                </div>
+                                <div class="col s1 left-align">
+                                    <a class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
+                                        <i class="material-icons blue-text">info</i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="collapsible-body-container">
+                                @if (_assignment.Problems.Count != 0)
+                                {
+                                    <ul class="collapsible" data-collapsible="accordion">
+                                        @foreach (var _problem in _assignment.Problems)
+                                        {
+                                            <li class="grey lighten-1">
+                                                <div class="collapsible-header">
+                                                    <div class="row clear-margin">
+                                                        <div class="col s3 truncate">
+                                                            <span class="search-criteria">@_problem.Name</span>
+                                                        </div>
+                                                        <div class="col s1 grey-text">
+                                                            <span></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
+                        </div>
+                    </li>
+
+            }
+        </ul>
+    </div>
+</div>
+}
+
+<!-- Assignments -->
+@if (Model.CourseSelected.ClosedAssignments.Count() > 0)
+{
+    <h2 class="assignment-category-title grey-text text-darken-1">Closed</h2>
+    <div class="row">
+        <div class="col s12">
+            <ul class="collapsible popout" data-collapsible="accordion">
+                @foreach (var _assignment in Model.CourseSelected.OpenAssignments)
+                {
+                    <li class="grey lighten-2">
+                        <div class="collapsible-header">
+                            <div class="row clear-margin">
+                                <div class="col s3 truncate">
+                                    <span class="search-criteria">@_assignment.Name</span>
+                                </div>
+                                <div class="col s1 left-align">
+                                    <a class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
+                                        <i class="material-icons blue-text">info</i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="collapsible-body-container">
+                                @if (_assignment.Problems.Count != 0)
+                                {
+                                    <ul class="collapsible" data-collapsible="accordion">
+                                        @foreach (var _problem in _assignment.Problems)
+                                        {
+                                            <li class="grey lighten-1">
+                                                <div class="collapsible-header">
+                                                    <div class="row clear-margin">
+                                                        <div class="col s3 truncate">
+                                                            <span class="search-criteria">@_problem.Name</span>
+                                                        </div>
+                                                        <div class="col s1 grey-text">
+                                                            <span></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
+                        </div>
+                    </li>
+
+                }
+            </ul>
+        </div>
+    </div>
 }
 
 <div id="new-problem-modal" class="modal">
