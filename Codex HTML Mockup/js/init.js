@@ -5,7 +5,7 @@ $('button[type="submit"]').click(function (e) {
 
 
     e.stopPropagation();
-    //e.preventDefault();
+    e.preventDefault();
 });
 
 $("input:file").change(function (){

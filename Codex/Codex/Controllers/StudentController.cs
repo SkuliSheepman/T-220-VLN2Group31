@@ -10,6 +10,7 @@ using Codex.Models.StudentModels.ViewModels;
 
 namespace Codex.Controllers
 {
+    [Authorize]
     public class StudentController : Controller
     {
         private readonly UserService _userService;
@@ -31,8 +32,8 @@ namespace Codex.Controllers
             };
             //Temporary model for testing
             var tempEnd = DateTime.Now;
-            /*tempEnd = tempEnd.AddHours(1);
-            tempEnd = tempEnd.AddMinutes(1);*/
+            tempEnd = tempEnd.AddHours(1);
+            tempEnd = tempEnd.AddMinutes(1);
 
             var tempTimeLeft = new TimeSpan(tempEnd.Ticks - DateTime.Now.Ticks);
             var tempRemaining = String.Empty;
