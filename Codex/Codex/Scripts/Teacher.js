@@ -62,7 +62,7 @@
     $("#new-problem-modal-create-button").on('click', function(e) {
 
         var formData = {
-            CourseId: 15,
+            CourseId: 1,
             Name: "TestProblem",
             Description: "Hello world",
             Filetype: "cs",

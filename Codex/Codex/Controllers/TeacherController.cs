@@ -44,16 +44,18 @@ namespace Codex.Controllers
 
             }
 
+            var teacherCourses = _teacherService.GetTeacherCoursesByDate(
+                    teacherId,
+                    teacherActiveSemesters.First().Year,
+                    teacherActiveSemesters.First().Semester
+                    );
+
             var model = new TeacherViewModel
             {
                 YearSelected = year,
                 SemesterSelected = semester,
                 ActiveSemesters = teacherActiveSemesters,
-                TeacherCourses = _teacherService.GetTeacherCoursesByDate(
-                    teacherId,
-                    teacherActiveSemesters.First().Year,
-                    teacherActiveSemesters.First().Semester
-                    )
+                TeacherCourses = teacherCourses
             };
 
             return View(model);

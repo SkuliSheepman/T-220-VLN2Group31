@@ -17,6 +17,7 @@ namespace Codex.Services
             _db = new Database();
             _assignmentService = new AssignmentService();
         }
+
         public List<CourseViewModel> GetCoursesByUserId(string teacherId)
         {
             var teacherCoursesQuery = _db.Teachers.Where(x => x.UserId == teacherId);
@@ -182,7 +183,7 @@ namespace Codex.Services
             {
                 if (DateTime.Now < assignment.StartTime) { assignmentState = "Upcoming"; }
                 else if (assignment.StartTime < DateTime.Now && DateTime.Now < assignment.EndTime) { assignmentState = "Open"; }
-                else if (assignment.EndTime < DateTime.Now) { assignmentState = "Ended"}
+                else if (assignment.EndTime < DateTime.Now) { assignmentState = "Ended"; }
                 assignmentList.Add(new AssignmentViewModel
                 {
                     Id = assignment.Id,
