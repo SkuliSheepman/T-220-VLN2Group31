@@ -20,7 +20,12 @@ namespace Codex.Services
             var courseList = new List<CourseViewModel>();
             foreach(var course in teacherCoursesQuery)
             {
-                courseList
+                courseList.Add(new CourseViewModel
+                {
+                    Id = course.CourseInstance.Id,
+                    Name = course.CourseInstance.Course.Name,
+                    IsAssistant = course.IsAssistant
+                });
             }
         }
     }
