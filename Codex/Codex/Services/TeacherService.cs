@@ -164,7 +164,7 @@ namespace Codex.Services
         {
             var openAssignments = assignments
                 .Where(
-                    x => x.StartTime > DateTime.Now
+                    x => x.StartTime < DateTime.Now
                          && DateTime.Now < x.EndTime)
                 .ToList();
 
@@ -175,7 +175,7 @@ namespace Codex.Services
         {
             var upcomingAssignments = assignments
                 .Where(
-                    x => x.StartTime > DateTime.Now)
+                    x => DateTime.Now < x.StartTime)
                 .ToList();
 
             return upcomingAssignments;
