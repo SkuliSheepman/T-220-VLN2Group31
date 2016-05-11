@@ -56,7 +56,8 @@ namespace Codex.Services
         public List<AssignmentViewModel> GetAssignmentsInCourseInstanceById(int courseInstanceId) {
             var assignments = _db.Assignments
                 .Where(x => x.CourseInstanceId == courseInstanceId)
-                .Select(_assignment => new AssignmentViewModel {
+                .Select(_assignment => new AssignmentViewModel
+                {
                     Id = _assignment.Id,
                     Name = _assignment.Name,
                     StartTime = _assignment.StartTime,
@@ -64,19 +65,23 @@ namespace Codex.Services
                     MaxCollaborators = _assignment.MaxCollaborators
                 }).ToList();
 
-            foreach (var _assignment in assignments) {
-                var problems = (from problemRelation in _db.AssignmentProblems
-                                join problem in _db.Problems on problemRelation.ProblemId equals problem.Id
-                                where problemRelation.AssignmentId == _assignment.Id
-                                select new {problem, problemRelation}).Select(_problemPair => new ProblemViewModel {
-                                    Id = _problemPair.problem.Id,
-                                    Name = _problemPair.problem.Name,
-                                    Weight = _problemPair.problemRelation.Weight
-                                }).ToList();
-                _assignment.Problems = problems;
-            }
-
             return assignments;
+        }
+
+        public List<ProblemViewModel> GetProblemsInAssignmentById(int assignmentId)
+        {
+            var problemQuery = _db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId);
+            var problemList = new List<ProblemViewModel>();
+            foreach(var problem in problemQuery)
+            {
+                problemList.Add(new ProblemViewModel
+                {
+                    Id = problem.Problem.Id,
+                    Name = problem.Problem.Name,
+                    Weight = problem.Weight
+                });
+            }
+            return problemList;
         }
 
         public List<AssignmentViewModel> GetOpenAssignmentsFromList(List<AssignmentViewModel> assignments) {

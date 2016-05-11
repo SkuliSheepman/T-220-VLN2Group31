@@ -36,7 +36,6 @@ namespace Codex.Models.TeacherViewModels
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public int MaxCollaborators { get; set; }
-        public string AssignmentState { get; set; }
         public bool IsGraded { get; set; }
         public List<ProblemViewModel> Problems { get; set; }
     }
