@@ -170,21 +170,13 @@ namespace Codex.Services
         }
 
         public List<AssignmentViewModel> GetRequiresGradingAssignmentsFromList(List<AssignmentViewModel> assignments) {
-            /*var requiresGrading = assignments
-                                  .Where(x => x.)*/
-
-            return new List<AssignmentViewModel>();
+            var notGradedAssignments = assignments.Where(x => x.EndTime < DateTime.Now && x.IsGraded == false).ToList();
+            return notGradedAssignments;
         }
 
         public List<AssignmentViewModel> GetClosedAssignmentsFromList(List<AssignmentViewModel> assignments) {
-            /*(from _assignment in assignments
-                                join _dbAssignment in _db.Assignments on _assignment.Id equals _dbAssignment.Id
-                                join _submission in _db.Submissions on _dbAssignment.Id equals _submission.AssignmentId
-                                join _group in _db.AssignmentGroups on _submission.AspNetUser equals _group.AspNetUser
-                                where*/
-
-
-            return new List<AssignmentViewModel>();
+            var closedAssignments = assignments.Where(x => x.EndTime < DateTime.Now && x.IsGraded == true).ToList();
+            return closedAssignments;
         }
 
         public ProblemUpdateViewModel UpdateProblem(ProblemUpdateViewModel problemViewModel) {
