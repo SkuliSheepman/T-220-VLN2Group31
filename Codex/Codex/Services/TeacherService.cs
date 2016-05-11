@@ -128,6 +128,28 @@ namespace Codex.Services
             return submissionList;
         }
 
+        // Gets submission with fewest FailedTests and Newest SubmissionTime
+        public SubmissionViewModel GetBestSubmissionFromSubmissionList(List<SubmissionViewModel> submissions)
+        {
+            var bestSubmission = new SubmissionViewModel();
+            foreach(var submission in submissions)
+            {
+                if (bestSubmission == null)
+                {
+                    bestSubmission = submission;
+                }
+                else if(submission.FailedTests < bestSubmission.FailedTests)
+                {
+                    bestSubmission = submission;
+                }
+                else if(bestSubmission.FailedTests == submission.FailedTests && bestSubmission.SubmissionTime < submission.SubmissionTime)
+                {
+                    bestSubmission = submission;
+                }
+            }
+            return bestSubmission;
+        }
+
         public List<AssignmentViewModel> GetOpenAssignmentsFromList(List<AssignmentViewModel> assignments) {
             var openAssignments = assignments
                 .Where(
