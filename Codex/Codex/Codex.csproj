@@ -252,6 +252,7 @@
     <Compile Include="Services\AdminService.cs" />
     <Compile Include="Services\AssignmentService.cs" />
     <Compile Include="Services\CourseService.cs" />
+    <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\ProblemService.cs" />
     <Compile Include="Services\StudentService.cs" />
     <Compile Include="Services\SubmissionService.cs" />

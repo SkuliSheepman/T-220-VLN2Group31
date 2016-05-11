@@ -1,4 +1,4 @@
-﻿@model Codex.Models.StudentModels.ViewModels.StudentViewModel
+﻿@model Codex.Models.StudentViewModel
 @{
     ViewBag.Title = "Student Overview";
 }
@@ -23,7 +23,7 @@
                                 <span>@assignment.TimeRemaining</span>
                             </div>
                             <div class="col s3 l2 grey-text truncate center-align">
-                                <span class="search-criteria">@assignment.CourseName</span>
+                                <span class="search-criteria">@assignment.Course</span>
                             </div>
                             <div class="col l2 grey-text center-align hide-on-med-and-down">
                                 <span>@assignment.NumberOfProblems</span>
@@ -47,9 +47,9 @@
 
                     <div class="collapsible-body">
                         <div class="collapsible-body-container">
-                            @if (assignment.AssignmentProblems.Count != 0) {
+                            @if (assignment.Problems.Count != 0) {
                                 <ul class="collapsible" data-collapsible="accordion">
-                                    @foreach (var problem in assignment.AssignmentProblems) {
+                                    @foreach (var problem in assignment.Problems) {
                                         <li class="grey lighten-1">
                                             <div class="collapsible-header">
                                                 <div class="row clear-margin">
@@ -184,7 +184,7 @@
                                 <span>10</span>
                             </div>
                             <div class="col s3 l2 grey-text truncate center-align">
-                                <span class="search-criteria">@assignment.CourseName</span>
+                                <span class="search-criteria">@assignment.Course</span>
                             </div>
                             <div class="col l2 grey-text center-align hide-on-med-and-down">
                                 <span>@assignment.NumberOfProblems</span>
@@ -209,10 +209,10 @@
 
                     <div class="collapsible-body">
                         <div class="collapsible-body-container">
-                            @if (assignment.AssignmentProblems.Count != 0)
+                            @if (assignment.Problems.Count != 0)
                             {
                                 <ul class="collapsible" data-collapsible="accordion">
-                                    @foreach (var problem in assignment.AssignmentProblems)
+                                    @foreach (var problem in assignment.Problems)
                                     {
                                         <li class="grey lighten-1">
                                             <div class="collapsible-header">

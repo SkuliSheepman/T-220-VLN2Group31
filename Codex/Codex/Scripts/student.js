@@ -95,7 +95,8 @@
                         }
                     },
                     error: function (xhr) {
-                        Materialize.toast("Error: " + xhr.statusCode, 4000);
+                        status.empty();
+                        Materialize.toast("Error: " + xhr.status + " - " + xhr.statusText, 4000);
                     }
                 });
             }
