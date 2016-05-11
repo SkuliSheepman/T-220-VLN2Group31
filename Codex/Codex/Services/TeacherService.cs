@@ -171,8 +171,7 @@ namespace Codex.Services
                         Name = assignment.Name,
                         StartTime = assignment.StartTime,
                         EndTime = assignment.EndTime,
-                        MaxCollaborators = assignment.MaxCollaborators,
-                        AssignmentState = assignmentState
+                        MaxCollaborators = assignment.MaxCollaborators
                     });
                 }
             return assignmentList;
