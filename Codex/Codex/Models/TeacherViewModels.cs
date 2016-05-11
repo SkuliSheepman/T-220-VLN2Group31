@@ -46,7 +46,6 @@ namespace Codex.Models.TeacherViewModels
         public string Name { get; set; }
         public int Weight { get; set; }
         public List<AssignmentGroupViewModel> Groups { get; set; }
-        public List<SubmissionViewModel> BestSubmissions { get; set; }
     }
 
     public class AssignmentGroupViewModel
