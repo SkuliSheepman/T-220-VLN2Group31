@@ -11,6 +11,7 @@ namespace Codex.Models.TeacherViewModels
         public string SemesterSelected { get; set; }
         public List<ActiveSemesterViewModel> ActiveSemesters { get; set; }
         public List<CourseViewModel> TeacherCourses { get; set; }
+        public CourseViewModel CourseSelected { get; set; }
     }
     public class ActiveSemesterViewModel
     {
@@ -36,7 +37,6 @@ namespace Codex.Models.TeacherViewModels
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public int MaxCollaborators { get; set; }
-        public string AssignmentState { get; set; }
         public bool IsGraded { get; set; }
         public List<ProblemViewModel> Problems { get; set; }
     }
@@ -46,7 +46,15 @@ namespace Codex.Models.TeacherViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public int Weight { get; set; }
-        public List<SubmissionViewModel> BestSubmissions { get; set; }
+        public List<AssignmentGroupViewModel> Groups { get; set; }
+    }
+
+    public class AssignmentGroupViewModel
+    {
+        public int GroupNumber { get; set; }
+        public List<string> StudentIds { get; set; }
+        public SubmissionViewModel BestSubmission { get; set; }
+        public List<SubmissionViewModel> Submissions { get; set; }
     }
 
     public class ProblemUpdateViewModel
@@ -65,12 +73,9 @@ namespace Codex.Models.TeacherViewModels
     public class SubmissionViewModel
     {
         public int Id { get; set; }
-        public string StudentId { get; set; }
-        public int ProblemId { get; set; }
-        public int AssignmentId { get; set; }
+        public string StudentName { get; set; }
         public DateTime SubmissionTime { get; set; }
-        public int FailedTests { get; set; }
-        public float SubmissionGrade { get; set; }
-        public List<SubmissionViewModel> OtherSubmissions { get; set; }
+        public int? FailedTests { get; set; }
+        public double? SubmissionGrade { get; set; }
     }
 }
