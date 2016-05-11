@@ -161,6 +161,7 @@ namespace Codex.Services
                                select new {_assignmentGroup, _assignment}).Select(_assignmentPair => new AssignmentHelperModel {
                                    Id = _assignmentPair._assignment.Id,
                                    CourseInstanceId = _assignmentPair._assignment.CourseInstanceId,
+                                   CourseName = _assignmentPair._assignment.CourseInstance.Course.Name,
                                    Name = _assignmentPair._assignment.Name,
                                    Description = _assignmentPair._assignment.Description,
                                    StartTime = _assignmentPair._assignment.StartTime,
