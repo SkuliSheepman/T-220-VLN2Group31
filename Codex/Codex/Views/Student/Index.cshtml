@@ -64,18 +64,18 @@
                                                     </div>
                                                     <!-- todo: submit solution -->
                                                     <div class="col s3 m4">
-                                                        <form action="#" method="post">
-                                                            <label for="file-@assignment.Id-@problem.Id" class="file-upload">
-                                                                <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
+                                                        @using (Html.BeginForm("Submit", "Student", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" })) {
+                                                            <label for="file-@assignment.Id-@problem.Id" class="file-upload stop-propagation tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
+                                                                <span class="waves-effect blue-text waves-light btn-flat">
                                                                     <i class="material-icons hide-on-small-and-down">insert_drive_file</i>
                                                                 </span>
                                                             </label>
-                                                            <input id="file-@assignment.Id-@problem.Id" type="file"/>
+                                                            <input id="file-@assignment.Id-@problem.Id" type="file" class="stop-propagation" />
                                                             <button class="btn-flat grey lighten-4 disabled submission-submit-button narrow-button tooltipped" type="submit" name="action" data-position="top" data-delay="30" data-tooltip="No file selected">
                                                                 <span>Submit</span>
                                                                 <i class="material-icons right hide-on-med-and-down">send</i>
                                                             </button>
-                                                        </form>
+                                                        }
                                                     </div>
                                                     <div class="col s3 m2 status right-align truncate">
                                                         @if (problem.IsAccepted) {

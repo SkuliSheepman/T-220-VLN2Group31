@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using Codex.Services;
@@ -15,10 +17,12 @@ namespace Codex.Controllers
     {
         private readonly UserService _userService;
         private readonly AssignmentService _assignmentService;
+        private readonly SubmissionService _submissionService;
 
         public StudentController() {
             _userService = new UserService();
             _assignmentService = new AssignmentService();
+            _submissionService = new SubmissionService();
         }
 
 
@@ -163,6 +167,22 @@ namespace Codex.Controllers
 
             ViewBag.UserName = User.Identity.Name;
             return View(model);
+        }
+
+        public ActionResult Submit(HttpPostedFileBase file, int? assignmentId, int? problemId) {
+            if (file != null && 0 < file.ContentLength && assignmentId != null && problemId != null) {
+                /*var userId = _userService.GetUserIdByName(User.Identity.Name);
+
+                var submissionId = _submissionService.InsertSubmission(file, assignmentId, problemId, userId);
+
+                if (submissionId != 0) {
+                    _submissionService.UploadSubmission(file, assignmentId, problemId, submissionId);
+                    return Json(true);
+                }*/
+                return Json(true);
+            }
+
+            return Json(false);
         }
     }
 }

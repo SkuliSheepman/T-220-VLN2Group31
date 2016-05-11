@@ -331,6 +331,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Data\Attachments\" />
+    <Folder Include="Content\Data\Submissions\" />
     <Folder Include="Content\materialize\fonts\roboto\" />
   </ItemGroup>
   <ItemGroup>
