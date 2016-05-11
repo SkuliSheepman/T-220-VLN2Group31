@@ -30,6 +30,12 @@
     </div>
 </div>
 
+<!-- Assignments -->
+@foreach (var _assignment in Model.CourseSelected.OpenAssignments)
+{
+    <p>@_assignment.Name</p>
+}
+
 <div id="new-problem-modal" class="modal">
     <div class="modal-content">
         <h4 class="center-align">New problem</h4>

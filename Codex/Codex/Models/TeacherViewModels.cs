@@ -11,6 +11,7 @@ namespace Codex.Models.TeacherViewModels
         public string SemesterSelected { get; set; }
         public List<ActiveSemesterViewModel> ActiveSemesters { get; set; }
         public List<CourseViewModel> TeacherCourses { get; set; }
+        public CourseViewModel CourseSelected { get; set; }
     }
     public class ActiveSemesterViewModel
     {
