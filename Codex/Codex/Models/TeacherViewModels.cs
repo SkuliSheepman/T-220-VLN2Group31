@@ -72,11 +72,9 @@ namespace Codex.Models.TeacherViewModels
     public class SubmissionViewModel
     {
         public int Id { get; set; }
-        public string StudentId { get; set; }
-        public int ProblemId { get; set; }
-        public int AssignmentId { get; set; }
+        public string StudentName { get; set; }
         public DateTime SubmissionTime { get; set; }
-        public int FailedTests { get; set; }
-        public float SubmissionGrade { get; set; }
+        public int? FailedTests { get; set; }
+        public double? SubmissionGrade { get; set; }
     }
 }

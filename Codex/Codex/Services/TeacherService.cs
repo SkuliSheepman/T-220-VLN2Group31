@@ -107,6 +107,27 @@ namespace Codex.Services
             return assignmentGroupList;
         }
 
+        public List<SubmissionViewModel> GetSubmissionsFromGroupByStudentIds(List<string> studentIds, int assignmentId, int problemId)
+        {
+            var submissionList = new List<SubmissionViewModel>();
+            foreach(var studentId in studentIds)
+            {
+                var submissionQuery = _db.Submissions.Where(x => x.StudentId == studentId && x.AssignmentId == assignmentId && x.ProblemId == problemId);
+                foreach(var submission in submissionQuery)
+                {
+                    submissionList.Add(new SubmissionViewModel
+                    {
+                        Id = submission.Id,
+                        StudentName = submission.AspNetUser.FullName,
+                        SubmissionTime = submission.Time,
+                        FailedTests = submission.FailedTests,
+                        SubmissionGrade = submission.SubmissionGrade.Grade
+                    });
+                }
+            }
+            return submissionList;
+        }
+
         public List<AssignmentViewModel> GetOpenAssignmentsFromList(List<AssignmentViewModel> assignments) {
             var openAssignments = assignments
                 .Where(
