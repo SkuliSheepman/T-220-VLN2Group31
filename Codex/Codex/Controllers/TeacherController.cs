@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Codex.Services;
 using Codex.Models;
-using Codex.Models.TeacherViewModels;
+using Codex.Models;
 
 namespace Codex.Controllers
 {
@@ -25,9 +25,9 @@ namespace Codex.Controllers
             var teacherId = _userService.GetUserIdByName(User.Identity.Name);
             var teacherActiveSemesters = _teacherService.GetTeacherActiveSemestersById(teacherId);
 
-            var courseSelected = new CourseViewModel {
-                OpenAssignments = new List<AssignmentViewModel>(),
-                ClosedAssignments = new List<AssignmentViewModel>()
+            var courseSelected = new TeacherCourseViewModel {
+                OpenAssignments = new List<TeacherAssignmentViewModel>(),
+                ClosedAssignments = new List<TeacherAssignmentViewModel>()
             };
 
             
@@ -83,12 +83,11 @@ namespace Codex.Controllers
             if (Request.IsAjaxRequest()) {
                 return Json(teacherCourses);
             }
-            else {
-                return View(teacherCourses);
-            }
+
+            return Json(false);
         }
 
-        public ActionResult UpdateProblem(ProblemUpdateViewModel problem) {
+        public ActionResult UpdateProblem(TeacherProblemUpdateViewModel problem) {
             return Json(_teacherService.UpdateProblem(problem));
         }
     }

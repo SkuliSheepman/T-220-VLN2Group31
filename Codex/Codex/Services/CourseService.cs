@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Codex.DAL;
-using Codex.Models.AdminModels.AdminViewModels;
-using Codex.Models.AdminModels.AdminHelperModels;
 using Codex.Models;
 
 namespace Codex.Services
@@ -26,7 +24,7 @@ namespace Codex.Services
         /// <summary>
         /// Create a course from given NewCourseViewModel
         /// </summary>
-        public bool CreateCourse(NewCourseViewModel newCourseViewModel) {
+        public bool CreateCourse(AdminNewCourseViewModel newCourseViewModel) {
             var _course = _db.Courses.SingleOrDefault(x => x.Name == newCourseViewModel.Name);
             Course newCourse = new Course() {
                 Name = newCourseViewModel.Name,
@@ -57,7 +55,7 @@ namespace Codex.Services
         /// <summary>
         /// Update a course with given CourseHelperModel
         /// </summary>
-        public bool UpdateCourse(CourseHelperModel course) {
+        public bool UpdateCourse(AdminCourseViewModel course) {
             var courseInstance = _db.CourseInstances.SingleOrDefault(x => x.Id == course.Id);
             var baseCourse = _db.Courses.SingleOrDefault(x => x.Id == courseInstance.CourseId);
 
@@ -68,8 +66,7 @@ namespace Codex.Services
 
                     if (baseCourse == null) {
                         Course newCourse = new Course() {
-                            Name = course.Name,
-                            Description = course.Description
+                            Name = course.Name
                         };
 
                         baseCourse = _db.Courses.Add(newCourse);
@@ -94,14 +91,15 @@ namespace Codex.Services
         /// <summary>
         /// Get all teachers in a course instance by the course instance's ID
         /// </summary>
-        public List<CourseTeacherHelperModel> GetTeachersInCourseInstanceByCourseInstanceId(int courseInstanceId) {
+        public List<AdminCourseTeacherViewModel> GetTeachersInCourseInstanceByCourseInstanceId(int courseInstanceId) {
             var course = _db.CourseInstances.SingleOrDefault(x => x.Id == courseInstanceId);
 
             if (course == null) {
-                return new List<CourseTeacherHelperModel>();
+                return new List<AdminCourseTeacherViewModel>();
             }
 
-            var teachers = course.Teachers.Select(teacher => new CourseTeacherHelperModel {
+            var teachers = course.Teachers.Select(teacher => new AdminCourseTeacherViewModel
+            {
                 Id = teacher.AspNetUser.Id,
                 Email = teacher.AspNetUser.Email,
                 IsAssistant = teacher.IsAssistant,
@@ -115,11 +113,11 @@ namespace Codex.Services
         /// <summary>
         /// Get all course instances
         /// </summary>
-        public List<CourseHelperModel> GetAllCourseInstances() {
+        public List<AdminCourseViewModel> GetAllCourseInstances() {
             var courseInstances = (from _courseInstance in _db.CourseInstances
                                    join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
                                    join _semester in _db.Semesters on _courseInstance.SemesterId equals _semester.Id
-                                   select new {_courseInstance, _course, _semester}).Select(_coursePair => new CourseHelperModel {
+                                   select new {_courseInstance, _course, _semester}).Select(_coursePair => new AdminCourseViewModel {
                                        Id = _coursePair._courseInstance.Id,
                                        CourseId = _coursePair._course.Id,
                                        Name = _coursePair._course.Name,
@@ -201,7 +199,7 @@ namespace Codex.Services
         /// <summary>
         /// Add user to course via UserAddCourseHelperModel
         /// </summary>
-        public bool AddUserToCourse(UserAddCourseHelperModel model) {
+        public bool AddUserToCourse(AdminAddCourseToUserViewModel model) {
             var courseInstance = _db.CourseInstances.SingleOrDefault(x => x.Id == model.CourseId);
             if (courseInstance == null) {
                 return false;
@@ -239,12 +237,13 @@ namespace Codex.Services
         /// <summary>
         /// Get all courses a user is in via User ID
         /// </summary>
-        public List<UserCoursesHelperModel> GetCoursesByUserId(string userId) {
+        public List<AdminUserCoursesViewModel> GetCoursesByUserId(string userId) {
             var studentCourses = (from _courseInstance in _db.CourseInstances
                                   join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
                                   join _user in _db.AspNetUsers on userId equals _user.Id
                                   where _courseInstance.AspNetUsers.Contains(_user)
-                                  select new {_courseInstance, _course}).Select(pair => new UserCoursesHelperModel {
+                                  select new {_courseInstance, _course}).Select(pair => new AdminUserCoursesViewModel
+                                  {
                                       CourseInstanceId = pair._courseInstance.Id,
                                       Name = pair._course.Name,
                                       Position = 1,
@@ -257,7 +256,8 @@ namespace Codex.Services
                                   join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
                                   where _courseInstance.Teachers.Any(user => user.UserId == userId)
                                         && _courseInstance.Teachers.Any(user => user.IsAssistant == false)
-                                  select new {_courseInstance, _course}).Select(pair => new UserCoursesHelperModel {
+                                  select new {_courseInstance, _course}).Select(pair => new AdminUserCoursesViewModel
+                                  {
                                       CourseInstanceId = pair._courseInstance.Id,
                                       Name = pair._course.Name,
                                       Position = 2,
@@ -270,7 +270,8 @@ namespace Codex.Services
                                     join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
                                     where _courseInstance.Teachers.Any(user => user.UserId == userId)
                                           && _courseInstance.Teachers.Any(user => user.IsAssistant == true)
-                                    select new {_courseInstance, _course}).Select(pair => new UserCoursesHelperModel {
+                                    select new {_courseInstance, _course}).Select(pair => new AdminUserCoursesViewModel
+                                    {
                                         CourseInstanceId = pair._courseInstance.Id,
                                         Name = pair._course.Name,
                                         Position = 3,
@@ -288,7 +289,7 @@ namespace Codex.Services
         /// Remove a user from a course via UserAddCourseHelperModel which contains the course instance ID,
         /// the user ID and the position the user currently occupies in the course.
         /// </summary>
-        public bool RemoveUserFromCourse(UserAddCourseHelperModel model) {
+        public bool RemoveUserFromCourse(AdminAddCourseToUserViewModel model) {
             var courseInstance = _db.CourseInstances.SingleOrDefault(x => x.Id == model.CourseId);
 
             if (courseInstance == null) {

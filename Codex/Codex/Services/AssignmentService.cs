@@ -154,7 +154,7 @@ namespace Codex.Services
             return collaborators;
         }
 
-        public List<AssignmentHelperModel> GetStudentAssignmentsByStudentId(string studentId) {
+        /*public List<AssignmentHelperModel> GetStudentAssignmentsByStudentId(string studentId) {
             var assignments = (from _assignmentGroup in _db.AssignmentGroups
                                where _assignmentGroup.UserId == studentId
                                join _assignment in _db.Assignments on _assignmentGroup.AssignmentId equals _assignment.Id
@@ -173,7 +173,7 @@ namespace Codex.Services
                 _assignment.Collaborators = GetCollaborators(_assignment.Id, studentId);
             }
             return assignments;
-        }
+        }*/
 
         public bool RemoveCollboratorsFromAssignment(int assignmentId, string studentId) {
             var relation = (from _relation in _db.AssignmentGroups

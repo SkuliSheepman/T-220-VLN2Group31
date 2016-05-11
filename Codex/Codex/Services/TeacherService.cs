@@ -1,5 +1,5 @@
 ﻿using Codex.DAL;
-using Codex.Models.TeacherViewModels;
+using Codex.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +18,13 @@ namespace Codex.Services
             _assignmentService = new AssignmentService();
         }
 
-        public List<CourseViewModel> GetCoursesByUserId(string teacherId)
+        public List<TeacherCourseViewModel> GetCoursesByUserId(string teacherId)
         {
             var teacherCoursesQuery = _db.Teachers.Where(x => x.UserId == teacherId);
-            var courseList = new List<CourseViewModel>();
+            var courseList = new List<TeacherCourseViewModel>();
             foreach (var course in teacherCoursesQuery)
             {
-                courseList.Add(new CourseViewModel
+                courseList.Add(new TeacherCourseViewModel
                 {
                     Id = course.CourseInstance.Id,
                     Name = course.CourseInstance.Course.Name,
@@ -36,13 +36,13 @@ namespace Codex.Services
             return courseList;
         }
 
-        public List<ActiveSemesterViewModel> GetTeacherActiveSemestersById(string userId)
+        public List<TeacherActiveSemesterViewModel> GetTeacherActiveSemestersById(string userId)
         {
             var teacherCourses = GetCoursesByUserId(userId);
-            var teacherActiveSemesters = new List<ActiveSemesterViewModel>();
+            var teacherActiveSemesters = new List<TeacherActiveSemesterViewModel>();
             foreach (var _course in teacherCourses)
             {
-                var newActiveSemesterEntry = new ActiveSemesterViewModel
+                var newActiveSemesterEntry = new TeacherActiveSemesterViewModel
                 {
                     Year = _course.Year,
                     Semester = _course.Semester
@@ -55,18 +55,18 @@ namespace Codex.Services
             return teacherActiveSemesters;
         }
 
-        public List<CourseViewModel> GetTeacherCoursesByDate(string userId, int year, string semester)
+        public List<TeacherCourseViewModel> GetTeacherCoursesByDate(string userId, int year, string semester)
         {
             var teacherCourses = GetCoursesByUserId(userId);
             var datedTeacherCourses = teacherCourses.Where(x => x.Year == year && x.Semester == semester).ToList();
             return datedTeacherCourses;
         }
 
-        public List<AssignmentViewModel> GetAssignmentsInCourseInstanceById(int courseInstanceId)
+        public List<TeacherAssignmentViewModel> GetAssignmentsInCourseInstanceById(int courseInstanceId)
         {
 
             var course = _db.CourseInstances.SingleOrDefault(x => x.Id == courseInstanceId);
-            var assignments = course.Assignments.Select(_assignment => new AssignmentViewModel
+            var assignments = course.Assignments.Select(_assignment => new TeacherAssignmentViewModel
                                                         {
                                                             Id = _assignment.Id,
                                                             Name = _assignment.Name,
@@ -78,13 +78,13 @@ namespace Codex.Services
             return assignments;
         }
 
-        public List<ProblemViewModel> GetProblemsInAssignmentById(int assignmentId)
+        public List<TeacherProblemViewModel> GetProblemsInAssignmentById(int assignmentId)
         {
             var problemQuery = _db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId);
-            var problemList = new List<ProblemViewModel>();
+            var problemList = new List<TeacherProblemViewModel>();
             foreach (var problem in problemQuery)
             {
-                problemList.Add(new ProblemViewModel
+                problemList.Add(new TeacherProblemViewModel
                 {
                     Id = problem.Problem.Id,
                     Name = problem.Problem.Name,
@@ -94,18 +94,18 @@ namespace Codex.Services
             return problemList;
         }
 
-        public List<AssignmentGroupViewModel> GetAssignmentGroups(int assignmentId)
+        public List<TeacherAssignmentGroupViewModel> GetAssignmentGroups(int assignmentId)
         {
             var groupQuery = _db.AssignmentGroups.Where(x => x.AssignmentId == assignmentId);
             var groupNumberSet = new HashSet<int>();
-            var assignmentGroupList = new List<AssignmentGroupViewModel>();
+            var assignmentGroupList = new List<TeacherAssignmentGroupViewModel>();
             foreach (var student in groupQuery)
             {
                 groupNumberSet.Add(student.GroupNumber);
             }
             foreach (var group in groupNumberSet)
             {
-                var assignmentGroup = new AssignmentGroupViewModel();
+                var assignmentGroup = new TeacherAssignmentGroupViewModel();
                 assignmentGroup.GroupNumber = group;
                 var studentsGroupQuery = _db.AssignmentGroups.Where(x => x.GroupNumber == group && x.AssignmentId == assignmentId);
                 foreach (var student in studentsGroupQuery)
@@ -117,15 +117,15 @@ namespace Codex.Services
             return assignmentGroupList;
         }
 
-        public List<SubmissionViewModel> GetSubmissionsFromGroupByStudentIds(List<string> studentIds, int assignmentId, int problemId)
+        public List<TeacherSubmissionViewModel> GetSubmissionsFromGroupByStudentIds(List<string> studentIds, int assignmentId, int problemId)
         {
-            var submissionList = new List<SubmissionViewModel>();
+            var submissionList = new List<TeacherSubmissionViewModel>();
             foreach (var studentId in studentIds)
             {
                 var submissionQuery = _db.Submissions.Where(x => x.StudentId == studentId && x.AssignmentId == assignmentId && x.ProblemId == problemId);
                 foreach (var submission in submissionQuery)
                 {
-                    submissionList.Add(new SubmissionViewModel
+                    submissionList.Add(new TeacherSubmissionViewModel
                     {
                         Id = submission.Id,
                         StudentName = submission.AspNetUser.FullName,
@@ -139,9 +139,9 @@ namespace Codex.Services
         }
 
         // Gets submission with fewest FailedTests and Newest SubmissionTime
-        public SubmissionViewModel GetBestSubmissionFromSubmissionList(List<SubmissionViewModel> submissions)
+        public TeacherSubmissionViewModel GetBestSubmissionFromSubmissionList(List<TeacherSubmissionViewModel> submissions)
         {
-            var bestSubmission = new SubmissionViewModel();
+            var bestSubmission = new TeacherSubmissionViewModel();
             foreach (var submission in submissions)
             {
                 if (bestSubmission == null)
@@ -160,7 +160,7 @@ namespace Codex.Services
             return bestSubmission;
         }
 
-        public List<AssignmentViewModel> GetOpenAssignmentsFromList(List<AssignmentViewModel> assignments)
+        public List<TeacherAssignmentViewModel> GetOpenAssignmentsFromList(List<TeacherAssignmentViewModel> assignments)
         {
             var openAssignments = assignments
                 .Where(
@@ -171,7 +171,7 @@ namespace Codex.Services
             return openAssignments;
         }
 
-        public List<AssignmentViewModel> GetUpcomingAssignmentsFromList(List<AssignmentViewModel> assignments)
+        public List<TeacherAssignmentViewModel> GetUpcomingAssignmentsFromList(List<TeacherAssignmentViewModel> assignments)
         {
             var upcomingAssignments = assignments
                 .Where(
@@ -181,19 +181,19 @@ namespace Codex.Services
             return upcomingAssignments;
         }
 
-        public List<AssignmentViewModel> GetRequiresGradingAssignmentsFromList(List<AssignmentViewModel> assignments)
+        public List<TeacherAssignmentViewModel> GetRequiresGradingAssignmentsFromList(List<TeacherAssignmentViewModel> assignments)
         {
             var notGradedAssignments = assignments.Where(x => x.EndTime < DateTime.Now && x.IsGraded == false).ToList();
             return notGradedAssignments;
         }
 
-        public List<AssignmentViewModel> GetClosedAssignmentsFromList(List<AssignmentViewModel> assignments)
+        public List<TeacherAssignmentViewModel> GetClosedAssignmentsFromList(List<TeacherAssignmentViewModel> assignments)
         {
             var closedAssignments = assignments.Where(x => x.EndTime < DateTime.Now && x.IsGraded == true).ToList();
             return closedAssignments;
         }
 
-        public ProblemUpdateViewModel UpdateProblem(ProblemUpdateViewModel problemViewModel)
+        public TeacherProblemUpdateViewModel UpdateProblem(TeacherProblemUpdateViewModel problemViewModel)
         {
             var problemExists = _db.Problems.SingleOrDefault(x => x.Id == problemViewModel.Id);
             /*var problem = new Problem

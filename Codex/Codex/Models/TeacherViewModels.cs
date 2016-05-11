@@ -3,32 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Codex.Models.TeacherViewModels
+namespace Codex.Models
 {
     public class TeacherViewModel
     {
-        public List<ActiveSemesterViewModel> ActiveSemesters { get; set; }
-        public List<CourseViewModel> TeacherCourses { get; set; }
-        public CourseViewModel CourseSelected { get; set; }
+        public List<TeacherActiveSemesterViewModel> ActiveSemesters { get; set; }
+        public List<TeacherCourseViewModel> TeacherCourses { get; set; }
+        public TeacherCourseViewModel CourseSelected { get; set; }
     }
-    public class ActiveSemesterViewModel
+    public class TeacherActiveSemesterViewModel
     {
         public int Year { get; set; }
         public string Semester { get; set; }
     }
-    public class CourseViewModel
+    public class TeacherCourseViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public bool? IsAssistant { get; set; }
         public int Year { get; set; }
         public string Semester { get; set; }
-        public List<AssignmentViewModel> RequiresGradingAssignments { get; set; }
-        public List<AssignmentViewModel> OpenAssignments { get; set; }
-        public List<AssignmentViewModel> UpcomingAssignments { get; set; }
-        public List<AssignmentViewModel> ClosedAssignments { get; set; }
+        public List<TeacherAssignmentViewModel> RequiresGradingAssignments { get; set; }
+        public List<TeacherAssignmentViewModel> OpenAssignments { get; set; }
+        public List<TeacherAssignmentViewModel> UpcomingAssignments { get; set; }
+        public List<TeacherAssignmentViewModel> ClosedAssignments { get; set; }
     }
-    public class AssignmentViewModel
+    public class TeacherAssignmentViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -36,18 +36,18 @@ namespace Codex.Models.TeacherViewModels
         public DateTime? EndTime { get; set; }
         public int MaxCollaborators { get; set; }
         public bool IsGraded { get; set; }
-        public List<ProblemViewModel> Problems { get; set; }
+        public List<TeacherProblemViewModel> Problems { get; set; }
     }
 
-    public class ProblemViewModel
+    public class TeacherProblemViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public int Weight { get; set; }
-        public List<AssignmentGroupViewModel> Groups { get; set; }
+        public List<TeacherAssignmentGroupViewModel> Groups { get; set; }
     }
 
-    public class AssignmentGroupViewModel
+    public class TeacherAssignmentGroupViewModel
     {
         public int GroupNumber { get; set; }
         public List<string> StudentIds { get; set; }
@@ -55,7 +55,7 @@ namespace Codex.Models.TeacherViewModels
         public List<SubmissionViewModel> Submissions { get; set; }
     }
 
-    public class ProblemUpdateViewModel
+    public class TeacherProblemUpdateViewModel
     {
         public int Id { get; set; }
         public int CourseId { get; set; }
@@ -68,7 +68,7 @@ namespace Codex.Models.TeacherViewModels
         //public List<TestCaseViewModel> TestCases { get; set; }
     }
 
-    public class SubmissionViewModel
+    public class TeacherSubmissionViewModel
     {
         public int Id { get; set; }
         public string StudentName { get; set; }

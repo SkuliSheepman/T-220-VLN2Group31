@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Codex.Models.AdminModels.AdminViewModels;
-using Codex.Models.AdminModels.AdminHelperModels;
 using Codex.Services;
 using Codex.Models;
 
@@ -22,14 +20,14 @@ namespace Codex.Controllers
         }
 
         public ActionResult Users() {
-            List<CourseHelperModel> allCourses = _courseService.GetAllCourseInstances();
+            List<AdminCourseViewModel> allCourses = _courseService.GetAllCourseInstances();
 
             List<SelectListItem> allCourseItems = new List<SelectListItem>();
             foreach (var course in allCourses) {
                 allCourseItems.Add(new SelectListItem {Text = course.Name + " - " + course.Year + " - " + course.Semester, Value = course.Id.ToString()});
             }
 
-            UserViewModel model = new UserViewModel();
+            AdminUsersViewModel model = new AdminUsersViewModel();
             model.Users = _userService.GetAllUsers();
             model.AvailableCourses = allCourseItems;
 
@@ -40,14 +38,14 @@ namespace Codex.Controllers
         public ActionResult Courses() {
             CourseService courseService = new CourseService();
 
-            CourseViewModel model = new CourseViewModel();
+            AdminCoursesViewModel model = new AdminCoursesViewModel();
             model.Courses = courseService.GetAllCourseInstances();
 
             ViewBag.UserName = User.Identity.Name;
             return View(model);
         }
 
-        public ActionResult CreateUser(NewUserViewModel newUser) {
+        public ActionResult CreateUser(AdminNewUserViewModel newUser) {
             if (newUser.Name == null && newUser.Email == null) {
                 return Json(false);
             }
@@ -66,7 +64,7 @@ namespace Codex.Controllers
             return Json(false);
         }
 
-        public ActionResult CreateCourse(NewCourseViewModel newCourse) {
+        public ActionResult CreateCourse(AdminNewCourseViewModel newCourse) {
             if (string.IsNullOrEmpty(newCourse.Name) || newCourse.Year == null || newCourse.Year < 2000) {
                 return Json(false);
             }
@@ -100,15 +98,15 @@ namespace Codex.Controllers
             return Json(userService.ResetPassword(userId));
         }
 
-        public ActionResult RemoveUserFromCourse(UserAddCourseHelperModel model) {
+        public ActionResult RemoveUserFromCourse(AdminAddCourseToUserViewModel model) {
             return Json(_courseService.RemoveUserFromCourse(model));
         }
 
-        public ActionResult AddUserToCourse(UserAddCourseHelperModel model) {
+        public ActionResult AddUserToCourse(AdminAddCourseToUserViewModel model) {
             return Json(_courseService.AddUserToCourse(model));
         }
 
-        public ActionResult EditCourse(CourseHelperModel course) {
+        public ActionResult EditCourse(AdminCourseViewModel course) {
             if (string.IsNullOrEmpty(course.Name) || course.Year == null || course.Year < 2000) {
                 return Json(false);
             }

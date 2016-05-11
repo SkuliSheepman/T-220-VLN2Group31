@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using Codex.Controllers;
 using Codex.DAL;
 using Codex.Models;
-using Codex.Models.AdminModels.AdminHelperModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -54,15 +53,15 @@ namespace Codex.Services
         /// <summary>
         /// Get all users in the database
         /// </summary>
-        public List<UserHelperModel> GetAllUsers() {
+        public List<AdminUserViewModel> GetAllUsers() {
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             var users = um.Users.ToList();
 
             CourseService courseService = new CourseService();
 
-            var userModels = new List<UserHelperModel>();
+            var userModels = new List<AdminUserViewModel>();
             foreach (var user in users) {
-                var model = new UserHelperModel() {
+                var model = new AdminUserViewModel() {
                     UserInfo = user,
                     IsAdmin = um.IsInRole(user.Id, "Admin"),
                     UserCourses = courseService.GetCoursesByUserId(user.Id)

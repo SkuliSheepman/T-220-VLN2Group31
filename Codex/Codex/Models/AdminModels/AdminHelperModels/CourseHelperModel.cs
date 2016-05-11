@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Codex.Models.AdminModels.AdminHelperModels
 {
-    public class CourseHelperModel : CourseViewModel
+    public class CourseHelperModel : TeacherCourseViewModel
     {
         public int StudentsCount { get; set; }
         public List<CourseTeacherHelperModel> Teachers { get; set; }

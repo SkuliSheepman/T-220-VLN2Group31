@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Codex.Models.StudentModels.HelperModels
 {
-    public class ProblemHelperModel : ProblemViewModel
+    public class ProblemHelperModel : TeacherProblemViewModel
     {
         public int Weight { get; set; }
         public int MaxSubmissions { get; set; }

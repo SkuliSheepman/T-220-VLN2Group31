@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Codex.Models.TeacherModels.HelperModels
 {
-    public class CourseHelperModel : CourseViewModel
+    public class CourseHelperModel : TeacherCourseViewModel
     {
     }
 }

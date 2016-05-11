@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Codex.Models.StudentModels.HelperModels
 {
-    public class AssignmentHelperModel : AssignmentViewModel
+    public class AssignmentHelperModel : TeacherAssignmentViewModel
     {
         public double? AssignmentGrade { get; set; }
         public bool IsDone { get; set; }

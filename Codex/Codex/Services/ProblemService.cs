@@ -95,7 +95,7 @@ namespace Codex.Services
             return rtrn;
         }
 
-        public List<ProblemHelperModel> GetAllProblemsInStudentAssignment(int assignmentId) {
+        /*public List<ProblemHelperModel> GetAllProblemsInStudentAssignment(int assignmentId) {
             var assignmentProblems = _db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId);
             var problems = new List<ProblemHelperModel>();
             foreach (var problem in assignmentProblems) {
@@ -111,7 +111,7 @@ namespace Codex.Services
                 });
             }
             return problems;
-        }
+        }*/
 
         /// <summary>
         /// Gets all problems related to a specific course instances
