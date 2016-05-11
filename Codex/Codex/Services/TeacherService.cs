@@ -24,9 +24,12 @@ namespace Codex.Services
                 {
                     Id = course.CourseInstance.Id,
                     Name = course.CourseInstance.Course.Name,
-                    IsAssistant = course.IsAssistant
+                    IsAssistant = course.IsAssistant,
+                    Year = course.CourseInstance.Year,
+                    Semester = course.CourseInstance.Semester.Name
                 });
             }
+            return courseList;
         }
     }
 }

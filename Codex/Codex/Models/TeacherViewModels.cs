@@ -22,6 +22,8 @@ namespace Codex.Models.TeacherViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public bool? IsAssistant { get; set; }
+        public int Year { get; set; }
+        public string Semester { get; set; }
         public List<AssignmentViewModel> RequiresGradingAssignments { get; set; }
         public List<AssignmentViewModel> OpenAssignments { get; set; }
         public List<AssignmentViewModel> UpcomingAssignments { get; set; }
