@@ -45,7 +45,16 @@ namespace Codex.Models.TeacherViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public int Weight { get; set; }
+        public List<AssignmentGroupViewModel> Groups { get; set; }
         public List<SubmissionViewModel> BestSubmissions { get; set; }
+    }
+
+    public class AssignmentGroupViewModel
+    {
+        public int GroupNumber { get; set; }
+        public List<string> StudentIds { get; set; }
+        public SubmissionViewModel BestSubmission { get; set; }
+        public List<SubmissionViewModel> Submissions { get; set; }
     }
 
     public class ProblemUpdateViewModel
@@ -70,6 +79,5 @@ namespace Codex.Models.TeacherViewModels
         public DateTime SubmissionTime { get; set; }
         public int FailedTests { get; set; }
         public float SubmissionGrade { get; set; }
-        public List<SubmissionViewModel> OtherSubmissions { get; set; }
     }
 }

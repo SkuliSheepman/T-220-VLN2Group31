@@ -84,6 +84,29 @@ namespace Codex.Services
             return problemList;
         }
 
+        public List<AssignmentGroupViewModel> GetAssignmentGroups(int assignmentId)
+        {
+            var groupQuery = _db.AssignmentGroups.Where(x => x.AssignmentId == assignmentId);
+            var groupNumberSet = new HashSet<int>();
+            var assignmentGroupList = new List<AssignmentGroupViewModel>();
+            foreach (var student in groupQuery)
+            {
+                groupNumberSet.Add(student.GroupNumber);
+            }
+            foreach(var group in groupNumberSet)
+            {
+                var assignmentGroup = new AssignmentGroupViewModel();
+                assignmentGroup.GroupNumber = group;
+                var studentsGroupQuery = _db.AssignmentGroups.Where(x => x.GroupNumber == group && x.AssignmentId == assignmentId);
+                foreach(var student in studentsGroupQuery)
+                {
+                    assignmentGroup.StudentIds.Add(student.UserId);
+                }
+                assignmentGroupList.Add(assignmentGroup);
+            }
+            return assignmentGroupList;
+        }
+
         public List<AssignmentViewModel> GetOpenAssignmentsFromList(List<AssignmentViewModel> assignments) {
             var openAssignments = assignments
                 .Where(
