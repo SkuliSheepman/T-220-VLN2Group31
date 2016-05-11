@@ -33,6 +33,8 @@ namespace Codex.DAL
 
         public int MaxCollaborators { get; set; }
 
+        public bool IsGraded { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AssignmentGroup> AssignmentGroups { get; set; }
 

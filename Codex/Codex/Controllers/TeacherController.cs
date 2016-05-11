@@ -14,16 +14,10 @@ namespace Codex.Controllers
     {
 
         private readonly UserService _userService;
-        private readonly SubmissionService _submissionService;
-        private readonly AssignmentService _assignmentService;
-        private readonly CourseService _courseService;
         private readonly TeacherService _teacherService;
 
         public TeacherController() {
             _userService = new UserService();
-            _submissionService = new SubmissionService();
-            _assignmentService = new AssignmentService();
-            _courseService = new CourseService();
             _teacherService = new TeacherService();
         }
 
@@ -90,6 +84,11 @@ namespace Codex.Controllers
 
             }
 
+        }
+
+        public ActionResult UpdateProblem(ProblemUpdateViewModel problem)
+        {
+            return Json(_teacherService.UpdateProblem(problem));
         }
 
     }

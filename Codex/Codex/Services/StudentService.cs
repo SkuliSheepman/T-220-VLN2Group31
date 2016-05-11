@@ -120,28 +120,22 @@ namespace Codex.Services
         public string GetAssignmentTimeRemaining(StudentAssignmentViewModel assignment) {
             var timeRemaining = String.Empty;
 
-            if (assignment.StartTime.HasValue && assignment.EndTime.HasValue)
-            {
-                if (0 < assignment.EndTime.Value.CompareTo(DateTime.Now))
-                {
+            if (assignment.StartTime.HasValue && assignment.EndTime.HasValue) {
+                if (0 < assignment.EndTime.Value.CompareTo(DateTime.Now)) {
                     var remainingTimeSpan = new TimeSpan(assignment.EndTime.Value.Ticks - DateTime.Now.Ticks);
-                    if (0 < remainingTimeSpan.Days)
-                    {
+                    if (0 < remainingTimeSpan.Days) {
                         timeRemaining = remainingTimeSpan.Days.ToString();
                         timeRemaining += (remainingTimeSpan.Days == 1 ? " day left" : " days left");
                     }
-                    else if (0 < remainingTimeSpan.Hours)
-                    {
+                    else if (0 < remainingTimeSpan.Hours) {
                         timeRemaining = remainingTimeSpan.Hours.ToString();
                         timeRemaining += (remainingTimeSpan.Hours == 1 ? " hour left" : " hours left");
                     }
-                    else if (0 < remainingTimeSpan.Minutes)
-                    {
+                    else if (0 < remainingTimeSpan.Minutes) {
                         timeRemaining = remainingTimeSpan.Minutes.ToString();
                         timeRemaining += (remainingTimeSpan.Minutes == 1 ? " minute left" : " minutes left");
                     }
-                    else if (0 < remainingTimeSpan.Seconds)
-                    {
+                    else if (0 < remainingTimeSpan.Seconds) {
                         timeRemaining = remainingTimeSpan.Seconds.ToString();
                         timeRemaining += (remainingTimeSpan.Seconds == 1 ? " second left" : " seconds left");
                     }
