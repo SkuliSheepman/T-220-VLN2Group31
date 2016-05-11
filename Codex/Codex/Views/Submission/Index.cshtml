@@ -1,0 +1,202 @@
+﻿@model Codex.Models.SubmissionViewModel
+
+@{
+    ViewBag.Title = "Submission";
+}
+
+<div class="row">
+    <div class="col s12">
+        <div class="card-panel">
+
+            <blockquote>
+                <!-- Course -->
+                <div class="row clear-margin    ">
+                    <div class="col s12">
+                        <span class="grey-text">@Model.Assignment.Course</span>
+                    </div>
+                </div>
+
+                <!-- Assignment name -->
+                <div class="row">
+                    <div class="col s12">
+                        <h2 class="assignment-heading">@Model.Assignment.Name</h2>
+                    </div>
+                </div>
+            </blockquote>
+
+            <div class="divider"></div>
+
+            <!-- Problem and submission info -->
+            <div class="row section clear-margin">
+
+                <!-- Problem name -->
+                <div class="col s4 truncate">
+                    <h3 class="problem-heading">@Model.Problem.Name</h3>
+                </div>
+
+                <!-- Problem weight -->
+                <div class="col s2 grey-text">
+                    <span class="hide-on-med-and-down">Weight: </span>
+                    <span>@Model.Problem.Weight%</span>
+                </div>
+
+                <!-- Submission name -->
+                <div class="col s3">
+                    <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
+                        @Model.FileName
+                    </span>
+                </div>
+
+                <!-- Number of passed test cases -->
+                <div class="col s3 truncate">
+                    <span class="green-text">@Model.PassedTestCases.Count Test cases passed</span>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <!-- Submission date -->
+                <div class="col s3">
+                    <span class="hide-on-small-and-down">Submission </span>
+                    <span class="capitalize-on-small-and-down">date:</span>
+                </div>
+                <div class="col s3 truncate">
+                    <span class="grey-text">@Model.Time.ToString()</span>
+                </div>
+
+                <!-- Submission number -->
+                <div class="col s3">
+                    <span class="hide-on-small-and-down">Submission </span>
+                    <span>#@Model.SubmissionNumber</span>
+                </div>
+
+                <!-- Number of failed test cases -->
+                <div class="col s3 truncate">
+                    <span class="red-text">@Model.FailedTestCases.Count Test cases failed</span>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Failed test cases -->
+            @if (Model.FailedTestCases.Any()) {
+                <h3 class="assignment-category-title grey-text text-darken-1">Failed</h3>
+
+                <ul class="collapsible popout" data-collapsible="accordion">
+                    @foreach (var testCase in Model.FailedTestCases) {
+                        <li class="grey lighten-2">
+                            <!-- Header -->
+                            <div class="collapsible-header">
+                                <div class="row clear-margin">
+                                    <!-- Number -->
+                                    <div class="col s4">
+                                        <span>Test case @testCase.TestCaseNumber</span>
+                                    </div>
+                                    <!-- Status text -->
+                                    <div class="col s4">
+                                        <span class="red-text">Failed</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collapsible-body">
+                                <div class="collapsible-body-container test-case z-depth-1">
+                                    <!-- Input -->
+                                    <div class="row clear-margin">
+                                        <div class="col s12">
+                                            <h4 class="">Input</h4>
+                                            <div class="card-panel">
+                                                <span>@testCase.Input</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Outputs -->
+                                    <div class="row">
+                                        <!-- Submission output -->
+                                        <div class="col s12 m6">
+                                            <h4>Submission output</h4>
+                                            <div class="card-panel">
+                                                <span>@testCase.SubmissionOutput</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Expected output -->
+                                        <div class="col s12 m6">
+                                            <h4>Expected output</h4>
+                                            <div class="card-panel">
+                                                <span>@testCase.ExpectedOutput</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+
+            <!-- Passed test cases -->
+            @if (Model.PassedTestCases.Any())
+            {
+                <h3 class="assignment-category-title grey-text text-darken-1">Passed</h3>
+
+                <ul class="collapsible popout" data-collapsible="accordion">
+                    @foreach (var testCase in Model.PassedTestCases)
+                    {
+                        <li class="grey lighten-2">
+                            <!-- Header -->
+                            <div class="collapsible-header">
+                                <div class="row clear-margin">
+                                    <!-- Number -->
+                                    <div class="col s3">
+                                        <span>Test case @testCase.TestCaseNumber</span>
+                                    </div>
+                                    <!-- Status text -->
+                                    <div class="col s4">
+                                        <span class="green-text">Passed</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collapsible-body">
+                                <div class="collapsible-body-container test-case z-depth-1">
+                                    <!-- Input -->
+                                    <div class="row clear-margin">
+                                        <div class="col s12">
+                                            <h4 class="">Input</h4>
+                                            <div class="card-panel">
+                                                <span>@testCase.Input</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Outputs -->
+                                    <div class="row">
+                                        <!-- Submission output -->
+                                        <div class="col s12 m6">
+                                            <h4>Submission output</h4>
+                                            <div class="card-panel">
+                                                <span>@testCase.SubmissionOutput</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Expected output -->
+                                        <div class="col s12 m6">
+                                            <h4>Expected output</h4>
+                                            <div class="card-panel">
+                                                <span>@testCase.ExpectedOutput</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+
+
+        </div>
+    </div>
+</div>

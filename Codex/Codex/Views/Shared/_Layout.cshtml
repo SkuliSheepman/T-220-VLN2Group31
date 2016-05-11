@@ -20,7 +20,16 @@
                         <i class="material-icons">menu</i>
                     </a>
                     <h1>
-                        <a href="#" class="logo">Codex</a>
+                        @if (User.IsInRole("Admin")) {
+                            @Html.ActionLink("Codex", "Users", "Admin", null, new { @class = "logo" })
+                        }
+                        else if (User.IsInRole("Teacher")) {
+                            @Html.ActionLink("Codex", "Index", "Teacher", null, new {@class = "logo"})
+                        }
+                        else {
+                            @Html.ActionLink("Codex", "Index", "Student", null, new { @class = "logo" })
+                        }
+
                     </h1>
                 </div>
 

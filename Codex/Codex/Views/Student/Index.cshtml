@@ -6,7 +6,7 @@
 <h2 class="assignment-category-title grey-text text-darken-1">Open</h2>
 <div class="row">
     <div class="col s12">
-        @if (Model.Assignments.Where(x => x.StartTime < DateTime.Now && DateTime.Now < x.EndTime).Count() != 0) {
+        @if (Model.Assignments.Any(x => x.StartTime < DateTime.Now && DateTime.Now < x.EndTime)) {
             <ul class="collapsible popout" data-collapsible="accordion">
                 @foreach (var assignment in Model.Assignments.Where(x => x.StartTime < DateTime.Now && DateTime.Now < x.EndTime)) {
                     <li class="grey lighten-2">
@@ -106,9 +106,9 @@
                                                 <div class="collapsible-body">
                                                     <div class="collapsible-body-container">
                                                         @if (problem.Submissions.Count != 0) {
-                                                            <ul class="collection z-depth-1">
+                                                            <div class="collection z-depth-1">
                                                                 @foreach (var submission in problem.Submissions) {
-                                                                    <li class="collection-item row">
+                                                                    <a href="@Url.Action("Index", "Submission", new { id = submission.Id })" class="collection-item row">
                                                                         <div class="col s4 truncate">
                                                                             <span>@submission.OriginalFilename</span>
                                                                         </div>
@@ -116,36 +116,36 @@
                                                                             <span>@submission.SubmissionTime.ToString()</span>
                                                                         </div>
                                                                         <div class="col s2 truncate">
-                                                                            <a href="#" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
+                                                                            <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
                                                                                 <i class="material-icons">file_download</i>
-                                                                            </a>
+                                                                            </span>
                                                                         </div>
                                                                         <div class="col s3 status truncate right-align">
                                                                             @if (submission.FailedTests.HasValue) {
                                                                                 if (submission.FailedTests.Value == 0) {
-                                                                                    <a href="#" class="green-text">
+                                                                                    <span class="green-text">
                                                                                         <span class="hide-on-small-and-down">Accepted</span>
                                                                                         <span class="material-icons">done</span>
-                                                                                    </a>
+                                                                                    </span>
                                                                                 }
                                                                                 else {
-                                                                                    <a href="#" class="red-text">
+                                                                                    <span class="red-text">
                                                                                         @submission.FailedTests.Value
                                                                                         tests failed
                                                                                         <span class="material-icons">clear</span>
-                                                                                    </a>
+                                                                                    </span>
                                                                                 }
                                                                             }
                                                                             else {
-                                                                                <a href="#" class="red-text">
+                                                                                <span class="red-text">
                                                                                     Compile error
                                                                                     <span class="material-icons">clear</span>
-                                                                                </a>
+                                                                                </span>
                                                                             }
                                                                         </div>
-                                                                    </li>
+                                                                    </a>
                                                                 }
-                                                            </ul>
+                                                            </div>
                                                         }
                                                     </div>
                                                 </div>
@@ -172,7 +172,7 @@
 <h2 class="assignment-category-title grey-text text-darken-1">Closed</h2>
 <div class="row">
     <div class="col s12">
-        @if (Model.Assignments.Where(x => x.EndTime < DateTime.Now).Count() != 0) {
+        @if (Model.Assignments.Any(x => x.EndTime < DateTime.Now)) {
             <ul class="collapsible popout" data-collapsible="accordion">
                 @foreach (var assignment in Model.Assignments.Where(x => x.EndTime < DateTime.Now)) {
                     <li class="grey lighten-2">

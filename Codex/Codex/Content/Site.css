@@ -178,10 +178,47 @@ input[type="file"] {
     font-size: 1.6em;
 }
 
+.submission-download-button {
+    text-transform: none;
+}
+
 .assignment-category-title {
     font-size: 1em;
     margin-bottom: 0.5em;
     overflow: hidden;
+}
+
+.assignment-heading {
+    font-size: 2em;
+    margin: 0;
+    padding: 0;
+}
+
+.problem-heading {
+    font-size: 1.5em;
+    margin: 0;
+    padding: 0;
+}
+
+/* Test case container */
+.test-case {
+    background-color: #bdbdbd;
+}
+
+.test-case h4, .test-case .card-panel {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.test-case h4 {
+    font-size: 1.2em;
+    color: #fff;
+}
+
+@media only screen and (min-width: 601px) {
+    .capitalize-on-small-and-down {
+        text-transform: capitalize;
+    }
 }
 
 /* Sidenav styling */
@@ -226,4 +263,9 @@ input[type="file"] {
     position: absolute;
     top: 0.25em;
     left: 50%;
+}
+
+/* Materialize blockquotes */
+blockquote {
+    border-left-color: #03a9f4;
 }

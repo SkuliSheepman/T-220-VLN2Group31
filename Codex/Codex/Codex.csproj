@@ -246,6 +246,7 @@
     <Compile Include="Models\StudentModels\HelperModels\SubmissionHelperModel.cs" />
     <Compile Include="Models\StudentModels\ViewModels\StudentViewModels.cs" />
     <Compile Include="Models\StudentViewModels.cs" />
+    <Compile Include="Models\SubmissionViewModels.cs" />
     <Compile Include="Models\TeacherModels\HelperModels\CourseHelperModels.cs" />
     <Compile Include="Models\TeacherModels\ViewModels\TeacherViewModels.cs" />
     <Compile Include="Models\TeacherViewModels.cs" />
@@ -333,13 +334,13 @@
     <Content Include="Views\Admin\Users.cshtml" />
     <Content Include="Views\Student\Index.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
+    <Content Include="Views\Submission\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Data\Attachments\" />
     <Folder Include="Content\Data\Submissions\" />
     <Folder Include="Content\materialize\fonts\roboto\" />
-    <Folder Include="Views\Submission\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
