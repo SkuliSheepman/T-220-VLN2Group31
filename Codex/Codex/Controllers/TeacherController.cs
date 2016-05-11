@@ -6,13 +6,12 @@ using System.Web.Mvc;
 using Codex.Services;
 using Codex.Models;
 using Codex.Models.TeacherViewModels;
+
 namespace Codex.Controllers
 {
-
     [Authorize(Roles = "Teacher")]
     public class TeacherController : Controller
     {
-
         private readonly UserService _userService;
         private readonly TeacherService _teacherService;
 
@@ -22,45 +21,36 @@ namespace Codex.Controllers
         }
 
         // GET: Teacher
-        public ActionResult Index(int year = 0, string semester = null, int courseInstanceId = 0) {
-
+        public ActionResult Index(int? year, string semester, int? courseInstanceId) {
             var teacherId = _userService.GetUserIdByName(User.Identity.Name);
             var teacherActiveSemesters = _teacherService.GetTeacherActiveSemestersById(teacherId);
 
-            var courseSelected = new CourseViewModel();
-            courseSelected.OpenAssignments = new List<AssignmentViewModel>();
-            courseSelected.ClosedAssignments = new List<AssignmentViewModel>();
+            var courseSelected = new CourseViewModel {
+                OpenAssignments = new List<AssignmentViewModel>(),
+                ClosedAssignments = new List<AssignmentViewModel>()
+            };
 
-
-            if (year != 0 && semester != null)
-            {
-
-                var selected = teacherActiveSemesters.Find(delegate (ActiveSemesterViewModel find)
-                {
-                    return find.Year == year && find.Semester == semester;
-                });
+            
+            if (year.HasValue && !String.IsNullOrEmpty(semester)) {
+                var selected = teacherActiveSemesters.Find(find => find.Year == year.Value && find.Semester == semester);
 
                 teacherActiveSemesters.RemoveAt(teacherActiveSemesters.IndexOf(selected));
                 teacherActiveSemesters.Insert(0, selected);
-
             }
 
             var teacherCourses = _teacherService.GetTeacherCoursesByDate(
-                    teacherId,
-                    teacherActiveSemesters.First().Year,
-                    teacherActiveSemesters.First().Semester
-                    );
+                teacherId,
+                teacherActiveSemesters.First().Year,
+                teacherActiveSemesters.First().Semester
+                );
 
-            if (courseInstanceId != 0)
-            {
+            if (courseInstanceId.HasValue) {
                 courseSelected = teacherCourses.SingleOrDefault(x => x.Id == courseInstanceId);
 
-                if (courseSelected != null)
-                {
-                    var assignments = _teacherService.GetAssignmentsInCourseInstanceById(courseInstanceId);
-                    foreach (var _assignment in assignments)
-                    {
-                        _assignment.Problems = _teacherService.GetProblemsInAssignmentById(_assignment.Id);
+                if (courseSelected != null) {
+                    var assignments = _teacherService.GetAssignmentsInCourseInstanceById(courseInstanceId.Value);
+                    foreach (var assignment in assignments) {
+                        assignment.Problems = _teacherService.GetProblemsInAssignmentById(assignment.Id);
                         /*foreach (var _problem in _assignment.Problems)
                         {
                             _problem.Groups = _teacherService.GetAssignmentGroups(_assignment.Id);
@@ -71,25 +61,19 @@ namespace Codex.Controllers
                 }
             }
 
-            var model = new TeacherViewModel
-            {
-                YearSelected = year,
-                SemesterSelected = semester,
+            var model = new TeacherViewModel {
                 ActiveSemesters = teacherActiveSemesters,
                 TeacherCourses = teacherCourses,
                 CourseSelected = courseSelected
             };
 
             return View(model);
-
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public ActionResult GetTeacherCoursesByDate(int year, string semester)
-        {
-
+        public ActionResult GetTeacherCoursesByDate(int year, string semester) {
             var teacherCourses = _teacherService.GetTeacherCoursesByDate(
                 _userService.GetUserIdByName(User.Identity.Name),
                 year,
@@ -97,23 +81,15 @@ namespace Codex.Controllers
                 );
 
             if (Request.IsAjaxRequest()) {
-
                 return Json(teacherCourses);
-
             }
-            else
-            {
-
+            else {
                 return View(teacherCourses);
-
             }
-
         }
 
-        public ActionResult UpdateProblem(ProblemUpdateViewModel problem)
-        {
+        public ActionResult UpdateProblem(ProblemUpdateViewModel problem) {
             return Json(_teacherService.UpdateProblem(problem));
         }
-
     }
 }

@@ -7,8 +7,6 @@ namespace Codex.Models.TeacherViewModels
 {
     public class TeacherViewModel
     {
-        public int YearSelected { get; set; }
-        public string SemesterSelected { get; set; }
         public List<ActiveSemesterViewModel> ActiveSemesters { get; set; }
         public List<CourseViewModel> TeacherCourses { get; set; }
         public CourseViewModel CourseSelected { get; set; }
