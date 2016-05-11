@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using Codex.DAL;
@@ -9,7 +10,7 @@ namespace Codex.Services
 {
     public class SubmissionService
     {
-        private Database _db;
+        private readonly Database _db;
         private AssignmentService _assignmentService;
 
         public SubmissionService() {
@@ -33,14 +34,10 @@ namespace Codex.Services
             return groupSubmissions;
         }
 
-        public List<SubmissionViewModel> GetAllGroupSubmissionsInProblem(string groupId, int assignmentId)
-        {
-
+        public List<SubmissionViewModel> GetAllGroupSubmissionsInProblem(string groupId, int assignmentId) {
             return new List<SubmissionViewModel>();
-
         }
-        /// <summary>
-        /// SubmitSubmission
-        /// </summary>
+
+        
     }
 }

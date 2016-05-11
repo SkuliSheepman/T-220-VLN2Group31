@@ -253,6 +253,7 @@
     <Compile Include="Services\AdminService.cs" />
     <Compile Include="Services\AssignmentService.cs" />
     <Compile Include="Services\CourseService.cs" />
+    <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\ProblemService.cs" />
     <Compile Include="Services\StudentService.cs" />
     <Compile Include="Services\SubmissionService.cs" />
@@ -335,6 +336,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Data\Attachments\" />
+    <Folder Include="Content\Data\Submissions\" />
     <Folder Include="Content\materialize\fonts\roboto\" />
     <Folder Include="Views\Submission\" />
   </ItemGroup>

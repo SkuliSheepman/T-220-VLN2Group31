@@ -127,6 +127,11 @@ input[type="file"] {
     padding: 0;
 }
 
+.status {
+    position: relative;
+    overflow: visible;
+}
+
 .status > span > span.material-icons, .status > a > span.material-icons {
     position: relative;
     top: 0.4rem;
@@ -213,4 +218,12 @@ input[type="file"] {
 
 .waves-effect.waves-light-blue .waves-ripple {
     background-color: rgba(79, 195, 247, 0.65);
+}
+
+/*  Materialize preloader */
+
+.preloader-wrapper {
+    position: absolute;
+    top: 0.25em;
+    left: 50%;
 }
