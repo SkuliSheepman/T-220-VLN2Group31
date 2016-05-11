@@ -33,11 +33,12 @@ namespace Codex.Models.TeacherViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime? StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public int MaxCollaborators { get; set; }
         public string AssignmentState { get; set; }
         public List<ProblemViewModel> Problems { get; set; }
     }
+
     public class ProblemViewModel
     {
         public int Id { get; set; }
@@ -45,6 +46,20 @@ namespace Codex.Models.TeacherViewModels
         public int Weight { get; set; }
         public List<SubmissionViewModel> BestSubmissions { get; set; }
     }
+
+    public class ProblemUpdateViewModel
+    {
+        public int Id { get; set; }
+        public int CourseId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Filetype { get; set; }
+        public string Attachment { get; set; }
+        public string Language { get; set; }
+        public int Weight { get; set; }
+        //public List<TestCaseViewModel> TestCases { get; set; }
+    }
+
     public class SubmissionViewModel
     {
         public int Id { get; set; }

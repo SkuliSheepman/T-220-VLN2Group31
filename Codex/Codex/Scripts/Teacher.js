@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
 
-    $("#create-new-assignment-modal-button").on('click', function (e) {
-        $("#edit-new-assignment-modal").openModal();
+    $("#new-problem-modal-button").on('click', function (e) {
+        //$("#new-problem-modal").openModal();
     });
 
     /* Initialization */
@@ -52,5 +52,44 @@
         });
 
     }
+
+    $("#add-test-case-button").on('click', function (e) {
+
+        
+
+    });
+
+    $("#new-problem-modal-create-button").on('click', function(e) {
+
+        var formData = {
+            CourseId: 15,
+            Name: "TestProblem",
+            Description: "Hello world",
+            Filetype: "cs",
+            Attachment: "problem.cs",
+            Language: "See sharp"
+        }
+
+        $.ajax({
+            url: "/Teacher/UpdateProblem",
+            data: JSON.stringify(formData),
+            method: "POST",
+            contentType: "application/json",
+            success: function (responseData) {
+                if (responseData) {
+                    alert(JSON.stringify(responseData));
+                    Materialize.toast("wohooo", 2000);
+                }
+                else {
+                    Materialize.toast("An error occurred", 4000);
+                }
+
+            },
+            error: function () {
+                Materialize.toast("Something awful happened :(", 4000);
+            }
+        });
+
+    });
 
 });
