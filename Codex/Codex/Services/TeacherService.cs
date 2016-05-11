@@ -173,5 +173,95 @@ namespace Codex.Services
             
         }
 
+        public List<AssignmentViewModel> GetAllAssignmentsInCourse(int courseInstanceId)
+        {
+            var assignmentQuery = _db.Assignments.Where(x => x.CourseInstanceId == courseInstanceId);
+            var assignmentList = new List<AssignmentViewModel>();
+            var assignmentState = "";
+            foreach (var assignment in assignmentQuery)
+            {
+                if (DateTime.Now < assignment.StartTime) { assignmentState = "Upcoming"; }
+                else if (assignment.StartTime < DateTime.Now && DateTime.Now < assignment.EndTime) { assignmentState = "Open"; }
+                else if (assignment.EndTime < DateTime.Now) { assignmentState = "Ended"}
+                assignmentList.Add(new AssignmentViewModel
+                {
+                    Id = assignment.Id,
+                    Name = assignment.Name,
+                    StartTime = assignment.StartTime,
+                    EndTime = assignment.EndTime,
+                    MaxCollaborators = assignment.MaxCollaborators,
+                    AssignmentState = assignmentState
+                });
+            }
+            return assignmentList;
+        }
+        public void CheckUngradedAssignments(int courseInstanceId)
+        {
+            // Gets all closed and ungraded assignments in courseInstance
+            var assignmentsQuery = _db.Assignments.Where(x => x.CourseInstanceId == courseInstanceId && x.EndTime < DateTime.Now && x.IsGraded == false);
+            foreach (var assignment in assignmentsQuery)
+            {
+                // Assumes the assignment is graded
+                bool IsGraded = true;
+
+                // Gets all problems in assignment
+                var problemQuery = _db.AssignmentProblems.Where(x => x.AssignmentId == assignment.Id);
+
+                // Gets all students assigned to assignment and collects uniqe groupNumbers in HashSet<int>
+                var groupQuery = _db.AssignmentGroups.Where(x => x.AssignmentId == assignment.Id);
+                var groups = new HashSet<int>();
+                foreach (var student in groupQuery)
+                {
+                    groups.Add(student.GroupNumber);
+                }
+
+                // Foreach problem in assignment
+                foreach (var problem in problemQuery)
+                {
+                    // Foreach unique group assigned to assignment
+                    foreach (var group in groups)
+                    {
+                        // Gets all students in particular unique group for assignment
+                        var studentsGroupQuery = _db.AssignmentGroups.Where(x => x.GroupNumber == group && x.AssignmentId == assignment.Id);
+
+                        // Gets the list of all submissions from group members
+                        var groupSubmissionsQuery = new List<Submission>();
+                        foreach (var student in studentsGroupQuery)
+                        {
+                            // Get all submission that have been graded
+                            var studentSubmissionQuery = _db.Submissions.Where(x => x.StudentId == student.UserId && x.AssignmentId == assignment.Id && x.ProblemId == problem.ProblemId && x.SubmissionGrade != null);
+                            foreach (var submission in studentSubmissionQuery)
+                            {
+                                groupSubmissionsQuery.Add(submission);
+                            }
+                        }
+                        // If no submission that is graded is found we break and render the assignment still NOT Graded
+                        if (groupSubmissionsQuery == null)
+                        {
+                            IsGraded = false;
+                            break;
+                        }
+                    }
+                    if (IsGraded == false)
+                    {
+                        break;
+                    }
+                }
+                // We have iterated through the entire assignment and there is no problem with at least one group with no graded submission
+                // So we update the database and set the assignment to IsGraded = true
+                if (IsGraded == true)
+                {
+                    assignment.IsGraded = true;
+                    try
+                    {
+                        _db.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+            }
+        }
     }
 }
