@@ -15,10 +15,14 @@ namespace Codex.Controllers
     {
         private readonly UserService _userService;
         private readonly AssignmentService _assignmentService;
+        private readonly ProblemService _problemService;
+        private readonly SubmissionService _submissionService;
 
         public StudentController() {
             _userService = new UserService();
             _assignmentService = new AssignmentService();
+            _problemService = new ProblemService();
+            _submissionService = new SubmissionService();
         }
 
 
@@ -30,6 +34,67 @@ namespace Codex.Controllers
             StudentViewModel model = new StudentViewModel {
                 Assignments = userAssignments
             };
+            /// <summary>
+            /// Get the problems and submissions form DB
+            /// </summary>
+            foreach (var assignment in model.Assignments) {
+                //add the problems to the assignments
+                assignment.AssignmentProblems = _problemService.GetAllProblemsInStudentAssignment(assignment.Id);
+
+                foreach (var problem in assignment.AssignmentProblems) {
+                    //todo: submisssion models + logic for best submission
+
+                    //  submissionHelperModel =/= submissionViewModel
+                    //problem.Submissions = _submissionService.GetGroupSubmissionsInProblem(studentId, problem.Id, assignment.Id);
+                }
+            }
+            /// <summary>
+            /// Logic for assignment varialbes
+            /// </summary>
+            foreach (var assignment in model.Assignments) {
+                // create the "x time left" string
+                if (assignment.StartTime.HasValue  && assignment.EndTime.HasValue) {
+                    if (0 < assignment.EndTime.Value.CompareTo(DateTime.Now)) {
+                        var remainingTimeSpan = new TimeSpan(assignment.EndTime.Value.Ticks - DateTime.Now.Ticks);
+                        if (0 < remainingTimeSpan.Days)
+                        {
+                            assignment.TimeRemaining = remainingTimeSpan.Days.ToString();
+                            assignment.TimeRemaining += (remainingTimeSpan.Days == 1 ? " day left" : " days left");
+                        }
+                        else if (0 < remainingTimeSpan.Hours)
+                        {
+                            assignment.TimeRemaining = remainingTimeSpan.Hours.ToString();
+                            assignment.TimeRemaining += (remainingTimeSpan.Hours == 1 ? " hour left" : " hours left");
+                        }
+                        else if (0 < remainingTimeSpan.Minutes)
+                        {
+                            assignment.TimeRemaining = remainingTimeSpan.Minutes.ToString();
+                            assignment.TimeRemaining += (remainingTimeSpan.Minutes == 1 ? " minute left" : " minutes left");
+                        }
+                        else if (0 < remainingTimeSpan.Seconds)
+                        {
+                            assignment.TimeRemaining = remainingTimeSpan.Seconds.ToString();
+                            assignment.TimeRemaining += (remainingTimeSpan.Seconds == 1 ? " second left" : " seconds left");
+                        }
+                    }
+                }
+
+                //Count the number of problems in the assignment and create the appropriate string
+                assignment.NumberOfProblems = assignment.AssignmentProblems.Count.ToString();
+                assignment.NumberOfProblems += (assignment.AssignmentProblems.Count == 1 ? " Problem" : " Problems");
+
+                //isDone logic
+                var isDoneCheck = true;
+                foreach (var problem in assignment.AssignmentProblems) {
+                    if (!problem.IsAccepted) {
+                        isDoneCheck = false;
+                        break;
+                    }
+                }
+                assignment.IsDone = isDoneCheck;
+            }
+
+
             //Temporary model for testing
             var tempEnd = DateTime.Now;
             tempEnd = tempEnd.AddHours(1);
@@ -124,7 +189,8 @@ namespace Codex.Controllers
                 NumberOfProblems = tempNumberOfProblems,
                 MaxCollaborators = 3,
                 IsDone = tempIsDone,
-                AssignmentProblems = tempProblemList
+                AssignmentProblems = tempProblemList,
+                AssignmentGrade = 10
             };
 
             var tempAssignmentList = new List<AssignmentHelperModel> {tempAssignment};

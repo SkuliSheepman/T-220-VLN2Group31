@@ -6,157 +6,164 @@
 <h2 class="assignment-category-title grey-text text-darken-1">Open</h2>
 <div class="row">
     <div class="col s12">
-        <ul class="collapsible popout" data-collapsible="accordion">
-            @foreach (var assignment in Model.Assignments.Where(x => x.StartTime < DateTime.Now && DateTime.Now < x.EndTime)) {
-                <li class="grey lighten-2">
-                    <div class="collapsible-header">
-                        <div class="row clear-margin">
-                            <div class="col s3 truncate">
-                                <span class="search-criteria">@assignment.Name</span>
-                            </div>
-                            <div class="col s1 left-align">
-                                <a class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
-                                    <i class="material-icons blue-text">info</i>
-                                </a>
-                            </div>
-                            <div class="col s3 l2 grey-text truncate center-align">
-                                <span>@assignment.TimeRemaining</span>
-                            </div>
-                            <div class="col s3 l2 grey-text truncate center-align">
-                                <span class="search-criteria">@assignment.CourseName</span>
-                            </div>
-                            <div class="col l2 grey-text center-align hide-on-med-and-down">
-                                <span>@assignment.NumberOfProblems</span>
-                            </div>
-                            <div class="col s2 l2 status truncate right-align">
-                                @if (assignment.IsDone) {
-                                    <span class="green-text">
-                                        <span class="hide-on-small-and-down search-criteria">Done</span>
-                                        <span class="material-icons">done</span>
-                                    </span>
-                                }
-                                else {
-                                    <span class="red-text">
-                                        <span class="hide-on-small-and-down search-criteria">Unfinished</span>
-                                        <span class="material-icons">clear</span>
-                                    </span>
-                                }
+        @if (Model.Assignments.Where(x => x.StartTime < DateTime.Now && DateTime.Now < x.EndTime).Count() != 0) {
+            <ul class="collapsible popout" data-collapsible="accordion">            
+                @foreach (var assignment in Model.Assignments.Where(x => x.StartTime < DateTime.Now && DateTime.Now < x.EndTime)) {
+                    <li class="grey lighten-2">
+                        <div class="collapsible-header">
+                            <div class="row clear-margin">
+                                <div class="col s3 truncate">
+                                    <span class="search-criteria">@assignment.Name</span>
+                                </div>
+                                <div class="col s1 left-align">
+                                    <a class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
+                                        <i class="material-icons blue-text">info</i>
+                                    </a>
+                                </div>
+                                <div class="col s3 l2 grey-text truncate center-align">
+                                    <span>@assignment.TimeRemaining</span>
+                                </div>
+                                <div class="col s3 l2 grey-text truncate center-align">
+                                    <span class="search-criteria">@assignment.CourseName</span>
+                                </div>
+                                <div class="col l2 grey-text center-align hide-on-med-and-down">
+                                    <span>@assignment.NumberOfProblems</span>
+                                </div>
+                                <div class="col s2 l2 status truncate right-align">
+                                    @if (assignment.IsDone) {
+                                        <span class="green-text">
+                                            <span class="hide-on-small-and-down search-criteria">Done</span>
+                                            <span class="material-icons">done</span>
+                                        </span>
+                                    }
+                                    else {
+                                        <span class="red-text">
+                                            <span class="hide-on-small-and-down search-criteria">Unfinished</span>
+                                            <span class="material-icons">clear</span>
+                                        </span>
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="collapsible-body">
-                        <div class="collapsible-body-container">
-                            @if (assignment.AssignmentProblems.Count != 0) {
-                                <ul class="collapsible" data-collapsible="accordion">
-                                    @foreach (var problem in assignment.AssignmentProblems) {
-                                        <li class="grey lighten-1">
-                                            <div class="collapsible-header">
-                                                <div class="row clear-margin">
-                                                    <div class="col s3 truncate">
-                                                        <span class="search-criteria">@problem.Name</span>
-                                                    </div>
-                                                    <div class="col s1 grey-text">
-                                                        <span>@problem.Weight%</span>
-                                                    </div>
-                                                    <div class="col s2 grey-text truncate">
-                                                        <span>@problem.Submissions.Count submissions</span>
-                                                    </div>
-                                                    <!-- todo: submit solution -->
-                                                    <div class="col s3 m4">
-                                                        <form action="#" method="post">
-                                                            <label for="file-@assignment.Id-@problem.Id" class="file-upload">
-                                                                <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
-                                                                    <i class="material-icons hide-on-small-and-down">insert_drive_file</i>
-                                                                </span>
-                                                            </label>
-                                                            <input id="file-@assignment.Id-@problem.Id" type="file"/>
-                                                            <button class="btn-flat grey lighten-4 disabled submission-submit-button narrow-button tooltipped" type="submit" name="action" data-position="top" data-delay="30" data-tooltip="No file selected">
-                                                                <span>Submit</span>
-                                                                <i class="material-icons right hide-on-med-and-down">send</i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                    <div class="col s3 m2 status right-align truncate">
-                                                        @if (problem.IsAccepted) {
-                                                            <a href="#" class="green-text">
-                                                                <span class="hide-on-small-and-down">Accepted</span>
-                                                                <span class="material-icons">done</span>
-                                                            </a>
-                                                        }
-                                                        else if (problem.BestSubmission != null) {
-                                                            <a href="#" class="red-text">
-                                                                <span>
-                                                                    @problem.BestSubmission.FailedTests tests failed
-                                                                </span>
-                                                                <span class="material-icons">clear</span>
-                                                            </a>
-                                                        }
-                                                        else {
-                                                            <a href="#" class="grey-text">
-                                                                <span>Unattempted</span>
-                                                                <span class="material-icons">remove</span>
-                                                            </a>
-                                                        }
+                        <div class="collapsible-body">
+                            <div class="collapsible-body-container">
+                                @if (assignment.AssignmentProblems.Count != 0) {
+                                    <ul class="collapsible" data-collapsible="accordion">
+                                        @foreach (var problem in assignment.AssignmentProblems) {
+                                            <li class="grey lighten-1">
+                                                <div class="collapsible-header">
+                                                    <div class="row clear-margin">
+                                                        <div class="col s3 truncate">
+                                                            <span class="search-criteria">@problem.Name</span>
+                                                        </div>
+                                                        <div class="col s1 grey-text">
+                                                            <span>@problem.Weight%</span>
+                                                        </div>
+                                                        <div class="col s2 grey-text truncate">
+                                                            <span>@problem.Submissions.Count submissions</span>
+                                                        </div>
+                                                        <!-- todo: submit solution -->
+                                                        <div class="col s3 m4">
+                                                            <form action="#" method="post">
+                                                                <label for="file-@assignment.Id-@problem.Id" class="file-upload">
+                                                                    <span class="waves-effect blue-text waves-light btn-flat tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
+                                                                        <i class="material-icons hide-on-small-and-down">insert_drive_file</i>
+                                                                    </span>
+                                                                </label>
+                                                                <input id="file-@assignment.Id-@problem.Id" type="file"/>
+                                                                <button class="btn-flat grey lighten-4 disabled submission-submit-button narrow-button tooltipped" type="submit" name="action" data-position="top" data-delay="30" data-tooltip="No file selected">
+                                                                    <span>Submit</span>
+                                                                    <i class="material-icons right hide-on-med-and-down">send</i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                        <div class="col s3 m2 status right-align truncate">
+                                                            @if (problem.IsAccepted) {
+                                                                <a href="#" class="green-text">
+                                                                    <span class="hide-on-small-and-down">Accepted</span>
+                                                                    <span class="material-icons">done</span>
+                                                                </a>
+                                                            }
+                                                            else if (problem.BestSubmission != null) {
+                                                                <a href="#" class="red-text">
+                                                                    <span class="hide-on-small-and-down">
+                                                                        @problem.BestSubmission.FailedTests tests failed
+                                                                    </span>
+                                                                    <span class="material-icons">clear</span>
+                                                                </a>
+                                                            }
+                                                            else {
+                                                                <a href="#" class="grey-text">
+                                                                    <span class="hide-on-small-and-down">Unattempted</span>
+                                                                    <span class="material-icons">remove</span>
+                                                                </a>
+                                                            }
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="collapsible-body">
-                                                <div class="collapsible-body-container">
-                                                    @if (problem.Submissions.Count != 0) {
-                                                        <ul class="collection z-depth-1">
-                                                            @foreach (var submission in problem.Submissions) {
-                                                                <li class="collection-item row">
-                                                                    <div class="col s4 truncate">
-                                                                        <span>@submission.OriginalFilename</span>
-                                                                    </div>
-                                                                    <div class="col s3 grey-text truncate">
-                                                                        <span>@submission.SubmissionTime.ToString()</span>
-                                                                    </div>
-                                                                    <div class="col s2 truncate">
-                                                                        <a href="#" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
-                                                                            <i class="material-icons">file_download</i>
-                                                                        </a>
-                                                                    </div>
-                                                                    <div class="col s3 status truncate right-align">
-                                                                        @if (submission.FailedTests.HasValue) {
-                                                                            if (submission.FailedTests.Value == 0) {
-                                                                                <a href="#" class="green-text">
-                                                                                    <span class="hide-on-small-and-down">Accepted</span>
-                                                                                    <span class="material-icons">done</span>
-                                                                                </a>
+                                                <div class="collapsible-body">
+                                                    <div class="collapsible-body-container">
+                                                        @if (problem.Submissions.Count != 0) {
+                                                            <ul class="collection z-depth-1">
+                                                                @foreach (var submission in problem.Submissions) {
+                                                                    <li class="collection-item row">
+                                                                        <div class="col s4 truncate">
+                                                                            <span>@submission.OriginalFilename</span>
+                                                                        </div>
+                                                                        <div class="col s3 grey-text truncate">
+                                                                            <span>@submission.SubmissionTime.ToString()</span>
+                                                                        </div>
+                                                                        <div class="col s2 truncate">
+                                                                            <a href="#" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
+                                                                                <i class="material-icons">file_download</i>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="col s3 status truncate right-align">
+                                                                            @if (submission.FailedTests.HasValue) {
+                                                                                if (submission.FailedTests.Value == 0) {
+                                                                                    <a href="#" class="green-text">
+                                                                                        <span class="hide-on-small-and-down">Accepted</span>
+                                                                                        <span class="material-icons">done</span>
+                                                                                    </a>
+                                                                                }
+                                                                                else {
+                                                                                    <a href="#" class="red-text">
+                                                                                        @submission.FailedTests.Value
+                                                                                        tests failed
+                                                                                        <span class="material-icons">clear</span>
+                                                                                    </a>
+                                                                                }
                                                                             }
                                                                             else {
                                                                                 <a href="#" class="red-text">
-                                                                                    @submission.FailedTests.Value
-                                                                                    tests failed
+                                                                                    Compile error
                                                                                     <span class="material-icons">clear</span>
                                                                                 </a>
                                                                             }
-                                                                        }
-                                                                        else {
-                                                                            <a href="#" class="red-text">
-                                                                                Compile error
-                                                                                <span class="material-icons">clear</span>
-                                                                            </a>
-                                                                        }
-                                                                    </div>
-                                                                </li>
-                                                            }
-                                                        </ul>
-                                                    }
+                                                                        </div>
+                                                                    </li>
+                                                                }
+                                                            </ul>
+                                                        }
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                    }
-                                </ul>
-                            }
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
                         </div>
-                    </div>
-                </li>
-            }
-        </ul>
+                    </li>
+                }
+            </ul>
+        }
+        else {
+            <div>
+                <p>There are no assignments currently open.</p>
+            </div>
+        }
     </div>
 </div>
 
@@ -165,157 +172,154 @@
 <h2 class="assignment-category-title grey-text text-darken-1">Closed</h2>
 <div class="row">
     <div class="col s12">
-        <ul class="collapsible popout" data-collapsible="accordion">
-            @foreach (var assignment in Model.Assignments.Where(x => x.EndTime < DateTime.Now))
-            {
-                <li class="grey lighten-2">
-                    <div class="collapsible-header">
-                        <div class="row clear-margin">
-                            <div class="col s3 truncate">
-                                <span class="search-criteria">@assignment.Name</span>
-                            </div>
-                            <div class="col s1 left-align">
-                                <a class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
-                                    <i class="material-icons blue-text">info</i>
-                                </a>
-                            </div>
-                            <div class="col s3 l2 grey-text truncate center-align">
-                                <span class="hide-on-small-and-down">Grade: </span>
-                                <span>10</span>
-                            </div>
-                            <div class="col s3 l2 grey-text truncate center-align">
-                                <span class="search-criteria">@assignment.CourseName</span>
-                            </div>
-                            <div class="col l2 grey-text center-align hide-on-med-and-down">
-                                <span>@assignment.NumberOfProblems</span>
-                            </div>
-                            <div class="col s2 l2 status truncate right-align">
-                                @if (assignment.IsDone)
-                                {
-                                    <span class="green-text">
-                                        <span class="hide-on-small-and-down search-criteria">Done</span>
-                                        <span class="material-icons">done</span>
-                                    </span>
-                                }
-                                else {
-                                    <span class="red-text">
-                                        <span class="hide-on-small-and-down search-criteria">Unfinished</span>
-                                        <span class="material-icons">clear</span>
-                                    </span>
-                                }
+        @if (Model.Assignments.Where(x => x.EndTime < DateTime.Now).Count() != 0) {
+            <ul class="collapsible popout" data-collapsible="accordion">
+                @foreach (var assignment in Model.Assignments.Where(x => x.EndTime < DateTime.Now)) {
+                    <li class="grey lighten-2">
+                        <div class="collapsible-header">
+                            <div class="row clear-margin">
+                                <div class="col s3 truncate">
+                                    <span class="search-criteria">@assignment.Name</span>
+                                </div>
+                                <div class="col s1 left-align">
+                                    <a class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
+                                        <i class="material-icons blue-text">info</i>
+                                    </a>
+                                </div>
+                                <div class="col s3 l2 grey-text truncate center-align">
+                                    <span class="hide-on-small-and-down">Grade: </span>
+                                    <span>@assignment.AssignmentGrade</span>
+                                </div>
+                                <div class="col s3 l2 grey-text truncate center-align">
+                                    <span class="search-criteria">@assignment.CourseName</span>
+                                </div>
+                                <div class="col l2 grey-text center-align hide-on-med-and-down">
+                                    <span>@assignment.NumberOfProblems</span>
+                                </div>
+                                <div class="col s2 l2 status truncate right-align">
+                                    @if (assignment.IsDone) {
+                                        <span class="green-text">
+                                            <span class="hide-on-small-and-down search-criteria">Done</span>
+                                            <span class="material-icons">done</span>
+                                        </span>
+                                    }
+                                    else {
+                                        <span class="red-text">
+                                            <span class="hide-on-small-and-down search-criteria">Unfinished</span>
+                                            <span class="material-icons">clear</span>
+                                        </span>
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="collapsible-body">
-                        <div class="collapsible-body-container">
-                            @if (assignment.AssignmentProblems.Count != 0)
-                            {
-                                <ul class="collapsible" data-collapsible="accordion">
-                                    @foreach (var problem in assignment.AssignmentProblems)
-                                    {
-                                        <li class="grey lighten-1">
-                                            <div class="collapsible-header">
-                                                <div class="row clear-margin">
-                                                    <div class="col s4 m3 truncate">
-                                                        <span class="search-criteria">@problem.Name</span>
-                                                    </div>
-                                                    <div class="col s1 m2 grey-text">
-                                                        <span class="hide-on-small-and-down">Grade: </span>
-                                                        <span>10</span>
-                                                    </div>
-                                                    <div class="col s2 grey-text">
-                                                        <span>@problem.Weight%</span>
-                                                    </div>
-                                                    <div class="col s3 grey-text truncate">
-                                                        <span>@problem.Submissions.Count submissions</span>
-                                                    </div>
+                        <div class="collapsible-body">
+                            <div class="collapsible-body-container">
+                                @if (assignment.AssignmentProblems.Count != 0) {
+                                    <ul class="collapsible" data-collapsible="accordion">
+                                        @foreach (var problem in assignment.AssignmentProblems) {
+                                            <li class="grey lighten-1">
+                                                <div class="collapsible-header">
+                                                    <div class="row clear-margin">
+                                                        <div class="col s4 m3 truncate">
+                                                            <span class="search-criteria">@problem.Name</span>
+                                                        </div>
+                                                        <div class="col s1 m2 grey-text">
+                                                            <span class="hide-on-small-and-down">Grade: </span>
+                                                            <span>10</span>
+                                                        </div>
+                                                        <div class="col s2 grey-text">
+                                                            <span>@problem.Weight%</span>
+                                                        </div>
+                                                        <div class="col s3 grey-text truncate">
+                                                            <span>@problem.Submissions.Count submissions</span>
+                                                        </div>
 
-                                                    <div class="col s2 status right-align truncate">
-                                                        @if (problem.IsAccepted)
-                                                        {
-                                                            <a href="#" class="green-text">
-                                                                <span class="hide-on-small-and-down">Accepted</span>
-                                                                <span class="material-icons">done</span>
-                                                            </a>
-                                                        }
-                                                        else if (problem.BestSubmission != null)
-                                                        {
-                                                            <a href="#" class="red-text">
-                                                                <span>
-                                                                    @problem.BestSubmission.FailedTests tests failed
-                                                                </span>
-                                                                <span class="material-icons">clear</span>
-                                                            </a>
-                                                        }
-                                                        else {
-                                                            <a href="#" class="grey-text">
-                                                                <span>Unattempted</span>
-                                                                <span class="material-icons">remove</span>
-                                                            </a>
-                                                        }
+                                                        <div class="col s2 status right-align truncate">
+                                                            @if (problem.IsAccepted) {
+                                                                <a href="#" class="green-text">
+                                                                    <span class="hide-on-small-and-down">Accepted</span>
+                                                                    <span class="material-icons">done</span>
+                                                                </a>
+                                                            }
+                                                            else if (problem.BestSubmission != null) {
+                                                                <a href="#" class="red-text">
+                                                                    <span>
+                                                                        @problem.BestSubmission.FailedTests tests failed
+                                                                    </span>
+                                                                    <span class="material-icons">clear</span>
+                                                                </a>
+                                                            }
+                                                            else {
+                                                                <a href="#" class="grey-text">
+                                                                    <span>Unattempted</span>
+                                                                    <span class="material-icons">remove</span>
+                                                                </a>
+                                                            }
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="collapsible-body">
-                                                <div class="collapsible-body-container">
-                                                    @if (problem.Submissions.Count != 0)
-                                                    {
-                                                        <ul class="collection z-depth-1">
-                                                            @foreach (var submission in problem.Submissions)
-                                                            {
-                                                                <li class="collection-item row">
-                                                                    <div class="col s4 truncate">
-                                                                        <span>@submission.OriginalFilename</span>
-                                                                    </div>
-                                                                    <div class="col s3 grey-text truncate">
-                                                                        <span>@submission.SubmissionTime.ToString()</span>
-                                                                    </div>
-                                                                    <div class="col s2 truncate">
-                                                                        <a href="#" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
-                                                                            <i class="material-icons">file_download</i>
-                                                                        </a>
-                                                                    </div>
-                                                                    <div class="col s3 status truncate right-align">
-                                                                        @if (submission.FailedTests.HasValue)
-                                                                        {
-                                                                            if (submission.FailedTests.Value == 0)
-                                                                            {
-                                                                                <a href="#" class="green-text">
-                                                                                    <span class="hide-on-small-and-down">Accepted</span>
-                                                                                    <span class="material-icons">done</span>
-                                                                                </a>
+                                                <div class="collapsible-body">
+                                                    <div class="collapsible-body-container">
+                                                        @if (problem.Submissions.Count != 0) {
+                                                            <ul class="collection z-depth-1">
+                                                                @foreach (var submission in problem.Submissions) {
+                                                                    <li class="collection-item row">
+                                                                        <div class="col s4 truncate">
+                                                                            <span>@submission.OriginalFilename</span>
+                                                                        </div>
+                                                                        <div class="col s3 grey-text truncate">
+                                                                            <span>@submission.SubmissionTime.ToString()</span>
+                                                                        </div>
+                                                                        <div class="col s2 truncate">
+                                                                            <a href="#" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
+                                                                                <i class="material-icons">file_download</i>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="col s3 status truncate right-align">
+                                                                            @if (submission.FailedTests.HasValue) {
+                                                                                if (submission.FailedTests.Value == 0) {
+                                                                                    <a href="#" class="green-text">
+                                                                                        <span class="hide-on-small-and-down">Accepted</span>
+                                                                                        <span class="material-icons">done</span>
+                                                                                    </a>
+                                                                                }
+                                                                                else {
+                                                                                    <a href="#" class="red-text">
+                                                                                        @submission.FailedTests.Value
+                                                                                        tests failed
+                                                                                        <span class="material-icons">clear</span>
+                                                                                    </a>
+                                                                                }
                                                                             }
                                                                             else {
                                                                                 <a href="#" class="red-text">
-                                                                                    @submission.FailedTests.Value
-                                                                                    tests failed
+                                                                                    Compile error
                                                                                     <span class="material-icons">clear</span>
                                                                                 </a>
                                                                             }
-                                                                        }
-                                                                        else {
-                                                                            <a href="#" class="red-text">
-                                                                                Compile error
-                                                                                <span class="material-icons">clear</span>
-                                                                            </a>
-                                                                        }
-                                                                    </div>
-                                                                </li>
-                                                            }
-                                                        </ul>
-                                                    }
+                                                                        </div>
+                                                                    </li>
+                                                                }
+                                                            </ul>
+                                                        }
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                    }
-                                </ul>
-                            }
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
                         </div>
-                    </div>
-                </li>
-            }
-        </ul>
+                    </li>
+                }
+            </ul>
+        }
+        else {
+            <div>
+                <p>There are no assignments currently closed.</p>
+            </div>
+        }
     </div>
 </div>
