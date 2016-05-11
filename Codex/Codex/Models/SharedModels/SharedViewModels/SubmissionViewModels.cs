@@ -9,6 +9,7 @@ namespace Codex.Models.SharedModels.SharedViewModels
     {
         public int Id { get; set; }
         public string OriginalFilename { get; set; }
+        public double? Grade { get; set; }
         public DateTime SubmissionTime { get; set; }
         public int? FailedTests { get; set; }
         public string Owner { get; set; }
