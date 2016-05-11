@@ -1,39 +1,16 @@
-﻿@model Codex.Models.TeacherModels.ViewModels.TeacherViewModel
+﻿@model Codex.Models.TeacherViewModels.TeacherViewModel
 @{
-    ViewBag.Title = "Inbox";
+    ViewBag.Title = "Teacher overview";
     ViewBag.UserName = "Teacher";
 }
-
-<!-- Date Filter -->
-<!--<div class="section">
-    <div id="dateFilter" class="row">
-        <div class="input-field col s6">
-            <select id="dateYear">
-                @foreach (var year in Model.TeacherActiveSemesters)
-                {
-                    <option value=@year>@year</option>
-                }
-            </select>
-            <label>Select Year</label>
-        </div>
-        <div class="input-field col s6">
-            <select id="dateSemester" >
-                <option value="1">Spring</option>
-                <option value="2">Summer</option>
-                <option value="3">Autumn</option>
-            </select>
-            <label>Select Semester</label>
-        </div>
-    </div>
-</div>-->
 
 <div class="section">
     <div id="dateFilter" class="row">
         <div class="input-field col s12">
             <select id="date">
-                @foreach (var _yearAndSemester in Model.TeacherActiveSemesters)
+                @foreach (var _activeSemester in Model.ActiveSemesters)
                 {
-                    <option value="@_yearAndSemester.Item1 @_yearAndSemester.Item2">@_yearAndSemester.Item1 - @_yearAndSemester.Item2</option>
+                    <option value="@_activeSemester.Year @_activeSemester.Semester">@_activeSemester.Year - @_activeSemester.Semester</option>
                 }
             </select>
             <label>Select Year</label>

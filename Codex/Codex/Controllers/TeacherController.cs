@@ -5,10 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Codex.Services;
 using Codex.Models;
-using Codex.Models.SharedModels.SharedViewModels;
-using Codex.Models.TeacherModels.ViewModels;
-using Codex.Models.TeacherModels.HelperModels;
-
+using Codex.Models.TeacherViewModels;
 namespace Codex.Controllers
 {
 
@@ -20,12 +17,14 @@ namespace Codex.Controllers
         private readonly SubmissionService _submissionService;
         private readonly AssignmentService _assignmentService;
         private readonly CourseService _courseService;
+        private readonly TeacherService _teacherService;
 
         public TeacherController() {
             _userService = new UserService();
             _submissionService = new SubmissionService();
             _assignmentService = new AssignmentService();
             _courseService = new CourseService();
+            _teacherService = new TeacherService();
         }
 
         // GET: Teacher
@@ -36,39 +35,31 @@ namespace Codex.Controllers
             ) {
 
             var teacherId = _userService.GetUserIdByName(User.Identity.Name);
-            var userCourses = _courseService.GetCoursesByUserId(teacherId);
-            var TeacherActiveSemesters = new List<Tuple<int, string>>();
+            var teacherActiveSemesters = _teacherService.GetTeacherActiveSemestersById(teacherId);
 
-            foreach (var course in userCourses)
-            {
-                var YearAndSemester = new Tuple<int, string>(course.Year, course.SemesterName);
-                if (!TeacherActiveSemesters.Contains(YearAndSemester))
-                    TeacherActiveSemesters.Add(YearAndSemester);
-            }
-
-            TeacherActiveSemesters.Sort();
-            TeacherActiveSemesters.Reverse();
             if (year != 0 && semester != null)
             {
 
-                var selected = TeacherActiveSemesters.Find(delegate (Tuple<int, string> find)
+                var selected = teacherActiveSemesters.Find(delegate (ActiveSemesterViewModel find)
                 {
-                    return find.Item1 == year && find.Item2 == semester;
+                    return find.Year == year && find.Semester == semester;
                 });
 
-                TeacherActiveSemesters.RemoveAt(TeacherActiveSemesters.IndexOf(selected));
-                TeacherActiveSemesters.Insert(0, selected);
+                teacherActiveSemesters.RemoveAt(teacherActiveSemesters.IndexOf(selected));
+                teacherActiveSemesters.Insert(0, selected);
 
             }
-
-            var teacherCourses = _courseService.GetTeacherCoursesByDate(User.Identity.Name, TeacherActiveSemesters.First().Item1, TeacherActiveSemesters.First().Item2);
 
             var model = new TeacherViewModel
             {
                 YearSelected = year,
                 SemesterSelected = semester,
-                TeacherActiveSemesters = TeacherActiveSemesters,
-                TeacherCourses = teacherCourses
+                ActiveSemesters = teacherActiveSemesters,
+                TeacherCourses = _teacherService.GetTeacherCoursesByDate(
+                    teacherId,
+                    teacherActiveSemesters.First().Year,
+                    teacherActiveSemesters.First().Semester
+                    )
             };
 
             return View(model);
@@ -81,8 +72,8 @@ namespace Codex.Controllers
         public ActionResult GetTeacherCoursesByDate(int year, string semester)
         {
 
-            var teacherCourses = _courseService.GetTeacherCoursesByDate(
-                User.Identity.Name,
+            var teacherCourses = _teacherService.GetTeacherCoursesByDate(
+                _userService.GetUserIdByName(User.Identity.Name),
                 year,
                 semester
                 );

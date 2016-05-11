@@ -1,5 +1,9 @@
 ﻿$(document).ready(function () {
 
+    $("#create-new-assignment-modal-button").on('click', function (e) {
+        $("#edit-new-assignment-modal").openModal();
+    });
+
     /* Initialization */
     $("#dateFilter .input-field").change(function(e) {
        
