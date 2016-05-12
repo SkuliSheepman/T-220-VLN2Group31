@@ -16,7 +16,7 @@
                                     <span class="search-criteria">@assignment.Name</span>
                                 </div>
                                 <div class="col s1 left-align">
-                                    <a class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
+                                    <a href="@Url.Action("Assignment", "Student", new { id = @assignment.Id })" class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
                                         <i class="material-icons blue-text">info</i>
                                     </a>
                                 </div>
@@ -116,8 +116,8 @@
                                                                             <span>@submission.SubmissionTime.ToString()</span>
                                                                         </div>
                                                                         <div class="col s2 truncate">
-                                                                            <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
-                                                                               <i class="material-icons">file_download</i>
+                                                                            <span data-action="@Url.Action("DownloadFile", "Submission", new { id = @submission.Id })" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped stop-propagation" data-position="top" data-delay="30" data-tooltip="Download">
+                                                                                <i class="material-icons">file_download</i>
                                                                             </span>
                                                                         </div>
                                                                         <div class="col s3 status truncate right-align">
@@ -183,7 +183,7 @@
                                     <span class="search-criteria">@assignment.Name</span>
                                 </div>
                                 <div class="col s1 left-align">
-                                    <a class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
+                                    <a href="@Url.Action("Assignment", "Student", new { id = @assignment.Id })" class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
                                         <i class="material-icons blue-text">info</i>
                                     </a>
                                 </div>
@@ -280,7 +280,7 @@
                                                                             <span>@submission.SubmissionTime.ToString()</span>
                                                                         </div>
                                                                         <div class="col s2 truncate">
-                                                                            <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
+                                                                            <span data-action="@Url.Action("DownloadFile", "Submission", new { id = @submission.Id })" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
                                                                                 <i class="material-icons">file_download</i>
                                                                             </span>
                                                                         </div>

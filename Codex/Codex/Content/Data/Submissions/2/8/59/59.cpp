@@ -6,7 +6,7 @@ int main(){
 	int num;
 	cin >> num;
 
-	cout << (num+4) << endl;
+	cout << (num+5) << endl;
 
 	return 0;
 }

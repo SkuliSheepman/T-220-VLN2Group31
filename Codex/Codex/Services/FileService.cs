@@ -232,7 +232,7 @@ namespace Codex.Services
                                    submission.AssignmentId + "\\" +
                                    submission.ProblemId + "\\" +
                                    submission.Id + "\\" +
-                                   submission.Id + "." + submission.Problem.Filetype;
+                                   submission.Id + submission.Problem.Filetype;
 
                         DownloadFile(path, submission.OriginalFileName);
                     }
@@ -296,6 +296,9 @@ namespace Codex.Services
                 byte[] data = req.DownloadData(filePath);
                 response.BinaryWrite(data);
                 response.End();
+            } else
+            {
+                
             }
         }
     }

@@ -56,6 +56,10 @@
                                     </div>
                                 </div>
                             </div>
+                            @foreach (var collaborator in Model.Collaborators)
+                            {
+                                <span>@collaborator.Name</span>
+                            }
                         </li>
                     </ul>
                 </div>
@@ -123,61 +127,63 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="collapsible-body">
-                                    <div class="collapsible-body-container">
-                                        @if (problem.Submissions.Count != 0)
-                                        {
-                                            <div class="collection z-depth-1">
-                                                @foreach (var submission in problem.Submissions)
-                                                {
-                                                    <a href="@Url.Action("Index", "Submission", new { id = submission.Id })" class="collection-item row">
-                                                        <div class="col s4 truncate">
-                                                            <span>@submission.OriginalFilename</span>
-                                                        </div>
-                                                        <div class="col s3 grey-text truncate">
-                                                            <span>@submission.SubmissionTime.ToString()</span>
-                                                        </div>
-                                                        <div class="col s2 truncate">
-                                                            <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
-                                                                <i class="material-icons">file_download</i>
-                                                            </span>
-                                                        </div>
-                                                        <div class="col s3 status truncate right-align">
-                                                            @if (submission.FailedTests.HasValue)
-                                                            {
-                                                                if (submission.FailedTests.Value == 0)
+                                    <div class="collapsible-body">
+                                        <div class="card-panel grey lighten-3 clear-margin">
+                                            <span>@problem.Description</span>
+                                        </div>
+                                        <div class="collapsible-body-container">
+                                            @if (problem.Submissions.Count != 0)
+                                            {
+                                                <div class="collection z-depth-1">
+                                                    @foreach (var submission in problem.Submissions)
+                                                    {
+                                                        <a href="@Url.Action("Index", "Submission", new { id = submission.Id })" class="collection-item row">
+                                                            <div class="col s4 truncate">
+                                                                <span>@submission.OriginalFilename</span>
+                                                            </div>
+                                                            <div class="col s3 grey-text truncate">
+                                                                <span>@submission.SubmissionTime.ToString()</span>
+                                                            </div>
+                                                            <div class="col s2 truncate">
+                                                                <span data-action="@Url.Action("DownloadFile", "Submission", new { id = @submission.Id })" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
+                                                                    <i class="material-icons">file_download</i>
+                                                                </span>
+                                                            </div>
+                                                            <div class="col s3 status truncate right-align">
+                                                                @if (submission.FailedTests.HasValue)
                                                                 {
-                                                                    <span class="green-text">
-                                                                        <span class="hide-on-small-and-down">Accepted</span>
-                                                                        <span class="material-icons">done</span>
-                                                                    </span>
+                                                                    if (submission.FailedTests.Value == 0)
+                                                                    {
+                                                                        <span class="green-text">
+                                                                            <span class="hide-on-small-and-down">Accepted</span>
+                                                                            <span class="material-icons">done</span>
+                                                                        </span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="red-text">
+                                                                            <span class="hide-on-small-and-down">
+                                                                                @submission.FailedTests.Value tests failed
+                                                                            </span>
+                                                                            <span class="material-icons">clear</span>
+                                                                        </span>
+                                                                    }
                                                                 }
                                                                 else
                                                                 {
                                                                     <span class="red-text">
-                                                                        <span class="hide-on-small-and-down">
-                                                                            @submission.FailedTests.Value tests failed
-                                                                        </span>
+                                                                        <span class="hide-on-small-and-down">Compile error</span>
                                                                         <span class="material-icons">clear</span>
                                                                     </span>
                                                                 }
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="red-text">
-                                                                    <span class="hide-on-small-and-down">Compile error</span>
-                                                                    <span class="material-icons">clear</span>
-                                                                </span>
-                                                            }
-                                                        </div>
-                                                    </a>
-                                                }
-                                            </div>
-                                        }
+                                                            </div>
+                                                        </a>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
+</li>
                         }
                     </ul>
                 }

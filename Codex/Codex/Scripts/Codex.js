@@ -66,6 +66,11 @@ $(document).ready(function () {
         });
     });
 
-    // Teacher
+    // Download submission
+    $(".submission-download-button").on('click', function (e) {
+        e.preventDefault();
+        var link = $(this).attr("data-action");
+        window.location = link;
+    });
 
 });
