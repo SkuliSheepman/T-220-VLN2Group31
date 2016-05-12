@@ -112,6 +112,39 @@ input[type="file"] {
     display: none;
 }
 
+#new-problem-attachment {
+    display: inline-block;
+}
+
+#create-problem-form h6 {
+    font-size: 1.4em;
+    margin: 1em 0;
+}
+
+#create-problem-form p {
+    font-size: 1.2em;
+}
+
+#create-problem-form p, #create-problem-form p + textarea {
+    margin: 0 0 1em 0;
+    padding: 0;
+}
+
+#create-problem-form p + textarea {
+    font-family: monospace;
+}
+
+.new-problem-input {
+    position: relative;
+}
+
+.new-problem-input i{
+    position: absolute;
+    top: 0.3em;
+    right: 0.5em;
+    cursor: pointer;
+}
+
 .file-upload {
     cursor: pointer;
     display: inline-block;
@@ -304,4 +337,9 @@ span.center-icon > span {
 /* Materialize blockquotes */
 blockquote {
     border-left-color: #03a9f4;
+}
+
+/* Materialize date picker */
+.picker__date-display {
+    display: none;
 }

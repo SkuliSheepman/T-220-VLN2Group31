@@ -209,7 +209,7 @@
     <div class="modal-content">
         <h4 class="center-align">New User</h4>
         <div class="divider"></div>
-
+        
         @using (Html.BeginForm("CreateUser", "Admin", FormMethod.Post, new {@id = "create-user-form", role = "form"})) {
             @Html.AntiForgeryToken()
 

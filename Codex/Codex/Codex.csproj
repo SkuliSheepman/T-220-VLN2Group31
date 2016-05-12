@@ -333,6 +333,7 @@
     <Content Include="Views\Student\Index.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
     <Content Include="Views\Submission\Index.cshtml" />
+    <Content Include="Views\Teacher\AssignmentListPartial.cshtml" />
     <Content Include="Views\Account\Settings.cshtml" />
     <Content Include="Views\Student\Assignment.cshtml" />
   </ItemGroup>
