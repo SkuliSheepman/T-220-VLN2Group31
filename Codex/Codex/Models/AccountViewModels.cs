@@ -109,4 +109,8 @@ namespace Codex.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
+    public class AccountSettingsViewModel
+    {
+        public string FullName { get; set; }
+    }
 }
