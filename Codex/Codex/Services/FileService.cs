@@ -217,8 +217,8 @@ namespace Codex.Services
                 var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
                 if (submission != null)
                 {
-                    var groupSubmissions = _studentService.GetSubmissionsByAssignmentGroup(userid, submission.ProblemId, submission.AssignmentId);
-                    if (true) // check if user is related to the submission group
+                    var collaborators = _studentService.GetCollaborators(submission.AssignmentId, userid);
+                    if (collaborators.Count != 0) // check if user is related to the submission group
                     {
                         var path = GetSubmissionsPath() +
                                    submission.AssignmentId + "\\" +
