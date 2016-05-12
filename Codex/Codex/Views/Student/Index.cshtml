@@ -229,7 +229,7 @@
                                                             <span class="hide-on-small-and-down">Grade: </span>
                                                             <span>
                                                                 @if (problem.BestSubmission != null) { 
-                                                                    @if (problem.BestSubmission.Grade.HasValue) {
+                                                                        if (problem.BestSubmission.Grade.HasValue) {
                                                                         @problem.BestSubmission.Grade.Value
                                                                     }
                                                                 }
