@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using Codex.Services;
 using Codex.Models;
-using Codex.Models;
 
 namespace Codex.Controllers
 {
@@ -27,7 +26,9 @@ namespace Codex.Controllers
 
             var courseSelected = new TeacherCourseViewModel {
                 OpenAssignments = new List<TeacherAssignmentViewModel>(),
-                ClosedAssignments = new List<TeacherAssignmentViewModel>()
+                ClosedAssignments = new List<TeacherAssignmentViewModel>(),
+                RequiresGradingAssignments = new List<TeacherAssignmentViewModel>(),
+                UpcomingAssignments = new List<TeacherAssignmentViewModel>()
             };
 
             
@@ -51,13 +52,19 @@ namespace Codex.Controllers
                     var assignments = _teacherService.GetAssignmentsInCourseInstanceById(courseInstanceId.Value);
                     foreach (var assignment in assignments) {
                         assignment.Problems = _teacherService.GetProblemsInAssignmentById(assignment.Id);
-                        /*foreach (var _problem in _assignment.Problems)
+                        assignment.TimeRemaining = _teacherService.GetAssignmentTimeRemaining(assignment);
+                        assignment.NumberOfProblems = assignment.Problems.Count + (assignment.Problems.Count == 1 ? " problems" : " problem");
+                        
+                        // Get groups
+                        foreach (var problem in assignment.Problems)
                         {
-                            _problem.Groups = _teacherService.GetAssignmentGroups(_assignment.Id);
-                        }*/
+                            problem.Groups = _teacherService.GetAssignmentGroups(assignment.Id);
+                        }
                     }
                     courseSelected.OpenAssignments = _teacherService.GetOpenAssignmentsFromList(assignments);
                     courseSelected.ClosedAssignments = _teacherService.GetClosedAssignmentsFromList(assignments);
+                    courseSelected.RequiresGradingAssignments = _teacherService.GetRequiresGradingAssignmentsFromList(assignments);
+                    courseSelected.UpcomingAssignments = _teacherService.GetUpcomingAssignmentsFromList(assignments);
                 }
             }
 

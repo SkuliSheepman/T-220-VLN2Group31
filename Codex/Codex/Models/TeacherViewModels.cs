@@ -36,6 +36,8 @@ namespace Codex.Models
         public DateTime? EndTime { get; set; }
         public int MaxCollaborators { get; set; }
         public bool IsGraded { get; set; }
+        public string NumberOfProblems { get; set; }
+        public string TimeRemaining { get; set; }
         public List<TeacherProblemViewModel> Problems { get; set; }
     }
 
@@ -51,8 +53,9 @@ namespace Codex.Models
     {
         public int GroupNumber { get; set; }
         public List<string> StudentIds { get; set; }
-        public SubmissionViewModel BestSubmission { get; set; }
-        public List<SubmissionViewModel> Submissions { get; set; }
+        public List<string> Names { get; set; }
+        public TeacherSubmissionViewModel BestSubmission { get; set; }
+        public List<TeacherSubmissionViewModel> Submissions { get; set; }
     }
 
     public class TeacherProblemUpdateViewModel

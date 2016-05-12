@@ -28,44 +28,130 @@
     </div>
 </div>
 
-<!-- Assignments -->
-@if (Model.CourseSelected.OpenAssignments.Count() > 0)
-{
+<!-- Open assignments -->
+
 <h2 class="assignment-category-title grey-text text-darken-1">Open</h2>
 <div class="row">
     <div class="col s12">
-        <ul class="collapsible popout" data-collapsible="accordion">
-            @foreach (var _assignment in Model.CourseSelected.OpenAssignments)
-            {
+        @if (Model.CourseSelected.OpenAssignments.Any())
+        {
+            <ul class="collapsible popout" data-collapsible="accordion">
+                @foreach (var assignment in Model.CourseSelected.OpenAssignments) {
                     <li class="grey lighten-2">
+                        <!-- Header -->
                         <div class="collapsible-header">
                             <div class="row clear-margin">
                                 <div class="col s3 truncate">
-                                    <span class="search-criteria">@_assignment.Name</span>
+                                    <span class="search-criteria">@assignment.Name</span>
                                 </div>
-                                <div class="col s1 left-align">
-                                    <a class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
-                                        <i class="material-icons blue-text">info</i>
-                                    </a>
+                                <div class="col s3 grey-text truncate center-align">
+                                    <span>@assignment.TimeRemaining</span>
+                                </div>
+                                <div class="col s3 grey-text truncate center-align">
+                                    <span class="search-criteria">@Model.CourseSelected.Name</span>
+                                </div>
+                                <div class="col s3 grey-text center-align hide-on-med-and-down">
+                                    <span>@assignment.NumberOfProblems</span>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Problems -->
                         <div class="collapsible-body">
                             <div class="collapsible-body-container">
-                                @if (_assignment.Problems.Count != 0)
-                                {
+                                @if (assignment.Problems.Any()) {
                                     <ul class="collapsible" data-collapsible="accordion">
-                                        @foreach (var _problem in _assignment.Problems)
-                                        {
+                                        @foreach (var problem in assignment.Problems) {
                                             <li class="grey lighten-1">
+                                                <!-- Problem header -->
                                                 <div class="collapsible-header">
                                                     <div class="row clear-margin">
-                                                        <div class="col s3 truncate">
-                                                            <span class="search-criteria">@_problem.Name</span>
+                                                        <!-- Problem name -->
+                                                        <div class="col s4 truncate">
+                                                            <span class="search-criteria">@problem.Name</span>
                                                         </div>
+
+                                                        <!-- Problem weight -->
                                                         <div class="col s1 grey-text">
-                                                            <span></span>
+                                                            <span>@problem.Weight%</span>
                                                         </div>
+
+                                                        <!-- Number of submissions -->
+                                                        <div class="col s5 grey-text">
+                                                            <span>@problem.Groups.Count </span>
+                                                            <span>submissions</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Student/Group list -->
+                                                <div class="collapsible-body">
+                                                    <div class="collapsible-body-container">
+                                                        @if (problem.Groups.Any()) {
+                                                            <!-- Legend -->
+                                                            <div class="row">
+                                                                <div class="col s3">
+                                                                    @if (assignment.MaxCollaborators == 0) {
+                                                                        <span>Student</span>
+                                                                    }
+                                                                    else {
+                                                                        <span>Group</span>
+                                                                    }
+                                                                </div>
+                                                                <div class="col s5">
+                                                                    <span>Last submission</span>
+                                                                </div>
+                                                                <div class="col s2">
+                                                                    <span>Grade</span>
+                                                                </div>
+                                                                <div class="col s2">
+                                                                    <span>Status</span>
+                                                                </div>
+                                                            </div>
+                                                            <ul class="collapsible" data-collapsible="accordion">
+                                                                @foreach (var group in problem.Groups) {
+                                                                    <li class="grey">
+                                                                        <!-- Group header -->
+                                                                        <div class="collapsible-header">
+                                                                            <div class="row clear-margin">
+                                                                                <!-- Group -->
+                                                                                <div class="col s3 truncate">
+                                                                                    @if (assignment.MaxCollaborators == 0) {
+                                                                                        <span>@group.Names[0]</span>
+                                                                                    }
+                                                                                    else {
+                                                                                        <span>
+                                                                                            @{ var last = group.Names.Last(); }
+                                                                                            @foreach (var student in group.Names) {
+                                                                                                if (student.Equals(last)) {
+                                                                                                    @student
+                                                                                                }
+                                                                                                else {
+                                                                                                    @student
+                                                                                                    @:,
+                                                                                                }
+                                                                                            }
+                                                                                        </span>
+                                                                                    }
+                                                                                </div>
+
+                                                                                <!-- Last submission -->
+                                                                                <div class="col s3 grey-text">
+                                                                                    <span>@group.Submissions[0].SubmissionTime</span>
+                                                                                </div>
+
+                                                                                <!-- Download best -->
+                                                                                <div class="col s2 grey-text">
+                                                                                    <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download best submission">
+                                                                                        <i class="material-icons">file_download</i>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                }
+                                                            </ul>
+                                                        }
                                                     </div>
                                                 </div>
                                             </li>
@@ -76,11 +162,12 @@
                         </div>
                     </li>
 
-            }
-        </ul>
+                }
+            </ul>
+        }
     </div>
 </div>
-}
+
 
 <!-- Assignments -->
 @if (Model.CourseSelected.ClosedAssignments.Count() > 0)

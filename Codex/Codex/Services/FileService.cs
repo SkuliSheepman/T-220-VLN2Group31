@@ -55,6 +55,27 @@ namespace Codex.Services
         }
 
         /// <summary>
+        /// Uploads a problem attachment to the server by problemId
+        /// </summary>
+        public bool UploadAttachmentToServer(HttpPostedFileBase file, int problemId) {
+            string uploadPath = GetAttachmentsPath() + problemId + "\\";
+
+            if (!Directory.Exists(uploadPath)) {
+                Directory.CreateDirectory(uploadPath);
+            }
+
+            var fileName = uploadPath + Path.GetExtension(file.FileName);
+
+            file.SaveAs(fileName);
+
+            if (File.Exists(fileName)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Compile a C++ program via submission ID
         /// </summary>
         public bool CompileCPlusPlusBySubmissionId(int submissionId) {

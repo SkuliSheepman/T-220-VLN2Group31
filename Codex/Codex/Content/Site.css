@@ -202,7 +202,7 @@ input[type="file"] {
 
 /* Test case container */
 .test-case {
-    background-color: #bdbdbd;
+    background-color: #e0e0e0 ;
 }
 
 .test-case h4, .test-case .card-panel {
@@ -212,7 +212,10 @@ input[type="file"] {
 
 .test-case h4 {
     font-size: 1.2em;
-    color: #fff;
+}
+
+.test-case span {
+    font-family: monospace;
 }
 
 @media only screen and (min-width: 601px) {
