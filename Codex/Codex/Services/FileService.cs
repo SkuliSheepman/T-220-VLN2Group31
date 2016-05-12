@@ -301,5 +301,14 @@ namespace Codex.Services
                 
             }
         }
+
+        /// <summary>
+        /// Check if file exists
+        /// </summary>
+        public bool FileExists(string path)
+        {
+            FileInfo file = new FileInfo(path);
+            return file.Exists;
+        }
     }
 }
