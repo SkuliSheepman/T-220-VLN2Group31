@@ -15,6 +15,9 @@ namespace Codex.Services
             _db = new Database();
         }
 
+        /// <summary>
+        /// Find a students collaborators in a specific assignment. Returns a list af CollaboratorViewModel including the given student.
+        /// </summary>
         public List<CollaboratorViewModel> GetCollaborators(int assignmentId, string studentId) {
             var collaboratorList = new List<CollaboratorViewModel>();
 
@@ -30,6 +33,9 @@ namespace Codex.Services
             return collaboratorList;
         }
 
+        /// <summary>
+        /// Finds all assignments that a student is connected too based on his Id. Returns a list of StudentAssignmentViewModel
+        /// </summary>
         public List<StudentAssignmentViewModel> GetStudentAssignmentsByStudentId(string studentId) {
             var assignmentList = new List<StudentAssignmentViewModel>();
 
@@ -52,6 +58,9 @@ namespace Codex.Services
             return assignmentList;
         }
 
+        /// <summary>
+        /// Gets all problems in assignment based on assignment Id, Returnst a list of StudentProblemViewModel
+        /// </summary>
         public List<StudentProblemViewModel> GetStudentProblemsByAssignmentId(int assignmentId) {
             var problemQuery = _db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId);
             var problemList = new List<StudentProblemViewModel>();
@@ -71,6 +80,9 @@ namespace Codex.Services
             return problemList;
         }
 
+        /// <summary>
+        /// Gets submission to problem from all collaborators in assignment. Returns list of StudentSubmissionViewModel
+        /// </summary>
         public List<StudentSubmissionViewModel> GetSubmissionsByAssignmentGroup(string studentId, int problemId, int assignmentId) {
             var groupSubmissions = new List<StudentSubmissionViewModel>();
 
