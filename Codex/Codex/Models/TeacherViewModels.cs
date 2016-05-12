@@ -75,6 +75,7 @@ namespace Codex.Models
     {
         public int Id { get; set; }
         public string StudentName { get; set; }
+        public string OriginalFilename { get; set; }
         public DateTime SubmissionTime { get; set; }
         public int? FailedTests { get; set; }
         public double? SubmissionGrade { get; set; }

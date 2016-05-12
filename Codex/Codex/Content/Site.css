@@ -143,9 +143,18 @@ input[type="file"] {
 }
 
 .collapsible-body-container {
-    width: 95%;
-    margin: 1em auto;
     background-color: #fff;
+    width: 95%;
+}
+
+.teacher-legend, .collapsible-body-container {
+    margin: 1em auto;
+}
+
+@media only screen and (max-width: 601px) {
+    .teacher-legend {
+        margin-left: 1em;
+    }
 }
 
 .problems > li > div > .row {
@@ -218,9 +227,33 @@ input[type="file"] {
     font-family: monospace;
 }
 
-@media only screen and (min-width: 601px) {
+@media only screen and (max-width: 601px) {
     .capitalize-on-small-and-down {
         text-transform: capitalize;
+    }
+}
+
+.grade-input {
+    margin-bottom: 0 !important;
+    position: relative;
+    top: -0.5em;
+}
+
+span.center-icon > span {
+    margin: 0.25em auto 0;
+}
+/*
+@media only screen and (max-width: 601px) {
+    span.center-icon > i {
+        position: relative;
+        left: 15%;
+    }
+}
+*/
+
+@media only screen and (min-width: 601px) and (max-width: 992px) {
+    span.center-icon > span {
+        margin-left: -0.5em;
     }
 }
 

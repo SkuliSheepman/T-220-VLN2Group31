@@ -106,7 +106,8 @@ namespace Codex.Services
                         foreach (var submission in submissions) {
                             var model = new TeacherSubmissionViewModel {
                                 Id = submission.Id,
-                                SubmissionTime = submission.Time
+                                SubmissionTime = submission.Time,
+                                OriginalFilename = submission.OriginalFileName
                             };
 
                             if (submission.FailedTests.HasValue) {
@@ -121,6 +122,9 @@ namespace Codex.Services
                         }
                     }
                 }
+
+                // Get best submission
+                assignmentGroup.BestSubmission = GetBestSubmissionFromSubmissionList(assignmentGroup.Submissions);
 
                 assignmentGroupList.Add(assignmentGroup);
             }
@@ -148,10 +152,7 @@ namespace Codex.Services
         public TeacherSubmissionViewModel GetBestSubmissionFromSubmissionList(List<TeacherSubmissionViewModel> submissions) {
             var bestSubmission = new TeacherSubmissionViewModel();
             foreach (var submission in submissions) {
-                if (bestSubmission == null) {
-                    bestSubmission = submission;
-                }
-                else if (submission.FailedTests < bestSubmission.FailedTests) {
+                if (submission.FailedTests < bestSubmission.FailedTests) {
                     bestSubmission = submission;
                 }
                 else if (bestSubmission.FailedTests == submission.FailedTests && bestSubmission.SubmissionTime < submission.SubmissionTime) {

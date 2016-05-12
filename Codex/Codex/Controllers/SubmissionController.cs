@@ -20,7 +20,7 @@ namespace Codex.Controllers
 
         // GET: Submission
         public ActionResult Index(int? id) {
-            if (id.HasValue && _submissionService.VerifyUser(User.Identity.Name, id.Value)) {
+            if (id.HasValue && (User.IsInRole("Teacher") || _submissionService.VerifyUser(User.Identity.Name, id.Value))) {
                 var model = _submissionService.GetSubmissionById(id.Value);
 
                 ViewBag.UserName = User.Identity.Name;
