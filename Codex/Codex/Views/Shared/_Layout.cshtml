@@ -59,19 +59,22 @@
 
             <!-- Sidenav -->
             <ul id="slide-out" class="side-nav hide-on-large-only">
-                <li>
-                    <a href="#">
-                        <i class="material-icons">school</i>
-                        <span>Teacher</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="material-icons">person</i>
-                        <span>Student</span>
-                    </a>
-                </li>
-                <li class="divider"></li>
+                @if (User.IsInRole("Teacher"))
+                {
+                    <li>
+                        <a href="/Teacher/Index">
+                            <i class="material-icons">school</i>
+                            <span>Teacher index</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Student/Index">
+                            <i class="material-icons">person</i>
+                            <span>Student index</span>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                }
                 <li>
                     <a href="javascript:document.getElementById('logoutForm').submit()">
                         <i class="material-icons">power_settings_new</i>
@@ -82,19 +85,22 @@
 
             <!-- Dropdown Structure -->
             <ul id="avatar-dropdown" class="dropdown-content">
-                <li>
-                    <a href="#">
-                        <i class="material-icons">school</i>
-                        <span>Teacher</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="material-icons">person</i>
-                        <span>Student</span>
-                    </a>
-                </li>
-                <li class="divider"></li>
+                @if (User.IsInRole("Teacher"))
+                {
+                    <li>
+                        <a href="/Teacher/Index">
+                            <i class="material-icons">school</i>
+                            <span>Teacher index</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Student/Index">
+                            <i class="material-icons">person</i>
+                            <span>Student index</span>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                }
 
                 <li>
                     <a href="javascript:document.getElementById('logoutForm').submit()">
