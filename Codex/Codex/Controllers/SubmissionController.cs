@@ -42,7 +42,10 @@ namespace Codex.Controllers
         // GET: File
         public void DownloadFile(int? id)
         {
-            _fileService.DownloadSubmission(_userService.GetUserIdByName(User.Identity.Name), id);
+            if (id.HasValue)
+            {
+                _fileService.DownloadSubmission(_userService.GetUserIdByName(User.Identity.Name), id.Value);
+            }
         }
     }
 }

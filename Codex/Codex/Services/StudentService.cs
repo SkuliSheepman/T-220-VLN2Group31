@@ -46,6 +46,7 @@ namespace Codex.Services
                     Id = group.Assignment.Id,
                     Course = group.Assignment.CourseInstance.Course.Name,
                     Name = group.Assignment.Name,
+                    Description = group.Assignment.Description,
                     StartTime = group.Assignment.StartTime,
                     EndTime = group.Assignment.EndTime,
                     MaxCollaborators = group.Assignment.MaxCollaborators,
@@ -199,6 +200,29 @@ namespace Codex.Services
             }
             //if there are no submissions, return null
             else return null;
+        }
+
+        /// <summary>
+        /// Get an assignment by it's id
+        /// </summary>
+        public StudentAssignmentViewModel GetStudentAssignmentById(int assignmentid, string studentid) {
+
+            var group = _db.AssignmentGroups.Where(x => x.UserId == studentid && x.AssignmentId == assignmentid).SingleOrDefault();
+            var assignment = new StudentAssignmentViewModel
+            {
+                Id = group.Assignment.Id,
+                Course = group.Assignment.CourseInstance.Course.Name,
+                Name = group.Assignment.Name,
+                Description = group.Assignment.Description,
+                StartTime = group.Assignment.StartTime,
+                EndTime = group.Assignment.EndTime,
+                MaxCollaborators = group.Assignment.MaxCollaborators,
+                AssignmentGrade = group.AssignmentGrade,
+                Collaborators = GetCollaborators(assignmentid, studentid)
+            };
+
+            return assignment;
+
         }
     }
 }
