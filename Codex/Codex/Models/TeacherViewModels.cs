@@ -10,6 +10,7 @@ namespace Codex.Models
         public List<TeacherActiveSemesterViewModel> ActiveSemesters { get; set; }
         public List<TeacherCourseViewModel> TeacherCourses { get; set; }
         public TeacherCourseViewModel CourseSelected { get; set; }
+        public TeacherProblemUpdateViewModel ProblemModel { get; set; }
     }
     public class TeacherActiveSemesterViewModel
     {
@@ -27,11 +28,13 @@ namespace Codex.Models
         public List<TeacherAssignmentViewModel> OpenAssignments { get; set; }
         public List<TeacherAssignmentViewModel> UpcomingAssignments { get; set; }
         public List<TeacherAssignmentViewModel> ClosedAssignments { get; set; }
+        public List<TeacherProblemUpdateViewModel> ProblemList { get; set; }
     }
     public class TeacherAssignmentViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Course { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public int MaxCollaborators { get; set; }
@@ -65,10 +68,27 @@ namespace Codex.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public string Filetype { get; set; }
-        public string Attachment { get; set; }
+        public string AttachmentName { get; set; }
         public string Language { get; set; }
         public int Weight { get; set; }
-        //public List<TestCaseViewModel> TestCases { get; set; }
+        public List<TeacherTestCaseViewModel> TestCases { get; set; }
+    }
+
+    public class TeacherNewProblemViewModel
+    {
+        public string CourseName { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Filetype { get; set; }
+        //public HttpPostedFileBase Attachment { get; set; }
+        public string Language { get; set; }
+        //public List<TeacherTestCaseViewModel> TestCases { get; set; }
+    }
+
+    public class TeacherTestCaseViewModel
+    {
+        public string Input { get; set; }
+        public string Output { get; set; }
     }
 
     public class TeacherSubmissionViewModel

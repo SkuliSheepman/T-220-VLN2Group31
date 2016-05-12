@@ -9,12 +9,12 @@ namespace Codex.Services
 {
     public class TeacherService
     {
-        private Database _db;
-        private AssignmentService _assignmentService;
+        private readonly Database _db;
+        private readonly CourseService _courseService;
 
         public TeacherService() {
             _db = new Database();
-            _assignmentService = new AssignmentService();
+            _courseService = new CourseService();
         }
 
         public List<TeacherCourseViewModel> GetCoursesByUserId(string teacherId) {
@@ -32,19 +32,63 @@ namespace Codex.Services
             return courseList;
         }
 
+        /// <summary>
+        /// Get a list of semesters the teacher is teaching, past, present and future, by user ID
+        /// </summary>
         public List<TeacherActiveSemesterViewModel> GetTeacherActiveSemestersById(string userId) {
             var teacherCourses = GetCoursesByUserId(userId);
             var teacherActiveSemesters = new List<TeacherActiveSemesterViewModel>();
-            foreach (var _course in teacherCourses) {
+            foreach (var course in teacherCourses) {
                 var newActiveSemesterEntry = new TeacherActiveSemesterViewModel {
-                    Year = _course.Year,
-                    Semester = _course.Semester
+                    Year = course.Year,
+                    Semester = course.Semester
                 };
                 if (!teacherActiveSemesters.Contains(newActiveSemesterEntry)) {
                     teacherActiveSemesters.Add(newActiveSemesterEntry);
                 }
             }
-            return teacherActiveSemesters;
+            return teacherActiveSemesters.OrderByDescending(x => x.Year).ThenByDescending(y => y.Semester).ToList();
+        }
+
+        /// <summary>
+        /// Get a TeacherActiveSemesterViewModel from a list of TeacherActiveSemesterViewModel that represents the
+        /// semester closest to the current date
+        /// </summary>
+        public TeacherActiveSemesterViewModel GetClosestSemester(List<TeacherActiveSemesterViewModel> semesterList) {
+            var currentYear = DateTime.Now.Year;
+            var currentMonth = DateTime.Now.Month;
+
+            string currentSemester = "Summer";
+            if (1 <= currentMonth && currentMonth <= 5) {
+                currentSemester = "Spring";
+            }
+            else if (8 <= currentMonth && currentMonth <= 12) {
+                currentSemester = "Fall";
+            }
+
+            var closestSemester = semesterList.SingleOrDefault(x => x.Year == DateTime.Now.Year && x.Semester == currentSemester);
+
+            // If current semester is the closest semester
+            if (closestSemester != null) {
+                return closestSemester;
+            }
+            else {
+                // Filter the list to only future courses
+                var filteredList = semesterList.Where(x => x.Year <= DateTime.Now.Year).OrderBy(y => y.Year).ThenBy(z => z.Semester).ToList();
+
+                // No future courses found, return the latest course
+                if (!filteredList.Any()) {
+                    return semesterList.First();
+                }
+                // More than 1 future semesters
+                /*else if (1 < filteredList.Count) {
+                    // TODO
+                }*/
+                // Only 1 future semester
+                else {
+                    return filteredList.First();
+                }
+            }
         }
 
         public List<TeacherCourseViewModel> GetTeacherCoursesByDate(string userId, int year, string semester) {
@@ -55,12 +99,13 @@ namespace Codex.Services
 
         public List<TeacherAssignmentViewModel> GetAssignmentsInCourseInstanceById(int courseInstanceId) {
             var course = _db.CourseInstances.SingleOrDefault(x => x.Id == courseInstanceId);
-            var assignments = course.Assignments.Select(_assignment => new TeacherAssignmentViewModel {
-                Id = _assignment.Id,
-                Name = _assignment.Name,
-                StartTime = _assignment.StartTime,
-                EndTime = _assignment.EndTime,
-                MaxCollaborators = _assignment.MaxCollaborators
+            var assignments = course.Assignments.Select(assignment => new TeacherAssignmentViewModel {
+                Id = assignment.Id,
+                Name = assignment.Name,
+                Course = assignment.CourseInstance.Course.Name,
+                StartTime = assignment.StartTime,
+                EndTime = assignment.EndTime,
+                MaxCollaborators = assignment.MaxCollaborators
             }).ToList();
 
             return assignments;
@@ -214,7 +259,7 @@ namespace Codex.Services
                 Name = problemViewModel.Name,
                 Description = problemViewModel.Description,
                 Filetype = problemViewModel.Filetype,
-                Attachment = problemViewModel.Attachment,
+                Attachment = problemViewModel.AttachmentName,
                 Language = problemViewModel.Language
             };
 
@@ -228,6 +273,131 @@ namespace Codex.Services
 
             _db.SaveChanges();
             return problemViewModel;
+        }
+
+        /// <summary>
+        /// Create a new problem via TeacherNewProblemViewModel
+        /// </summary>
+        public int CreateNewProblem(TeacherNewProblemViewModel problem) {
+            var courseId = _courseService.GetCourseIdByCourseName(problem.CourseName);
+
+            // Filetype check
+            if (_db.Filetypes.SingleOrDefault(x => x.Type == problem.Filetype) == null) {
+                var fileType = new Filetype {
+                    Type = problem.Filetype
+                };
+
+                _db.Filetypes.Add(fileType);
+            }
+
+            // Language check
+            if (_db.ProgrammingLanguages.SingleOrDefault(x => x.Language == problem.Language) == null) {
+                var language = new ProgrammingLanguage {
+                    Language = problem.Filetype
+                };
+
+                _db.ProgrammingLanguages.Add(language);
+            }
+
+            // Add the new problem
+            var newProblem = new Problem {
+                CourseId = courseId,
+                Name = problem.Name,
+                Description = problem.Description,
+                Filetype = problem.Filetype,
+                Language = problem.Language
+            };
+
+            _db.Problems.Add(newProblem);
+
+            try {
+                _db.SaveChanges();
+                return newProblem.Id;
+            }
+            catch (Exception e) {
+                return 0;
+            }
+        }
+
+        public bool SetTestCasesForProblemByProblemId(int problemId, List<TeacherTestCaseViewModel> testCases) {
+            foreach (var testCase in testCases) {
+                var newTestCase = new TestCase {
+                    ProblemId = problemId,
+                    ExpectedOutput = testCase.Output,
+                    Input = testCase.Input
+                };
+
+                _db.TestCases.Add(newTestCase);
+            }
+
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
+
+        public bool SetAttachmentToProblemInDatabaseByProblemId(int problemId, string attachmentName) {
+            var problem = _db.Problems.SingleOrDefault(x => x.Id == problemId);
+
+            if (problem != null) {
+                problem.Attachment = attachmentName;
+
+                try {
+                    _db.SaveChanges();
+                    return true;
+                }
+                catch (Exception e) {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Get all problems in a base course via a course instance Id.
+        /// </summary>
+        public List<TeacherProblemUpdateViewModel> GetProblemsInCourseById(int courseInstanceId) {
+            var problemList = new List<TeacherProblemUpdateViewModel>();
+
+            var courseId = _courseService.GetCourseIdByCourseCourseInstanceId(courseInstanceId);
+
+            if (courseId != 0) {
+                var problems = _db.Problems.Where(x => x.CourseId == courseId);
+
+                foreach (var problem in problems)
+                {
+                    var p = new TeacherProblemUpdateViewModel
+                    {
+                        Id = problem.Id,
+                        Description = problem.Description,
+                        Name = problem.Name,
+                        AttachmentName = problem.Attachment,
+                        CourseId = problem.CourseId,
+                        Filetype = problem.Filetype,
+                        Language = problem.Language,
+                        TestCases = new List<TeacherTestCaseViewModel>()
+                    };
+
+                    foreach (var testCase in problem.TestCases)
+                    {
+                        var t = new TeacherTestCaseViewModel
+                        {
+                            Input = testCase.Input,
+                            Output = testCase.ExpectedOutput
+                        };
+
+                        p.TestCases.Add(t);
+                    }
+
+                    problemList.Add(p);
+                }
+            }
+
+            return problemList;
         }
 
         public void CheckUngradedAssignments(int courseInstanceId) {

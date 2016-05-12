@@ -25,18 +25,18 @@ namespace Codex.Services
         /// Create a course from given NewCourseViewModel
         /// </summary>
         public bool CreateCourse(AdminNewCourseViewModel newCourseViewModel) {
-            var _course = _db.Courses.SingleOrDefault(x => x.Name == newCourseViewModel.Name);
-            Course newCourse = new Course() {
+            var course = _db.Courses.SingleOrDefault(x => x.Name == newCourseViewModel.Name);
+            Course newCourse = new Course {
                 Name = newCourseViewModel.Name,
                 Description = newCourseViewModel.Description
             };
 
-            if (_course == null) {
-                _course = _db.Courses.Add(newCourse);
+            if (course == null) {
+                course = _db.Courses.Add(newCourse);
             }
 
             CourseInstance newCourseInstance = new CourseInstance() {
-                CourseId = _course.Id,
+                CourseId = course.Id,
                 Year = newCourseViewModel.Year,
                 SemesterId = newCourseViewModel.Semester
             };
@@ -347,6 +347,36 @@ namespace Codex.Services
             }
 
             return teacherCourses;
+        }
+
+        /// <summary>
+        /// Get the name of a base course by base course ID
+        /// </summary>
+        public int GetCourseIdByCourseName(string name) {
+            var course = _db.Courses.SingleOrDefault(x => x.Name == name);
+
+            if (course != null) {
+                return course.Id;
+            }
+            else {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Get the ID of a base course by course instance ID
+        /// </summary>
+        public int GetCourseIdByCourseCourseInstanceId(int id)
+        {
+            var course = _db.CourseInstances.SingleOrDefault(x => x.Id == id);
+
+            if (course != null)
+            {
+                return course.CourseId;
+            }
+            else {
+                return 0;
+            }
         }
     }
 }

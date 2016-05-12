@@ -274,6 +274,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ClassDiagram1.cd" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\student.js" />
     <Content Include="Scripts\teacher.js" />
@@ -330,10 +331,11 @@
     <Content Include="Views\Admin\Courses.cshtml" />
     <Content Include="Views\Admin\Users.cshtml" />
     <Content Include="Views\Student\Index.cshtml" />
-    <Content Include="Views\Teacher\Index.cshtml" />
     <Content Include="Views\Submission\Index.cshtml" />
+    <Content Include="Views\Teacher\AssignmentListPartial.cshtml" />
     <Content Include="Views\Account\Settings.cshtml" />
     <Content Include="Views\Student\Assignment.cshtml" />
+    <Content Include="Views\Teacher\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

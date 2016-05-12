@@ -1,0 +1,297 @@
+﻿@model Codex.Models.TeacherViewModel
+@{
+    ViewBag.Title = "Teacher overview";
+}
+<div class="card-panel">
+    <div id="dateFilter" class="row">
+        <div class="input-field col s12">
+            <select id="date">
+                @foreach (var activeSemester in Model.ActiveSemesters)
+                {
+                    <option value="@activeSemester.Year @activeSemester.Semester">@activeSemester.Year - @activeSemester.Semester</option>
+                }
+            </select>
+            <label>Select year and semester</label>
+        </div>
+    </div>
+    <!-- Course Selection -->
+    <div id="teacherCourses" class="row">
+        @foreach (var course in Model.TeacherCourses)
+        {
+            <div class="col s4">
+                <a href="" class="waves-effect waves-light btn">@course.Name</a>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Assignments -->
+@if (Model.CourseSelected.Id != 0)
+{
+    <!-- Required grading assignments -->
+    <h2 class="assignment-category-title grey-text text-darken-1">Requires grading</h2>
+    <div class="row">
+        <div class="col s12">
+            @if (Model.CourseSelected.RequiresGradingAssignments.Any())
+            {
+                @Html.Partial("AssignmentListPartial", Model.CourseSelected.RequiresGradingAssignments)
+            }
+            else
+            {
+                <div>
+                    <p>There are no assignments that require grading.</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Open assignments -->
+    <h2 class="assignment-category-title grey-text text-darken-1">Open</h2>
+    <div class="row">
+        <div class="col s12">
+            @if (Model.CourseSelected.OpenAssignments.Any())
+            {
+                @Html.Partial("AssignmentListPartial", Model.CourseSelected.OpenAssignments)
+            }
+            else
+            {
+                <div>
+                    <p>There are no open assignments.</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Upcoming assignments -->
+    <h2 class="assignment-category-title grey-text text-darken-1">Upcoming</h2>
+    <div class="row">
+        <div class="col s12">
+            @if (Model.CourseSelected.UpcomingAssignments.Any())
+            {
+                @Html.Partial("AssignmentListPartial", Model.CourseSelected.UpcomingAssignments)
+            }
+            else
+            {
+                <div>
+                    <p>There are no upcoming assignments.</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Closed assignments -->
+    <h2 class="assignment-category-title grey-text text-darken-1">Closed</h2>
+    <div class="row">
+        <div class="col s12">
+            @if (Model.CourseSelected.ClosedAssignments.Any())
+            {
+                @Html.Partial("AssignmentListPartial", Model.CourseSelected.ClosedAssignments)
+            }
+            else
+            {
+                <div>
+                    <p>There are no closed assignments.</p>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<!-- Pencil menu -->
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large red">
+        <i class="large material-icons">mode_edit</i>
+    </a>
+    <ul>
+        <li>
+            <a id="new-assignment-modal-button" class="modal-trigger btn-floating red tooltipped" href="#new-assignment-modal" data-position="left" data-delay="50" data-tooltip="New assignment">
+                <i class="material-icons">assignment_late</i>
+            </a>
+        </li>
+        <li>
+            <a id="new-problem-modal-button" class="modal-trigger btn-floating green tooltipped" href="#new-problem-modal" data-position="left" data-delay="50" data-tooltip="New problem">
+                <i class="material-icons">assignment</i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- New problem modal -->
+<div id="new-problem-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4 class="center-align">New problem</h4>
+        <div class="divider"></div>
+
+        @using (Html.BeginForm("NewProblem", "Teacher", FormMethod.Post, new { @id = "create-problem-form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">title</i>
+                    <input id="new-problem-name" name="new-problem-name" type="text" class="validate" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-name" data-valmsg-replace="true"></span>
+                    <label for="new-problem-name">Name</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">email</i>
+                    <textarea id="new-problem-description" name="new-problem-description" class="materialize-textarea"></textarea>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-description" data-valmsg-replace="true"></span>
+                    <label for="new-problem-description">Description</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12 m4">
+                    <i class="material-icons prefix">email</i>
+                    <input id="new-problem-course" name="new-problem-course" type="text" class="validate disabled" disabled value="@Model.CourseSelected.Name" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-course" data-valmsg-replace="true"></span>
+                    <label for="new-problem-course">Course</label>
+                </div>
+
+                <div class="input-field col s12 m4">
+                    <i class="material-icons prefix">email</i>
+                    <input id="new-problem-language" name="new-problem-language" type="text" class="validate" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-language" data-valmsg-replace="true"></span>
+                    <label for="new-problem-language">Language</label>
+                </div>
+
+                <div class="input-field col s12 m4">
+                    <i class="material-icons prefix">email</i>
+                    <input id="new-problem-filetype" name="new-problem-filetype" type="text" class="validate" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-filetype" data-valmsg-replace="true"></span>
+                    <label for="new-problem-filetype">Allowed filetype</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="file-field input-field col s12">
+                    <div class="btn">
+                        <span>Attachment</span>
+                        <input type="file" name="new-problem-attachment" id="new-problem-attachment" />
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h6>Test cases</h6>
+
+            <div class="card-panel new-problem-input">
+                <i class="material-icons red-text">clear</i>
+                <p>Input</p>
+                <textarea class="materialize-textarea"></textarea>
+
+                <p>Output</p>
+                <textarea class="materialize-textarea"></textarea>
+            </div>
+
+            <a class="btn-floating btn-large waves-effect waves-light blue right tooltipped" data-position="left" data-delay="50" data-tooltip="Add another input/output pair">
+                <i class="material-icons">add</i>
+            </a>
+        }
+    </div>
+    <div class="modal-footer">
+        <a id="new-problem-modal-create-button" href="#" class="btn-flat">Create</a>
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+    </div>
+</div>
+
+<!-- New assignment modal -->
+<div id="new-assignment-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4 class="center-align">New assignment</h4>
+        <div class="divider"></div>
+
+        @using (Html.BeginForm("NewAssignment", "Teacher", FormMethod.Post, new {@id = "create-assignment-form", role = "form"})) {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">title</i>
+                    <input id="new-assignment-name" name="new-assignment-name" type="text" class="validate"/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-assignment-name" data-valmsg-replace="true"></span>
+                    <label for="new-assignment-name">Name</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">email</i>
+                    <textarea id="new-assignment-description" name="new-assignment-description" class="materialize-textarea"></textarea>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-assignment-description" data-valmsg-replace="true"></span>
+                    <label for="new-assignment-description">Description</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s4">
+                    <label for="new-assignment-start-date">Open date</label>
+                    <input type="date" class="datepicker" id="new-assignment-start-date" name="new-assignment-start-date" />
+                </div>
+
+                <div class="input-field col s4">
+                    <label for="new-assignment-start-date">Due date</label>
+                    <input type="date" class="datepicker" id="new-assignment-end-date" name="new-assignment-end-date" />
+                </div>
+
+                <div class="input-field col s4">
+                    <input type="number" min="0" id="new-assignment-collaborators" name="new-assignment-collaborators" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-assignment-collaborators" data-valmsg-replace="true"></span>
+                    <label for="new-assignment-collaborators">Max collaborators</label>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h6>Problems</h6>
+
+            // Create list
+            var selectionList = new List<SelectListItem>();
+
+            foreach (var problem in Model.CourseSelected.ProblemList) {
+                var item = new SelectListItem {
+                    Text = problem.Name,
+                    Value = problem.Id.ToString()
+                };
+
+                selectionList.Add(item);
+            }
+
+            <div class="row new-assignment-problemEntry">
+                <div class="input-field col s4 new-assignment-problem-list">
+                    @Html.DropDownList("new-assignment-problemlist", selectionList)
+                    <label>Problem</label>
+                </div>
+
+                <div class="input-field col s4">
+                    <input type="number" min="0" id="new-assignment-weight1" name="new-assignment-weight1"/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-assignment-weight1" data-valmsg-replace="true"></span>
+                    <label for="new-assignment-weight1">Weight %</label>
+                </div>
+
+                <div class="input-field col s4">
+                    <input type="number" min="0" id="new-assignment-max-submission1" name="new-assignment-max-submission1" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-assignment-max-submission1" data-valmsg-replace="true"></span>
+                    <label for="new-assignment-max-submission1">Max submissions</label>
+                </div>
+            </div>
+
+            <a class="btn-floating btn-large waves-effect waves-light blue right tooltipped" data-position="left" data-delay="50" data-tooltip="Add another problem">
+                <i class="material-icons">add</i>
+            </a>
+
+            <input type="hidden" id="new-assignment-course" value="@Model.CourseSelected.Id"/>
+        }
+    </div>
+    <div class="modal-footer">
+        <a id="new-assignment-modal-create-button" href="#" class="btn-flat">Create</a>
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+    </div>
+</div>

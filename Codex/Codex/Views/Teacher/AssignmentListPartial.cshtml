@@ -1,0 +1,226 @@
+﻿@model List<Codex.Models.TeacherAssignmentViewModel>
+
+<ul class="collapsible popout" data-collapsible="accordion">
+@foreach (var assignment in Model) {
+    <li class="grey lighten-2">
+    <!-- Header -->
+    <div class="collapsible-header">
+        <div class="row clear-margin">
+            <div class="col s3 truncate">
+                <span class="search-criteria">@assignment.Name</span>
+            </div>
+            <div class="col s3 grey-text truncate center-align">
+                <span>@assignment.TimeRemaining</span>
+            </div>
+            <div class="col s3 grey-text truncate center-align">
+                <span class="search-criteria">@assignment.Course</span>
+            </div>
+            <div class="col s3 grey-text center-align hide-on-med-and-down">
+                <span>@assignment.NumberOfProblems</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problems -->
+    <div class="collapsible-body">
+        <div class="collapsible-body-container">
+            @if (assignment.Problems.Any()) {
+                <ul class="collapsible" data-collapsible="accordion">
+                    @foreach (var problem in assignment.Problems) {
+                        <li class="grey lighten-1">
+                            <!-- Problem header -->
+                            <div class="collapsible-header">
+                                <div class="row clear-margin">
+                                    <!-- Problem name -->
+                                    <div class="col s4 truncate">
+                                        <span class="search-criteria">@problem.Name</span>
+                                    </div>
+
+                                    <!-- Problem weight -->
+                                    <div class="col s1 grey-text">
+                                        <span>@problem.Weight%</span>
+                                    </div>
+
+                                    <!-- Number of submissions -->
+                                    <div class="col s5 grey-text">
+                                        <span>@problem.Groups.Count </span>
+                                        <span>submissions</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Student/Group list -->
+                            <div class="collapsible-body">
+                                @if (problem.Groups.Any()) {
+                                    <!-- Legend -->
+                                    <div class="row clear-margin">
+                                        <div class="teacher-legend center-align">
+                                            <div class="col s3 m3 truncate">
+                                                @if (assignment.MaxCollaborators == 0) {
+                                                    <span>Student</span>
+                                                }
+                                                else {
+                                                    <span>Group</span>
+                                                }
+                                            </div>
+                                            <div class="col s4 truncate hide-on-small-and-down">
+                                                <span>Last submission</span>
+                                            </div>
+                                            <div class="col s6 m2 truncate">
+                                                <span>Grade</span>
+                                            </div>
+                                            <div class="col s3 truncate">
+                                                <span>Status</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="collapsible-body-container">
+
+                                        <ul class="collapsible" data-collapsible="accordion">
+                                            @foreach (var group in problem.Groups) {
+                                                <li class="grey">
+                                                    <!-- Group header -->
+                                                    <div class="collapsible-header">
+                                                        <div class="row clear-margin">
+                                                            <!-- Group -->
+                                                            <div class="col s3 truncate">
+                                                                @if (assignment.MaxCollaborators == 0) {
+                                                                    <span>@group.Names[0]</span>
+                                                                }
+                                                                else {
+                                                                    <span>
+                                                                        @{ var last = group.Names.Last(); }
+                                                                        @foreach (var student in group.Names) {
+                                                                            if (student.Equals(last)) {
+                                                                                @student
+                                                                            }
+                                                                            else {
+                                                                                @student
+                                                                                @:,
+                                                                            }
+                                                                        }
+                                                                    </span>
+                                                                }
+                                                            </div>
+
+                                                            <!-- Last submission -->
+                                                            <div class="col s2 m3 grey-text truncate hide-on-small-and-down">
+                                                                <span></span>
+                                                            </div>
+
+                                                            <!-- Download best -->
+                                                            <div class="col s2 m1 center-align">
+                                                                <span class="waves-effect waves-light-blue btn-flat blue-text light-blue lighten-5 submission-download-button narrow-button fill-width center-icon tooltipped" data-position="top" data-delay="30" data-tooltip="Download best submission">
+                                                                    <span class="material-icons">file_download</span>
+                                                                </span>
+                                                            </div>
+
+                                                            <!-- Grading -->
+                                                            <div class="col s5 m3 center-align">
+                                                                <form class="row clear-margin">
+                                                                    <div class="input-field col s6 clear-margin">
+                                                                        <input type="number" id="grade-@group.BestSubmission.Id" name="grade-@group.BestSubmission.Id" class="grade-input" placeholder="Grade"/>
+                                                                    </div>
+
+                                                                    <div class="col s6 clear-margin">
+                                                                        <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button center-align center-icon fill-width tooltipped" data-position="top" data-delay="30" data-tooltip="Grade">
+                                                                            <span class="material-icons">send</span>
+                                                                        </span>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+
+                                                            <!-- Best submission status -->
+                                                            <div class="col s2 truncate status right-align">
+                                                                @if (group.BestSubmission.FailedTests.HasValue) {
+                                                                    if (group.BestSubmission.FailedTests.Value == 0) {
+                                                                        <span class="green-text truncate">
+                                                                            <span class="hide-on-small-and-down">Accepted</span>
+                                                                            <span class="material-icons">done</span>
+                                                                        </span>
+                                                                    }
+                                                                    else {
+                                                                        <span class="red-text truncate">
+                                                                            <span class="hide-on-small-and-down">
+                                                                                @group.BestSubmission.FailedTests.Value
+                                                                                tests failed
+                                                                            </span>
+                                                                            <span class="material-icons">clear</span>
+                                                                        </span>
+                                                                    }
+                                                                }
+                                                                else {
+                                                                    <span class="red-text truncate">
+                                                                        <span class="hide-on-small-and-down">
+                                                                            Compile error
+                                                                        </span>
+                                                                        <span class="material-icons">clear</span>
+                                                                    </span>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Submission -->
+                                                    <div class="collapsible-body">
+                                                        @if (group.Submissions.Any()) {
+                                                            <div class="collapsible-body-container">
+                                                                <div class="collection z-depth-1">
+                                                                    @foreach (var submission in group.Submissions) {
+                                                                        <a href="@Url.Action("Index", "Submission", new {id = submission.Id})" class="collection-item row">
+                                                                            <div class="col s4 truncate">
+                                                                                <span>@submission.OriginalFilename</span>
+                                                                            </div>
+                                                                            <div class="col s3 grey-text truncate">
+                                                                                <span>@submission.SubmissionTime.ToString()</span>
+                                                                            </div>
+                                                                            <div class="col s2 truncate">
+                                                                                <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
+                                                                                    <i class="material-icons">file_download</i>
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="col s3 status truncate right-align">
+                                                                                @if (submission.FailedTests.HasValue) {
+                                                                                    if (submission.FailedTests.Value == 0) {
+                                                                                        <span class="green-text">
+                                                                                            <span class="hide-on-small-and-down">Accepted</span>
+                                                                                            <span class="material-icons">done</span>
+                                                                                        </span>
+                                                                                    }
+                                                                                    else {
+                                                                                        <span class="red-text">
+                                                                                            @submission.FailedTests.Value
+                                                                                            tests failed
+                                                                                            <span class="material-icons">clear</span>
+                                                                                        </span>
+                                                                                    }
+                                                                                }
+                                                                                else {
+                                                                                    <span class="red-text">
+                                                                                        Compile error
+                                                                                        <span class="material-icons">clear</span>
+                                                                                    </span>
+                                                                                }
+                                                                            </div>
+                                                                        </a>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ul>
+
+                                    </div>
+                                }
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+    </li>
+}
+</ul>

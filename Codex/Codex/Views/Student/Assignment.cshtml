@@ -36,7 +36,7 @@
 
             <div class="divider"></div>
             <!-- Assignment collaborators-->
-            @if (Model.MaxCollaborators > 1)
+            @if (Model.MaxCollaborators > 1 || true)
             {
             <div class="row">
                 <div class="col s12">
@@ -56,10 +56,16 @@
                                     </div>
                                 </div>
                             </div>
-                            @foreach (var collaborator in Model.Collaborators)
-                            {
-                                <span>@collaborator.Name</span>
-                            }
+                            <div class="card-panel grey lighten-3 clear-margin">
+                                @foreach (var collaborator in Model.Collaborators)
+                                {
+                                    <span class="clear-margin">@collaborator.Name</span>
+                                    if (User.Identity.Name == collaborator.Name)
+                                    {
+                                        
+                                    }
+                                }
+                            </div> 
                         </li>
                     </ul>
                 </div>

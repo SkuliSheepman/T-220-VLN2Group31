@@ -12,25 +12,25 @@ namespace Codex.DAL
         {
         }
 
-        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-        public virtual DbSet<AssignmentGroup> AssignmentGroups { get; set; }
-        public virtual DbSet<AssignmentProblem> AssignmentProblems { get; set; }
-        public virtual DbSet<Assignment> Assignments { get; set; }
-        public virtual DbSet<CourseInstance> CourseInstances { get; set; }
-        public virtual DbSet<Course> Courses { get; set; }
-        public virtual DbSet<Filetype> Filetypes { get; set; }
-        public virtual DbSet<Problem> Problems { get; set; }
-        public virtual DbSet<ProgrammingLanguage> ProgrammingLanguages { get; set; }
-        public virtual DbSet<Semester> Semesters { get; set; }
-        public virtual DbSet<SubmissionGrade> SubmissionGrades { get; set; }
-        public virtual DbSet<Submission> Submissions { get; set; }
-        public virtual DbSet<Teacher> Teachers { get; set; }
-        public virtual DbSet<TestCase> TestCases { get; set; }
-        public virtual DbSet<TestResult> TestResults { get; set; }
+        public DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
+        public DbSet<AspNetRole> AspNetRoles { get; set; }
+        public DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public DbSet<AspNetUser> AspNetUsers { get; set; }
+        public DbSet<AssignmentGroup> AssignmentGroups { get; set; }
+        public DbSet<AssignmentProblem> AssignmentProblems { get; set; }
+        public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<CourseInstance> CourseInstances { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Filetype> Filetypes { get; set; }
+        public DbSet<Problem> Problems { get; set; }
+        public DbSet<ProgrammingLanguage> ProgrammingLanguages { get; set; }
+        public DbSet<Semester> Semesters { get; set; }
+        public DbSet<SubmissionGrade> SubmissionGrades { get; set; }
+        public DbSet<Submission> Submissions { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<TestCase> TestCases { get; set; }
+        public DbSet<TestResult> TestResults { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
