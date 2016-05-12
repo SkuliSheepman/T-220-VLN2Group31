@@ -79,6 +79,7 @@ namespace Codex.Controllers
                 assignment.IsDone = _studentService.IsAssignmentDone(assignment);
                 assignment.NumberOfProblems = assignment.Problems.Count + " " + (assignment.Problems.Count == 1 ? "problem" : "problems");
 
+                ViewBag.UserName = User.Identity.Name;
                 return View(assignment);
 
             }
