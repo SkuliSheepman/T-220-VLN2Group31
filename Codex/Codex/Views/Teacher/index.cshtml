@@ -183,7 +183,6 @@
             <a class="btn-floating btn-large waves-effect waves-light blue right tooltipped" data-position="left" data-delay="50" data-tooltip="Add another input/output pair">
                 <i class="material-icons">add</i>
             </a>
-            
         }
     </div>
     <div class="modal-footer">
@@ -198,14 +197,13 @@
         <h4 class="center-align">New assignment</h4>
         <div class="divider"></div>
 
-        @using (Html.BeginForm("NewAssignment", "Teacher", FormMethod.Post, new { @id = "create-assignment-form", role = "form" }))
-        {
+        @using (Html.BeginForm("NewAssignment", "Teacher", FormMethod.Post, new {@id = "create-assignment-form", role = "form"})) {
             @Html.AntiForgeryToken()
 
             <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">title</i>
-                    <input id="new-assignment-name" name="new-assignment-name" type="text" class="validate" />
+                    <input id="new-assignment-name" name="new-assignment-name" type="text" class="validate"/>
                     <span class="field-validation-valid text-danger" data-valmsg-for="new-assignment-name" data-valmsg-replace="true"></span>
                     <label for="new-assignment-name">Name</label>
                 </div>
@@ -241,14 +239,42 @@
             <div class="divider"></div>
 
             <h6>Problems</h6>
-            
+            // Create list
+            var selectionList = new List<SelectListItem>();
 
+            foreach (var problem in Model.CourseSelected.ProblemList) {
+                var item = new SelectListItem {
+                    Text = problem.Name,
+                    Value = problem.Id.ToString()
+                };
+
+                selectionList.Add(item);
+            }
+
+            <div class="row new-assignment-problemEntry">
+                <div class="input-field col s4 new-assignment-problem-list">
+                    @Html.DropDownList("new-assignment-problemlist", selectionList)
+                    <label>Problem</label>
+                </div>
+
+                <div class="input-field col s4">
+                    <input type="number" min="0" id="new-assignment-weight1" name="new-assignment-weight1"/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-assignment-weight1" data-valmsg-replace="true"></span>
+                    <label for="new-assignment-weight1">Weight %</label>
+                </div>
+
+                <div class="input-field col s4">
+                    <input type="number" min="0" id="new-assignment-max-submission1" name="new-assignment-max-submission1" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-assignment-max-submission1" data-valmsg-replace="true"></span>
+                    <label for="new-assignment-max-submission1">Max submissions</label>
+                </div>
+            </div>
 
             <a class="btn-floating btn-large waves-effect waves-light blue right tooltipped" data-position="left" data-delay="50" data-tooltip="Add another problem">
                 <i class="material-icons">add</i>
             </a>
 
-            <input type="hidden" id="new-assignment-course" value="@Model.CourseSelected.Id" />
+            <input type="hidden" id="new-assignment-course" value="@Model.CourseSelected.Id"/>
         }
     </div>
     <div class="modal-footer">

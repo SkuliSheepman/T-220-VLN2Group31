@@ -73,6 +73,9 @@
         });
     }
 
+    /* Global variables */
+    var PROBLEMS = 1;
+
     $("#new-problem-modal-button").on('click', function (e) {
         //$("#new-problem-modal").openModal();
     });
@@ -127,7 +130,7 @@
     }
 
     // New problem form
-    $("#new-problem-modal-create-button").on('click', function (e) {
+    $("#new-problem-modal-create-button").on("click", function (e) {
 
         var testCases = [];
         $("#create-problem-form .new-problem-input").each(function () {
@@ -178,9 +181,89 @@
         $(this).before(inputOutput);
     });
 
-    // New problem form
+    // Remove test case from new problem
     $("body").on("click", ".new-problem-input i", function () {
         $(this).parent().fadeOut(500, function() {
+            $(this).remove();
+        });
+    });
+
+    // New assignment form
+    $("#new-assignment-modal-create-button").on("click", function (e) {
+
+        var problems = [];
+        $("#create-assignment-form .new-assignment-problemEntry").each(function () {
+            var problemId = $(this).find("select").val();
+            var weight = $(this).find("input[type='number']:first").val();
+            var maxSubmissions = $(this).find("input[type='number']:last").val();
+
+            problems.push({ "ProblemId": problemId, "Weight": weight, "MaxSubmissions": maxSubmissions });
+        });
+
+        var formData = {
+            "CourseName": $("#new-assignment-course").val(),
+            "Name": $("#new-assignment-name").val(),
+            "Description": $("#new-assignment-description").val(),
+            "StartDate": $("#new-assignment-start-date").val(),
+            "EndDate": $("#new-assignment-end-date").val(),
+            "Problems": JSON.stringify({ Problems: problems })
+        };
+
+        $.ajax({
+            url: $("#create-assignment-form").attr("action"),
+            data: formData,
+            method: "POST",
+            dataType: "json",
+            success: function (responseData) {
+                if (responseData !== 0) {
+
+                }
+                else {
+                    Materialize.toast("An error occurred adding the problem to the database", 4000);
+                }
+
+            },
+            error: function () {
+                Materialize.toast("Something awful happened :(", 4000);
+            }
+        });
+    });
+
+    // Add problem to assignment
+    $("#create-assignment-form .btn-floating").on("click", function () {
+        PROBLEMS++;
+        var row = $("<div class='row new-assignment-problemEntry'></div>");
+
+        // Problems
+        var select = $("<select></select>");
+        $("#new-assignment-problemlist option").clone().appendTo(select);
+
+        select = select.after("<label>Problem</label>");
+
+        var container = $("<div class='input-field col s4 new-assignment-problem-list'></div>");
+        select.appendTo(container);
+
+        container.appendTo(row);
+
+        // Weight
+        var weight = $("<div class='input-field col s4'><input type='number' min='0' id='new-assignment-weight" + PROBLEMS + "' name='new-assignment-weight" + PROBLEMS + "'/><span class='field-validation-valid text-danger' data-valmsg-for='new-assignment-weight" + PROBLEMS + "' data-valmsg-replace='true'></span><label for='new-assignment-weight" + PROBLEMS + "'>Weight %</label></div>");
+
+        weight.appendTo(row);
+
+        // Max submissions
+        var maxSubmissions = $("<div class='input-field col s4'><input type='number' min='0' id='new-assignment-submission" + PROBLEMS + "' name='new-assignment-submission" + PROBLEMS + "'/><span class='field-validation-valid text-danger' data-valmsg-for='new-assignment-submission" + PROBLEMS + "' data-valmsg-replace='true'></span><label for='new-assignment-submission" + PROBLEMS + "'>Max submissions</label></div>");
+
+        maxSubmissions.appendTo(row);
+
+        // Insert
+        $(this).before(row);
+
+        $("select").material_select();
+    });
+
+    // Remove problem from new assignment
+    $("body").on("click", ".new-problem-input i", function () {
+        $(this).parent().fadeOut(500, function () {
             $(this).remove();
         });
     });

@@ -349,11 +349,30 @@ namespace Codex.Services
             return teacherCourses;
         }
 
+        /// <summary>
+        /// Get the name of a base course by base course ID
+        /// </summary>
         public int GetCourseIdByCourseName(string name) {
             var course = _db.Courses.SingleOrDefault(x => x.Name == name);
 
             if (course != null) {
                 return course.Id;
+            }
+            else {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Get the ID of a base course by course instance ID
+        /// </summary>
+        public int GetCourseIdByCourseCourseInstanceId(int id)
+        {
+            var course = _db.CourseInstances.SingleOrDefault(x => x.Id == id);
+
+            if (course != null)
+            {
+                return course.CourseId;
             }
             else {
                 return 0;

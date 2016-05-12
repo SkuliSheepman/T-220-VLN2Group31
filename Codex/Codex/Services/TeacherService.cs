@@ -9,8 +9,8 @@ namespace Codex.Services
 {
     public class TeacherService
     {
-        private Database _db;
-        private CourseService _courseService;
+        private readonly Database _db;
+        private readonly CourseService _courseService;
 
         public TeacherService() {
             _db = new Database();
@@ -358,36 +358,43 @@ namespace Codex.Services
         }
 
         /// <summary>
-        /// Get all problems in a base course via the course Id.
+        /// Get all problems in a base course via a course instance Id.
         /// </summary>
-        public List<TeacherProblemUpdateViewModel> GetProblemsInCourseById(int courseId) {
-            var problems = _db.Problems.Where(x => x.CourseId == courseId);
-
+        public List<TeacherProblemUpdateViewModel> GetProblemsInCourseById(int courseInstanceId) {
             var problemList = new List<TeacherProblemUpdateViewModel>();
 
-            foreach (var problem in problems) {
-                var p = new TeacherProblemUpdateViewModel
-                {
-                    Id = problem.Id,
-                    Description = problem.Description,
-                    Name = problem.Name,
-                    AttachmentName = problem.Attachment,
-                    CourseId = problem.CourseId,
-                    Filetype = problem.Filetype,
-                    Language = problem.Language,
-                    TestCases = new List<TeacherTestCaseViewModel>()
-                };
+            var courseId = _courseService.GetCourseIdByCourseCourseInstanceId(courseInstanceId);
 
-                foreach (var testCase in problem.TestCases) {
-                    var t = new TeacherTestCaseViewModel {
-                        Input = testCase.Input,
-                        Output = testCase.ExpectedOutput
+            if (courseId != 0) {
+                var problems = _db.Problems.Where(x => x.CourseId == courseId);
+
+                foreach (var problem in problems)
+                {
+                    var p = new TeacherProblemUpdateViewModel
+                    {
+                        Id = problem.Id,
+                        Description = problem.Description,
+                        Name = problem.Name,
+                        AttachmentName = problem.Attachment,
+                        CourseId = problem.CourseId,
+                        Filetype = problem.Filetype,
+                        Language = problem.Language,
+                        TestCases = new List<TeacherTestCaseViewModel>()
                     };
 
-                    p.TestCases.Add(t);
-                }
+                    foreach (var testCase in problem.TestCases)
+                    {
+                        var t = new TeacherTestCaseViewModel
+                        {
+                            Input = testCase.Input,
+                            Output = testCase.ExpectedOutput
+                        };
 
-                problemList.Add(p);
+                        p.TestCases.Add(t);
+                    }
+
+                    problemList.Add(p);
+                }
             }
 
             return problemList;
