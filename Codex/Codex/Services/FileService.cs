@@ -207,7 +207,8 @@ namespace Codex.Services
         }
 
         /// <summary>
-        /// 
+        /// Download a submission
+        /// Unfinished
         /// </summary>
         public void DownloadSubmission(string userid, int? submissionId)
         {
@@ -232,7 +233,8 @@ namespace Codex.Services
         }
 
         /// <summary>
-        /// 
+        /// Download an attachment
+        /// Unfinished
         /// </summary>
         public void DownloadAttachment(string userid, int? attachmentId)
         {
@@ -240,7 +242,8 @@ namespace Codex.Services
         }
 
         /// <summary>
-        /// 
+        /// Download a file
+        /// Unfinished
         /// </summary>
         public void DownloadFile(string path, string originalFileName)
         {
