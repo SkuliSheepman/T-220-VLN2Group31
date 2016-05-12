@@ -212,13 +212,21 @@ namespace Codex.Services
         /// </summary>
         public void DownloadSubmission(string userid, int? submissionId)
         {
-            if (submissionId.HasValue)
+            var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userid);
+            if (submissionId.HasValue && user != null)
             {
                 var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
                 if (submission != null)
                 {
-                    var collaborators = _studentService.GetCollaborators(submission.AssignmentId, userid);
-                    if (collaborators.Count != 0) // check if user is related to the submission group
+                    var collaborators = new List<CollaboratorViewModel>();
+                    bool isTeacher = submission.Assignment.CourseInstance.Teachers.Any(x => x.AspNetUser == user);
+
+                    if (!isTeacher)
+                    {
+                        collaborators = _studentService.GetCollaborators(submission.AssignmentId, userid);
+                    }
+
+                    if (collaborators.Count != 0 || isTeacher)  // check if user is related to the submission group
                     {
                         var path = GetSubmissionsPath() +
                                    submission.AssignmentId + "\\" +
