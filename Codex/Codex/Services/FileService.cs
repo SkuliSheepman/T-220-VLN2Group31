@@ -210,21 +210,29 @@ namespace Codex.Services
         /// Download a submission
         /// Unfinished
         /// </summary>
-        public void DownloadSubmission(string userid, int? submissionId)
+        public void DownloadSubmission(string userid, int submissionId)
         {
-            if (submissionId.HasValue)
+            var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userid);
+            if (user != null)
             {
                 var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
                 if (submission != null)
                 {
-                    var collaborators = _studentService.GetCollaborators(submission.AssignmentId, userid);
-                    if (collaborators.Count != 0) // check if user is related to the submission group
+                    var collaborators = new List<CollaboratorViewModel>();
+                    bool isTeacher = submission.Assignment.CourseInstance.Teachers.Any(x => x.AspNetUser == user);
+
+                    if (!isTeacher)
+                    {
+                        collaborators = _studentService.GetCollaborators(submission.AssignmentId, userid);
+                    }
+
+                    if (collaborators.Count != 0 || isTeacher)  // check if user is related to the submission group
                     {
                         var path = GetSubmissionsPath() +
                                    submission.AssignmentId + "\\" +
                                    submission.ProblemId + "\\" +
                                    submission.Id + "\\" +
-                                   submission.Id + "." + submission.Problem.Filetype;
+                                   submission.Id + submission.Problem.Filetype;
 
                         DownloadFile(path, submission.OriginalFileName);
                     }
@@ -236,9 +244,36 @@ namespace Codex.Services
         /// Download an attachment
         /// Unfinished
         /// </summary>
-        public void DownloadAttachment(string userid, int? attachmentId)
+        public void DownloadAttachment(string userid, int problemid)
         {
+            var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userid);
+            if (user != null)
+            {
+                var problem = _db.Problems.SingleOrDefault(x => x.Id == problemid);
+                if (problem != null)
+                {
+                    var assignment = (from assign in _db.Assignments
+                                      join relation in _db.AssignmentProblems
+                                      on assign.Id equals relation.AssignmentId
+                                      where relation.ProblemId == problemid
+                                      select assign).SingleOrDefault();
 
+                    if (assignment != null)
+                    {
+                        if (user.CourseInstances.Contains(assignment.CourseInstance))
+                        {
+                            if (problem.Attachment != null)
+                            {
+                                var path = GetAttachmentsPath() +
+                                       problem.Id + "\\" +
+                                       problem.Id + "." + problem.Attachment.Split('.')[1];
+
+                                DownloadFile(path, problem.Attachment);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -261,9 +296,19 @@ namespace Codex.Services
                 byte[] data = req.DownloadData(filePath);
                 response.BinaryWrite(data);
                 response.End();
+            } else
+            {
+                
             }
         }
 
-
+        /// <summary>
+        /// Check if file exists
+        /// </summary>
+        public bool FileExists(string path)
+        {
+            FileInfo file = new FileInfo(path);
+            return file.Exists;
+        }
     }
 }

@@ -40,6 +40,7 @@ namespace Codex.Controllers
                 foreach (var problem in assignment.Problems) {
                     problem.Submissions = _studentService.GetSubmissionsByAssignmentGroup(studentId, problem.Id, assignment.Id);
                     problem.IsAccepted = _studentService.IsProblemDone(problem);
+                    problem.BestSubmission = _studentService.GetBestSubmission(problem.Submissions);
                 }
 
                 assignment.TimeRemaining = _studentService.GetAssignmentTimeRemaining(assignment);
@@ -53,6 +54,37 @@ namespace Codex.Controllers
 
             ViewBag.UserName = User.Identity.Name;
             return View(model);
+        }
+
+        [Authorize]
+        public ActionResult Assignment(int? id)
+        {
+
+            if (id.HasValue)
+            {
+
+                var studentId = _userService.GetUserIdByName(User.Identity.Name);
+                var assignment = _studentService.GetStudentAssignmentById(id.Value, studentId);
+
+                assignment.Problems = _studentService.GetStudentProblemsByAssignmentId(assignment.Id);
+
+                foreach (var problem in assignment.Problems)
+                {
+                    problem.Submissions = _studentService.GetSubmissionsByAssignmentGroup(studentId, problem.Id, assignment.Id);
+                    problem.IsAccepted = _studentService.IsProblemDone(problem);
+                    problem.BestSubmission = _studentService.GetBestSubmission(problem.Submissions);
+                }
+
+                assignment.TimeRemaining = _studentService.GetAssignmentTimeRemaining(assignment);
+                assignment.IsDone = _studentService.IsAssignmentDone(assignment);
+                assignment.NumberOfProblems = assignment.Problems.Count + " " + (assignment.Problems.Count == 1 ? "problem" : "problems");
+
+                return View(assignment);
+
+            }
+
+            return RedirectToAction("Index", "Student");
+
         }
 
         public ActionResult Submit(HttpPostedFileBase file, int? assignmentId, int? problemId) {

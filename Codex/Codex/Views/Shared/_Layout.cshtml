@@ -59,19 +59,28 @@
 
             <!-- Sidenav -->
             <ul id="slide-out" class="side-nav hide-on-large-only">
+                @if (User.IsInRole("Teacher"))
+                {
+                    <li>
+                        <a href="/Teacher/Index">
+                            <i class="material-icons">school</i>
+                            <span>Teacher index</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Student/Index">
+                            <i class="material-icons">person</i>
+                            <span>Student index</span>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                }
                 <li>
-                    <a href="#">
-                        <i class="material-icons">school</i>
-                        <span>Teacher</span>
+                    <a href="@Url.Action("Settings", "Account")">
+                        <i class="material-icons">settings</i>
+                        <span>Settings</span>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        <i class="material-icons">person</i>
-                        <span>Student</span>
-                    </a>
-                </li>
-                <li class="divider"></li>
                 <li>
                     <a href="javascript:document.getElementById('logoutForm').submit()">
                         <i class="material-icons">power_settings_new</i>
@@ -82,20 +91,28 @@
 
             <!-- Dropdown Structure -->
             <ul id="avatar-dropdown" class="dropdown-content">
+                @if (User.IsInRole("Teacher"))
+                {
+                    <li>
+                        <a href="/Teacher/Index">
+                            <i class="material-icons">school</i>
+                            <span>Teacher index</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Student/Index">
+                            <i class="material-icons">person</i>
+                            <span>Student index</span>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                }
                 <li>
-                    <a href="#">
-                        <i class="material-icons">school</i>
-                        <span>Teacher</span>
+                    <a href="@Url.Action("Settings", "Account")">
+                        <i class="material-icons">settings</i>
+                        <span>Settings</span>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        <i class="material-icons">person</i>
-                        <span>Student</span>
-                    </a>
-                </li>
-                <li class="divider"></li>
-
                 <li>
                     <a href="javascript:document.getElementById('logoutForm').submit()">
                         <i class="material-icons">power_settings_new</i>

@@ -15,6 +15,9 @@ namespace Codex.Services
             _db = new Database();
         }
 
+        /// <summary>
+        /// Find a students collaborators in a specific assignment. Returns a list af CollaboratorViewModel including the given student.
+        /// </summary>
         public List<CollaboratorViewModel> GetCollaborators(int assignmentId, string studentId) {
             var collaboratorList = new List<CollaboratorViewModel>();
 
@@ -30,6 +33,9 @@ namespace Codex.Services
             return collaboratorList;
         }
 
+        /// <summary>
+        /// Finds all assignments that a student is connected too based on his Id. Returns a list of StudentAssignmentViewModel
+        /// </summary>
         public List<StudentAssignmentViewModel> GetStudentAssignmentsByStudentId(string studentId) {
             var assignmentList = new List<StudentAssignmentViewModel>();
 
@@ -40,6 +46,7 @@ namespace Codex.Services
                     Id = group.Assignment.Id,
                     Course = group.Assignment.CourseInstance.Course.Name,
                     Name = group.Assignment.Name,
+                    Description = group.Assignment.Description,
                     StartTime = group.Assignment.StartTime,
                     EndTime = group.Assignment.EndTime,
                     MaxCollaborators = group.Assignment.MaxCollaborators,
@@ -52,6 +59,9 @@ namespace Codex.Services
             return assignmentList;
         }
 
+        /// <summary>
+        /// Gets all problems in assignment based on assignment Id, Returnst a list of StudentProblemViewModel
+        /// </summary>
         public List<StudentProblemViewModel> GetStudentProblemsByAssignmentId(int assignmentId) {
             var problemQuery = _db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId);
             var problemList = new List<StudentProblemViewModel>();
@@ -71,6 +81,9 @@ namespace Codex.Services
             return problemList;
         }
 
+        /// <summary>
+        /// Gets submission to problem from all collaborators in assignment. Returns list of StudentSubmissionViewModel
+        /// </summary>
         public List<StudentSubmissionViewModel> GetSubmissionsByAssignmentGroup(string studentId, int problemId, int assignmentId) {
             var groupSubmissions = new List<StudentSubmissionViewModel>();
 
@@ -166,6 +179,50 @@ namespace Codex.Services
             catch (Exception e) {
                 return 0;
             }
+        }
+        
+        /// <summary>
+        /// Get the most recent submisssion with the fewest failed cases, or null if there are no submissions
+        /// </summary>
+        public StudentSubmissionViewModel GetBestSubmission(List<StudentSubmissionViewModel> groupSubmissions) {
+            var bestSubmission = new StudentSubmissionViewModel();
+            if (groupSubmissions.Count != 0) {
+                //List is sorted by FailedTests (Null last) then by Submission time, fewest failed cases first, in order of submissison time
+                groupSubmissions = groupSubmissions.OrderByDescending(x => x.FailedTests.HasValue)
+                                                   .ThenBy(x => x.FailedTests)
+                                                   .ThenByDescending(x => x.SubmissionTime)
+                                                   .ToList();
+
+                //The first submission in the list will be the most recent submission with the fewest failed cases
+                bestSubmission = groupSubmissions.First();
+
+                return bestSubmission;
+            }
+            //if there are no submissions, return null
+            else return null;
+        }
+
+        /// <summary>
+        /// Get an assignment by it's id
+        /// </summary>
+        public StudentAssignmentViewModel GetStudentAssignmentById(int assignmentid, string studentid) {
+
+            var group = _db.AssignmentGroups.Where(x => x.UserId == studentid && x.AssignmentId == assignmentid).SingleOrDefault();
+            var assignment = new StudentAssignmentViewModel
+            {
+                Id = group.Assignment.Id,
+                Course = group.Assignment.CourseInstance.Course.Name,
+                Name = group.Assignment.Name,
+                Description = group.Assignment.Description,
+                StartTime = group.Assignment.StartTime,
+                EndTime = group.Assignment.EndTime,
+                MaxCollaborators = group.Assignment.MaxCollaborators,
+                AssignmentGrade = group.AssignmentGrade,
+                Collaborators = GetCollaborators(assignmentid, studentid)
+            };
+
+            return assignment;
+
         }
     }
 }

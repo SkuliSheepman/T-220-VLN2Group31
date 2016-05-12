@@ -31,7 +31,7 @@ namespace Codex.Controllers
                 ClosedAssignments = new List<TeacherAssignmentViewModel>(),
                 RequiresGradingAssignments = new List<TeacherAssignmentViewModel>(),
                 UpcomingAssignments = new List<TeacherAssignmentViewModel>(),
-                ProblemList = new List<TeacherProblemViewModel>()
+                ProblemList = new List<TeacherProblemUpdateViewModel>()
             };
 
 

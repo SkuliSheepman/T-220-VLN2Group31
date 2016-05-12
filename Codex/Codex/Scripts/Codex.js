@@ -66,6 +66,72 @@ $(document).ready(function () {
         });
     });
 
-    // Teacher
+    // Download submission
+    $(".submission-download-button").on('click', function (e) {
+        e.preventDefault();
+        var link = $(this).attr("data-action");
+        window.location = link;
+    });
+
+
+    // Account Settings, update name and password
+    $("#birkir").on("click", function () {
+        Materialize.toast("Birkir Birkir!", 2000);
+    });
+    $("#change-name-form").on("submit", function (e) {
+        e.preventDefault();
+        
+        var form = $(this);
+        var formData = $('#FullName').val();
+        if (formData.length <= 0) {
+            Materialize.toast("Name missing!", 2000);
+        }
+        else {
+            console.log(formData);
+            $.ajax({
+                url: form.attr("action"),
+                data: { newName: formData },
+                method: "POST",
+                success: function (responseData) {
+                    if (responseData) {
+                        Materialize.toast("Your name has been changed to \"" + formData + "\"", 4000);
+                    }
+                    else {
+                        Materialize.toast("Something went wrong when trying to change your name", 4000);
+                    }
+                }
+            });
+        }
+    });
+
+    $("#change-password-form").on("submit", function (e) {
+        e.preventDefault();
+        var form = $(this);
+        var nPass = $('#NewPassword').val();
+        var cPass = $('#ConfirmPassword').val();
+        if (nPass.length <= 6) {
+            Materialize.toast("Password too short!", 2000);
+        }
+        else if (nPass != cPass) {
+            Materialize.toast("Your passwords do not match!", 2000);
+        }
+        else {
+            $.ajax({
+                url: form.attr("action"),
+                data: { newPassword: nPass, confirmPassword: cPass },
+                method: "POST",
+                success: function (responseData) {
+                    console.log("Done");
+                    console.log(responseData);
+                    if (responseData) {
+                        Materialize.toast("Your password has been successfully changed!", 2000);
+                    }
+                    else {
+                        Materialize.toast("Something went wrong when trying to change your password", 4000);
+                    }
+                }
+            });
+        }
+    });
 
 });

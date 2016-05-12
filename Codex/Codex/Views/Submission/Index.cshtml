@@ -42,8 +42,8 @@
 
                 <!-- Submission name -->
                 <div class="col s3">
-                    <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
-                        <a href="/Submission/DownloadFile?id=@Model.Id">@Model.FileName</a>
+                    <span data-action="@Url.Action("DownloadFile", "Submission", new { id = @Model.Id })" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
+                        <a>@Model.FileName</a>
                     </span>
                 </div>
 

@@ -259,7 +259,7 @@ namespace Codex.Services
                 Name = problemViewModel.Name,
                 Description = problemViewModel.Description,
                 Filetype = problemViewModel.Filetype,
-                Attachment = problemViewModel.Attachment.FileName,
+                Attachment = problemViewModel.AttachmentName,
                 Language = problemViewModel.Language
             };
 

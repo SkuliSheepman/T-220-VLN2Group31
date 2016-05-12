@@ -16,7 +16,7 @@
                                     <span class="search-criteria">@assignment.Name</span>
                                 </div>
                                 <div class="col s1 left-align">
-                                    <a class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
+                                    <a href="@Url.Action("Assignment", "Student", new { id = @assignment.Id })" class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
                                         <i class="material-icons blue-text">info</i>
                                     </a>
                                 </div>
@@ -87,15 +87,15 @@
                                                             }
                                                             else if (problem.BestSubmission != null) {
                                                                 <a href="#" class="red-text">
-                                                                    <span>
-                                                                    @problem.BestSubmission.FailedTests tests failed
-                                                                </span>
+                                                                    <span class="hide-on-small-and-down">
+                                                                        @problem.BestSubmission.FailedTests tests failed
+                                                                    </span>
                                                                     <span class="material-icons">clear</span>
                                                                 </a>
                                                             }
                                                             else {
                                                                 <a href="#" class="grey-text">
-                                                                    <span>Unattempted</span>
+                                                                    <span class="hide-on-small-and-down">Unattempted</span>
                                                                     <span class="material-icons">remove</span>
                                                                 </a>
                                                             }
@@ -116,8 +116,8 @@
                                                                             <span>@submission.SubmissionTime.ToString()</span>
                                                                         </div>
                                                                         <div class="col s2 truncate">
-                                                                            <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
-                                                                               <i class="material-icons">file_download</i>
+                                                                            <span data-action="@Url.Action("DownloadFile", "Submission", new { id = @submission.Id })" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped stop-propagation" data-position="top" data-delay="30" data-tooltip="Download">
+                                                                                <i class="material-icons">file_download</i>
                                                                             </span>
                                                                         </div>
                                                                         <div class="col s3 status truncate right-align">
@@ -130,17 +130,18 @@
                                                                                 }
                                                                                 else {
                                                                                     <span class="red-text">
-                                                                                        @submission.FailedTests.Value
-                                                                                        tests failed
+                                                                                        <span class="hide-on-small-and-down">
+                                                                                            @submission.FailedTests.Value tests failed
+                                                                                        </span>
                                                                                         <span class="material-icons">clear</span>
                                                                                     </span>
                                                                                 }
                                                                             }
                                                                             else {
-                                                                                <span class="red-text">
-                                                                                    Compile error
-                                                                                    <span class="material-icons">clear</span>
-                                                                                </span>
+                                                                            <span class="red-text">
+                                                                                <span class="hide-on-small-and-down">Compile error</span>
+                                                                                <span class="material-icons">clear</span>
+                                                                            </span>
                                                                             }
                                                                         </div>
                                                                     </a>
@@ -182,7 +183,7 @@
                                     <span class="search-criteria">@assignment.Name</span>
                                 </div>
                                 <div class="col s1 left-align">
-                                    <a class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
+                                    <a href="@Url.Action("Assignment", "Student", new { id = @assignment.Id })" class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
                                         <i class="material-icons blue-text">info</i>
                                     </a>
                                 </div>
@@ -226,7 +227,13 @@
                                                         </div>
                                                         <div class="col s1 m2 grey-text">
                                                             <span class="hide-on-small-and-down">Grade: </span>
-                                                            <span>10</span>
+                                                            <span>
+                                                                @if (problem.BestSubmission != null) { 
+                                                                        if (problem.BestSubmission.Grade.HasValue) {
+                                                                        @problem.BestSubmission.Grade.Value
+                                                                    }
+                                                                }
+                                                            </span>
                                                         </div>
                                                         <div class="col s2 grey-text">
                                                             <span>@problem.Weight%</span>
@@ -243,7 +250,7 @@
                                                             }
                                                             else if (problem.BestSubmission != null) {
                                                                 <a href="#" class="red-text">
-                                                                    <span>
+                                                                    <span class="hide-on-small-and-down">
                                                                         @problem.BestSubmission.FailedTests tests failed
                                                                     </span>
                                                                     <span class="material-icons">clear</span>
@@ -251,7 +258,7 @@
                                                             }
                                                             else {
                                                                 <a href="#" class="grey-text">
-                                                                    <span>Unattempted</span>
+                                                                    <span class="hide-on-small-and-down">Unattempted</span>
                                                                     <span class="material-icons">remove</span>
                                                                 </a>
                                                             }
@@ -273,7 +280,7 @@
                                                                             <span>@submission.SubmissionTime.ToString()</span>
                                                                         </div>
                                                                         <div class="col s2 truncate">
-                                                                            <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
+                                                                            <span data-action="@Url.Action("DownloadFile", "Submission", new { id = @submission.Id })" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
                                                                                 <i class="material-icons">file_download</i>
                                                                             </span>
                                                                         </div>
@@ -289,17 +296,20 @@
                                                                                 }
                                                                                 else {
                                                                                     <span class="red-text">
-                                                                                        @submission.FailedTests.Value
-                                                                                        tests failed
+                                                                                        <span class="hide-on-small-and-down">
+                                                                                            @submission.FailedTests.Value tests failed
+                                                                                        </span>
                                                                                         <span class="material-icons">clear</span>
                                                                                     </span>
+                                                                                    
                                                                                 }
                                                                             }
                                                                             else {
                                                                                 <span class="red-text">
-                                                                                    Compile error
+                                                                                    <span class="hide-on-small-and-down">Compile error</span>
                                                                                     <span class="material-icons">clear</span>
                                                                                 </span>
+                                                                                
                                                                             }
                                                                         </div>
                                                                     </a>
