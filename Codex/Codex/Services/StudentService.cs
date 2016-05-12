@@ -179,5 +179,20 @@ namespace Codex.Services
                 return 0;
             }
         }
+
+        public StudentSubmissionViewModel GetBestSubmission(string studentId, int problemId, int assignmentId)
+        {
+            var bestSubmission = new StudentSubmissionViewModel();
+            var groupSubmissions = GetSubmissionsByAssignmentGroup(studentId, problemId, assignmentId);
+            var sortedSubmissions = new List<StudentSubmissionViewModel>();
+
+            //List is sorted by FailedTests in descending order then by Submission time, fewest failed cases first, in order of submissison time
+            groupSubmissions.OrderByDescending(x => x.FailedTests).ThenBy(x => x.SubmissionTime);
+            
+            //The first submission in the list will be the most recent submission with the fewest failed cases
+            bestSubmission = sortedSubmissions.FirstOrDefault();
+
+            return bestSubmission;
+        }
     }
 }

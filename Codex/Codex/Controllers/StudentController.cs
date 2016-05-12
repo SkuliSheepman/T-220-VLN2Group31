@@ -40,6 +40,7 @@ namespace Codex.Controllers
                 foreach (var problem in assignment.Problems) {
                     problem.Submissions = _studentService.GetSubmissionsByAssignmentGroup(studentId, problem.Id, assignment.Id);
                     problem.IsAccepted = _studentService.IsProblemDone(problem);
+                    problem.BestSubmission = _studentService.GetBestSubmission(studentId, problem.Id, assignment.Id);
                 }
 
                 assignment.TimeRemaining = _studentService.GetAssignmentTimeRemaining(assignment);
