@@ -334,12 +334,14 @@
     <Content Include="Views\Student\Index.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
     <Content Include="Views\Submission\Index.cshtml" />
+    <Content Include="Views\Account\Settings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Data\Attachments\" />
     <Folder Include="Content\Data\Submissions\" />
     <Folder Include="Content\materialize\fonts\roboto\" />
+    <Folder Include="Views\Settings\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

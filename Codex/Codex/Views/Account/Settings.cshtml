@@ -1,0 +1,72 @@
+﻿@model Codex.Models.AccountSettingsViewModel
+@{
+    ViewBag.Title = "Account Settings";
+}
+
+<div class="row">
+    <div class="col s12 center-align">
+        <h2>@ViewBag.Title</h2>
+        <div class="divider"></div>
+    </div>
+</div>
+
+@using (Html.BeginForm("ChangeName", "Account", FormMethod.Post, new { @class = "card-panel col s12 m8 offset-m2 l6 offset-l3", role = "form", id = "change-name-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+    <div class="row">
+        <div class="input-field col s12">
+            <i class="material-icons prefix">account_circle</i>
+            @Html.TextBoxFor(m => m.FullName, new { @class = "validate" })
+            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+            @Html.LabelFor(m => m.FullName, "Full name")
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12 m6 offset-m3">
+            <button class="btn waves-effect waves-light fill-width" type="submit" name="action">
+                Update Name
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("ChangePassword", "Account", FormMethod.Post, new { @class = "card-panel col s12 m8 offset-m2 l6 offset-l3", role = "form", id = "change-password-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+    <div class="row">
+        <div class="input-field col s12">
+            <i class="material-icons prefix">vpn_key</i>
+            @Html.PasswordFor(m => m.NewPassword, new { @class = "validate" })
+            @Html.ValidationMessageFor(m => m.NewPassword, "", new { @class = "text-danger" })
+            @Html.LabelFor(m => m.NewPassword, "New password")
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12">
+            <i class="material-icons prefix">vpn_key</i>
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "validate" })
+            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+            @Html.LabelFor(m => m.ConfirmPassword, "Confirm new password")
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12 m6 offset-m3">
+            <button class="btn waves-effect waves-light fill-width" type="submit" name="action">
+                Update Password
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+    </div>
+}
