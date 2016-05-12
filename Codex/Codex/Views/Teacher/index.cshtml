@@ -1,10 +1,8 @@
 ﻿@model Codex.Models.TeacherViewModel
 @{
     ViewBag.Title = "Teacher overview";
-    ViewBag.UserName = "Teacher";
 }
-
-<div class="section">
+<div class="card-panel">
     <div id="dateFilter" class="row">
         <div class="input-field col s12">
             <select id="date">
@@ -15,10 +13,7 @@
             <label>Select year and semester</label>
         </div>
     </div>
-</div>
-
-<!-- Course Selection -->
-<div class="section">
+    <!-- Course Selection -->
     <div id="teacherCourses" class="row">
         @foreach (var course in Model.TeacherCourses) {
             <div class="col s4">
@@ -30,401 +25,62 @@
 
 <!-- Assignments -->
 @if (Model.CourseSelected.Id != 0) {
-    <!-- Open assignments -->
-    <h2 class="assignment-category-title grey-text text-darken-1">Open</h2>
-    <div class="row">
-        <div class="col s12">
-            @if (Model.CourseSelected.OpenAssignments.Any()) {
-                <ul class="collapsible popout" data-collapsible="accordion">
-                    @foreach (var assignment in Model.CourseSelected.OpenAssignments) {
-                        <li class="grey lighten-2">
-                            <!-- Header -->
-                            <div class="collapsible-header">
-                                <div class="row clear-margin">
-                                    <div class="col s3 truncate">
-                                        <span class="search-criteria">@assignment.Name</span>
-                                    </div>
-                                    <div class="col s3 grey-text truncate center-align">
-                                        <span>@assignment.TimeRemaining</span>
-                                    </div>
-                                    <div class="col s3 grey-text truncate center-align">
-                                        <span class="search-criteria">@Model.CourseSelected.Name</span>
-                                    </div>
-                                    <div class="col s3 grey-text center-align hide-on-med-and-down">
-                                        <span>@assignment.NumberOfProblems</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Problems -->
-                            <div class="collapsible-body">
-                                <div class="collapsible-body-container">
-                                    @if (assignment.Problems.Any()) {
-                                        <ul class="collapsible" data-collapsible="accordion">
-                                            @foreach (var problem in assignment.Problems) {
-                                                <li class="grey lighten-1">
-                                                    <!-- Problem header -->
-                                                    <div class="collapsible-header">
-                                                        <div class="row clear-margin">
-                                                            <!-- Problem name -->
-                                                            <div class="col s4 truncate">
-                                                                <span class="search-criteria">@problem.Name</span>
-                                                            </div>
-
-                                                            <!-- Problem weight -->
-                                                            <div class="col s1 grey-text">
-                                                                <span>@problem.Weight%</span>
-                                                            </div>
-
-                                                            <!-- Number of submissions -->
-                                                            <div class="col s5 grey-text">
-                                                                <span>@problem.Groups.Count </span>
-                                                                <span>submissions</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Student/Group list -->
-                                                    <div class="collapsible-body">
-                                                        <div class="collapsible-body-container">
-                                                            @if (problem.Groups.Any()) {
-                                                                <!-- Legend -->
-                                                                <div class="row">
-                                                                    <div class="col s3">
-                                                                        @if (assignment.MaxCollaborators == 0) {
-                                                                            <span>Student</span>
-                                                                        }
-                                                                        else {
-                                                                            <span>Group</span>
-                                                                        }
-                                                                    </div>
-                                                                    <div class="col s5">
-                                                                        <span>Last submission</span>
-                                                                    </div>
-                                                                    <div class="col s2">
-                                                                        <span>Grade</span>
-                                                                    </div>
-                                                                    <div class="col s2">
-                                                                        <span>Status</span>
-                                                                    </div>
-                                                                </div>
-                                                                <ul class="collapsible" data-collapsible="accordion">
-                                                                    @foreach (var group in problem.Groups) {
-                                                                        <li class="grey">
-                                                                            <!-- Group header -->
-                                                                            <div class="collapsible-header">
-                                                                                <div class="row clear-margin">
-                                                                                    <!-- Group -->
-                                                                                    <div class="col s3 truncate">
-                                                                                        @if (assignment.MaxCollaborators == 0) {
-                                                                                            <span>@group.Names[0]</span>
-                                                                                        }
-                                                                                        else {
-                                                                                            <span>
-                                                                                            @{ var last = group.Names.Last(); }
-                                                                                            @foreach (var student in group.Names) {
-                                                                                                if (student.Equals(last)) {
-                                                                                                    @student
-                                                                                                }
-                                                                                                else {
-                                                                                                    @student
-                                                                                                    @:,
-                                                                                                }
-                                                                                            }
-                                                                                        </span>
-                                                                                        }
-                                                                                    </div>
-
-                                                                                    <!-- Last submission -->
-                                                                                    <div class="col s3 grey-text truncate">
-                                                                                        <span>@group.Submissions[0].SubmissionTime</span>
-                                                                                    </div>
-
-                                                                                    <!-- Download best -->
-                                                                                    <div class="col s2">
-                                                                                        <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download best submission">
-                                                                                        <i class="material-icons">file_download</i>
-                                                                                    </span>
-                                                                                    </div>
-
-                                                                                    <!-- Best submission status -->
-                                                                                    <div class="col s2 truncate status">
-                                                                                        @if (group.BestSubmission.FailedTests.HasValue) {
-                                                                                            if (group.BestSubmission.FailedTests.Value == 0) {
-                                                                                                <span class="green-text">
-                                                                                                <span class="hide-on-small-and-down">Accepted</span>
-                                                                                                <span class="material-icons">done</span>
-                                                                                            </span>
-                                                                                            }
-                                                                                            else {
-                                                                                                <span class="red-text">
-                                                                                                @group.BestSubmission.FailedTests.Value
-                                                                                                tests failed
-                                                                                                <span class="material-icons">clear</span>
-                                                                                            </span>
-                                                                                            }
-                                                                                        }
-                                                                                        else {
-                                                                                            <span class="red-text">
-                                                                                            Compile error
-                                                                                            <span class="material-icons">clear</span>
-                                                                                        </span>
-                                                                                        }
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    }
-                                                                </ul>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            }
-                                        </ul>
-                                    }
-                                </div>
-                            </div>
-                        </li>
-                    }
-                </ul>
-            }
-        </div>
-    </div>
-
     <!-- Required grading assignments -->
     <h2 class="assignment-category-title grey-text text-darken-1">Requires grading</h2>
     <div class="row">
         <div class="col s12">
             @if (Model.CourseSelected.RequiresGradingAssignments.Any()) {
-                <ul class="collapsible popout" data-collapsible="accordion">
-                    @foreach (var assignment in Model.CourseSelected.RequiresGradingAssignments) {
-                        <li class="grey lighten-2">
-                            <!-- Header -->
-                            <div class="collapsible-header">
-                                <div class="row clear-margin">
-                                    <div class="col s3 truncate">
-                                        <span class="search-criteria">@assignment.Name</span>
-                                    </div>
-                                    <div class="col s3 grey-text truncate center-align">
-                                        <span>@assignment.TimeRemaining</span>
-                                    </div>
-                                    <div class="col s3 grey-text truncate center-align">
-                                        <span class="search-criteria">@Model.CourseSelected.Name</span>
-                                    </div>
-                                    <div class="col s3 grey-text center-align hide-on-med-and-down">
-                                        <span>@assignment.NumberOfProblems</span>
-                                    </div>
-                                </div>
-                            </div>
+                @Html.Partial("AssignmentListPartial", Model.CourseSelected.RequiresGradingAssignments)
+            }
+            else {
+                <div>
+                    <p>There are no assignments that require grading.</p>
+                </div>
+            }
+        </div>
+    </div>
 
-                            <!-- Problems -->
-                            <div class="collapsible-body">
-                                <div class="collapsible-body-container">
-                                    @if (assignment.Problems.Any()) {
-                                        <ul class="collapsible" data-collapsible="accordion">
-                                            @foreach (var problem in assignment.Problems) {
-                                                <li class="grey lighten-1">
-                                                    <!-- Problem header -->
-                                                    <div class="collapsible-header">
-                                                        <div class="row clear-margin">
-                                                            <!-- Problem name -->
-                                                            <div class="col s4 truncate">
-                                                                <span class="search-criteria">@problem.Name</span>
-                                                            </div>
+    <!-- Open assignments -->
+    <h2 class="assignment-category-title grey-text text-darken-1">Open</h2>
+    <div class="row">
+        <div class="col s12">
+            @if (Model.CourseSelected.OpenAssignments.Any()) {
+                @Html.Partial("AssignmentListPartial", Model.CourseSelected.OpenAssignments)
+            }
+            else {
+                <div>
+                    <p>There are no open assignments.</p>
+                </div>
+            }
+        </div>
+    </div>
 
-                                                            <!-- Problem weight -->
-                                                            <div class="col s1 grey-text">
-                                                                <span>@problem.Weight%</span>
-                                                            </div>
+    <!-- Upcoming assignments -->
+    <h2 class="assignment-category-title grey-text text-darken-1">Upcoming</h2>
+    <div class="row">
+        <div class="col s12">
+            @if (Model.CourseSelected.UpcomingAssignments.Any()) {
+                @Html.Partial("AssignmentListPartial", Model.CourseSelected.UpcomingAssignments)
+            }
+            else {
+                <div>
+                    <p>There are no upcoming assignments.</p>
+                </div>
+            }
+        </div>
+    </div>
 
-                                                            <!-- Number of submissions -->
-                                                            <div class="col s5 grey-text">
-                                                                <span>@problem.Groups.Count </span>
-                                                                <span>submissions</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Student/Group list -->
-                                                    <div class="collapsible-body">
-                                                        @if (problem.Groups.Any()) {
-                                                            <!-- Legend -->
-                                                            <div class="row clear-margin">
-                                                                <div class="teacher-legend center-align">
-                                                                    <div class="col s3 m3 truncate">
-                                                                        @if (assignment.MaxCollaborators == 0)
-                                                                        {
-                                                                            <span>Student</span>
-                                                                        }
-                                                                        else {
-                                                                            <span>Group</span>
-                                                                        }
-                                                                    </div>
-                                                                    <div class="col s4 truncate hide-on-small-and-down">
-                                                                        <span>Last submission</span>
-                                                                    </div>
-                                                                    <div class="col s6 m2 truncate">
-                                                                        <span>Grade</span>
-                                                                    </div>
-                                                                    <div class="col s3 truncate">
-                                                                        <span>Status</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="collapsible-body-container">
-
-                                                                <ul class="collapsible" data-collapsible="accordion">
-                                                                    @foreach (var group in problem.Groups) {
-                                                                        <li class="grey">
-                                                                            <!-- Group header -->
-                                                                            <div class="collapsible-header">
-                                                                                <div class="row clear-margin">
-                                                                                    <!-- Group -->
-                                                                                    <div class="col s3 truncate">
-                                                                                        @if (assignment.MaxCollaborators == 0) {
-                                                                                            <span>@group.Names[0]</span>
-                                                                                        }
-                                                                                        else {
-                                                                                            <span>
-                                                                                            @{ var last = group.Names.Last(); }
-                                                                                            @foreach (var student in group.Names) {
-                                                                                                if (student.Equals(last)) {
-                                                                                                    @student
-                                                                                                }
-                                                                                                else {
-                                                                                                    @student
-                                                                                                    @:,
-                                                                                                }
-                                                                                            }
-                                                                                        </span>
-                                                                                        }
-                                                                                    </div>
-
-                                                                                    <!-- Last submission -->
-                                                                                    <div class="col s2 m3 grey-text truncate hide-on-small-and-down">
-                                                                                        <span>@group.Submissions[0].SubmissionTime</span>
-                                                                                    </div>
-
-                                                                                    <!-- Download best -->
-                                                                                    <div class="col s2 m1 center-align">
-                                                                                        <span class="waves-effect waves-light-blue btn-flat blue-text light-blue lighten-5 submission-download-button narrow-button fill-width center-icon tooltipped" data-position="top" data-delay="30" data-tooltip="Download best submission">
-                                                                                            <span class="material-icons">file_download</span>
-                                                                                        </span>
-                                                                                    </div>
-
-                                                                                    <!-- Grading -->
-                                                                                    <div class="col s5 m3 center-align">
-                                                                                        <form class="row clear-margin">
-                                                                                            <div class="input-field col s6 clear-margin">
-                                                                                                <input type="number" id="grade-@group.BestSubmission.Id" name="grade-@group.BestSubmission.Id" class="grade-input" placeholder="Grade"/>
-                                                                                            </div>
-
-                                                                                            <div class="col s6 clear-margin">
-                                                                                                <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button center-align center-icon fill-width tooltipped" data-position="top" data-delay="30" data-tooltip="Grade">
-                                                                                                    <span class="material-icons">send</span>
-                                                                                                </span>
-                                                                                            </div>
-                                                                                        </form>
-                                                                                    </div>
-
-                                                                                    <!-- Best submission status -->
-                                                                                    <div class="col s2 truncate status right-align">
-                                                                                        @if (group.BestSubmission.FailedTests.HasValue) {
-                                                                                            if (group.BestSubmission.FailedTests.Value == 0) {
-                                                                                                <span class="green-text truncate">
-                                                                                                    <span class="hide-on-small-and-down">Accepted</span>
-                                                                                                    <span class="material-icons">done</span>
-                                                                                                </span>
-                                                                                            }
-                                                                                            else {
-                                                                                                <span class="red-text truncate">
-                                                                                                    <span class="hide-on-small-and-down">
-                                                                                                    @group.BestSubmission.FailedTests.Value
-                                                                                                    tests failed
-                                                                                                    </span>
-                                                                                                    <span class="material-icons">clear</span>
-                                                                                                </span>
-                                                                                            }
-                                                                                        }
-                                                                                        else {
-                                                                                            <span class="red-text truncate">
-                                                                                                <span class="hide-on-small-and-down">
-                                                                                                    Compile error
-                                                                                                </span>
-                                                                                                <span class="material-icons">clear</span>
-                                                                                            </span>
-                                                                                        }
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <!-- Submission -->
-                                                                            <div class="collapsible-body">
-                                                                                @if (group.Submissions.Any()) {
-                                                                                    <div class="collapsible-body-container">
-                                                                                        <div class="collection z-depth-1">
-                                                                                            @foreach (var submission in group.Submissions)
-                                                                                            {
-                                                                                                <a href="@Url.Action("Index", "Submission", new { id = submission.Id })" class="collection-item row">
-                                                                                                    <div class="col s4 truncate">
-                                                                                                        <span>@submission.OriginalFilename</span>
-                                                                                                    </div>
-                                                                                                    <div class="col s3 grey-text truncate">
-                                                                                                        <span>@submission.SubmissionTime.ToString()</span>
-                                                                                                    </div>
-                                                                                                    <div class="col s2 truncate">
-                                                                                                        <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
-                                                                                                            <i class="material-icons">file_download</i>
-                                                                                                        </span>
-                                                                                                    </div>
-                                                                                                    <div class="col s3 status truncate right-align">
-                                                                                                        @if (submission.FailedTests.HasValue)
-                                                                                                        {
-                                                                                                            if (submission.FailedTests.Value == 0)
-                                                                                                            {
-                                                                                                                <span class="green-text">
-                                                                                                                    <span class="hide-on-small-and-down">Accepted</span>
-                                                                                                                    <span class="material-icons">done</span>
-                                                                                                                </span>
-                                                                                                            }
-                                                                                                            else {
-                                                                                                                <span class="red-text">
-                                                                                                                    @submission.FailedTests.Value
-                                                                                                                    tests failed
-                                                                                                                    <span class="material-icons">clear</span>
-                                                                                                                </span>
-                                                                                                            }
-                                                                                                        }
-                                                                                                        else {
-                                                                                                            <span class="red-text">
-                                                                                                                Compile error
-                                                                                                                <span class="material-icons">clear</span>
-                                                                                                            </span>
-                                                                                                        }
-                                                                                                    </div>
-                                                                                                </a>
-                                                                                            }
-                                                                                        </div>
-                                                                                    </div>
-                                                                                }
-                                                                            </div>
-                                                                        </li>
-                                                                    }
-                                                                </ul>
-
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                </li>
-                                            }
-                                        </ul>
-                                    }
-                                </div>
-                            </div>
-                        </li>
-                    }
-                </ul>
+    <!-- Closed assignments -->
+    <h2 class="assignment-category-title grey-text text-darken-1">Closed</h2>
+    <div class="row">
+        <div class="col s12">
+            @if (Model.CourseSelected.ClosedAssignments.Any()) {
+                @Html.Partial("AssignmentListPartial", Model.CourseSelected.ClosedAssignments)
+            }
+            else {
+                <div>
+                    <p>There are no closed assignments.</p>
+                </div>
             }
         </div>
     </div>
@@ -437,7 +93,7 @@
     </a>
     <ul>
         <li>
-            <a id="new-assignment-modal-button" class="btn-floating red tooltipped" data-position="left" data-delay="50" data-tooltip="New assignment">
+            <a id="new-assignment-modal-button" class="modal-trigger btn-floating red tooltipped" href="#new-assignment-modal" data-position="left" data-delay="50" data-tooltip="New assignment">
                 <i class="material-icons">assignment_late</i>
             </a>
         </li>
@@ -449,35 +105,154 @@
     </ul>
 </div>
 
-<div id="new-problem-modal" class="modal">
+<!-- New problem modal -->
+<div id="new-problem-modal" class="modal modal-fixed-footer">
     <div class="modal-content">
         <h4 class="center-align">New problem</h4>
         <div class="divider"></div>
-        <form class="col s12">
+
+        @using (Html.BeginForm("NewProblem", "Teacher", FormMethod.Post, new {@id = "create-problem-form", role = "form"})) {
+            @Html.AntiForgeryToken()
+
             <div class="row">
                 <div class="input-field col s12">
-                    <input id="problem-name" type="text" class="validate">
-                    <label for="problem-description">Name</label>
+                    <i class="material-icons prefix">title</i>
+                    <input id="new-problem-name" name="new-problem-name" type="text" class="validate"/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-name" data-valmsg-replace="true"></span>
+                    <label for="new-problem-name">Name</label>
                 </div>
             </div>
+
             <div class="row">
                 <div class="input-field col s12">
-                    <textarea id="problem-description" class="materialize-textarea"></textarea>
-                    <label for="problem-description">Description</label>
+                    <i class="material-icons prefix">email</i>
+                    <textarea id="new-problem-description" name="new-problem-description" class="materialize-textarea"></textarea>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-description" data-valmsg-replace="true"></span>
+                    <label for="new-problem-description">Description</label>
                 </div>
             </div>
+
             <div class="row">
-                <div class="col s6">
-
+                <div class="input-field col s12 m4">
+                    <i class="material-icons prefix">email</i>
+                    <input id="new-problem-course" name="new-problem-course" type="text" class="validate disabled" disabled value="@Model.CourseSelected.Name"/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-course" data-valmsg-replace="true"></span>
+                    <label for="new-problem-course">Course</label>
                 </div>
-                <div class="col s6">
 
+                <div class="input-field col s12 m4">
+                    <i class="material-icons prefix">email</i>
+                    <input id="new-problem-language" name="new-problem-language" type="text" class="validate"/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-language" data-valmsg-replace="true"></span>
+                    <label for="new-problem-language">Language</label>
+                </div>
+
+                <div class="input-field col s12 m4">
+                    <i class="material-icons prefix">email</i>
+                    <input id="new-problem-filetype" name="new-problem-filetype" type="text" class="validate"/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-filetype" data-valmsg-replace="true"></span>
+                    <label for="new-problem-filetype">Allowed filetype</label>
                 </div>
             </div>
-        </form>
-        <div class="modal-footer">
-            <a id="new-problem-modal-create-button" href="#!" class="btn-flat">Create</a>
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-        </div>
+
+            <div class="row">
+                <div class="file-field input-field col s12">
+                    <div class="btn">
+                        <span>Attachment</span>
+                        <input type="file" name="new-problem-attachment" id="new-problem-attachment"/>
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h6>Test cases</h6>
+
+            <div class="card-panel new-problem-input">
+                <i class="material-icons red-text">clear</i>
+                <p>Input</p>
+                <textarea class="materialize-textarea"></textarea>
+
+                <p>Output</p>
+                <textarea class="materialize-textarea"></textarea>
+            </div>
+
+            <a class="btn-floating btn-large waves-effect waves-light blue right tooltipped" data-position="left" data-delay="50" data-tooltip="Add another input/output pair">
+                <i class="material-icons">add</i>
+            </a>
+            
+        }
+    </div>
+    <div class="modal-footer">
+        <a id="new-problem-modal-create-button" href="#" class="btn-flat">Create</a>
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+    </div>
+</div>
+
+<!-- New assignment modal -->
+<div id="new-assignment-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4 class="center-align">New assignment</h4>
+        <div class="divider"></div>
+
+        @using (Html.BeginForm("NewAssignment", "Teacher", FormMethod.Post, new { @id = "create-assignment-form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">title</i>
+                    <input id="new-assignment-name" name="new-assignment-name" type="text" class="validate" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-assignment-name" data-valmsg-replace="true"></span>
+                    <label for="new-assignment-name">Name</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">email</i>
+                    <textarea id="new-assignment-description" name="new-assignment-description" class="materialize-textarea"></textarea>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-assignment-description" data-valmsg-replace="true"></span>
+                    <label for="new-assignment-description">Description</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s4">
+                    <label for="new-assignment-start-date">Open date</label>
+                    <input type="date" class="datepicker" id="new-assignment-start-date" name="new-assignment-start-date"/>
+                </div>
+
+                <div class="input-field col s4">
+                    <label for="new-assignment-start-date">Due date</label>
+                    <input type="date" class="datepicker" id="new-assignment-end-date" name="new-assignment-end-date"/>
+                </div>
+
+                <div class="input-field col s4">
+                    <input type="number" min="0" id="new-assignment-collaborators" name="new-assignment-collaborators"/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="new-assignment-collaborators" data-valmsg-replace="true"></span>
+                    <label for="new-assignment-collaborators">Max collaborators</label>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h6>Problems</h6>
+            
+
+
+            <a class="btn-floating btn-large waves-effect waves-light blue right tooltipped" data-position="left" data-delay="50" data-tooltip="Add another problem">
+                <i class="material-icons">add</i>
+            </a>
+
+            <input type="hidden" id="new-assignment-course" value="@Model.CourseSelected.Id" />
+        }
+    </div>
+    <div class="modal-footer">
+        <a id="new-assignment-modal-create-button" href="#" class="btn-flat">Create</a>
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
     </div>
 </div>

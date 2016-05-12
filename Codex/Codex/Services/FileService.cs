@@ -67,7 +67,7 @@ namespace Codex.Services
                 Directory.CreateDirectory(uploadPath);
             }
 
-            var fileName = uploadPath + Path.GetExtension(file.FileName);
+            var fileName = uploadPath + problemId + Path.GetExtension(file.FileName);
 
             file.SaveAs(fileName);
 
@@ -263,5 +263,7 @@ namespace Codex.Services
                 response.End();
             }
         }
+
+
     }
 }

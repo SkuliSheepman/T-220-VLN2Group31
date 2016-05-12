@@ -25,18 +25,18 @@ namespace Codex.Services
         /// Create a course from given NewCourseViewModel
         /// </summary>
         public bool CreateCourse(AdminNewCourseViewModel newCourseViewModel) {
-            var _course = _db.Courses.SingleOrDefault(x => x.Name == newCourseViewModel.Name);
-            Course newCourse = new Course() {
+            var course = _db.Courses.SingleOrDefault(x => x.Name == newCourseViewModel.Name);
+            Course newCourse = new Course {
                 Name = newCourseViewModel.Name,
                 Description = newCourseViewModel.Description
             };
 
-            if (_course == null) {
-                _course = _db.Courses.Add(newCourse);
+            if (course == null) {
+                course = _db.Courses.Add(newCourse);
             }
 
             CourseInstance newCourseInstance = new CourseInstance() {
-                CourseId = _course.Id,
+                CourseId = course.Id,
                 Year = newCourseViewModel.Year,
                 SemesterId = newCourseViewModel.Semester
             };
@@ -347,6 +347,17 @@ namespace Codex.Services
             }
 
             return teacherCourses;
+        }
+
+        public int GetCourseIdByCourseName(string name) {
+            var course = _db.Courses.SingleOrDefault(x => x.Name == name);
+
+            if (course != null) {
+                return course.Id;
+            }
+            else {
+                return 0;
+            }
         }
     }
 }
