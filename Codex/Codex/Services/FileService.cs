@@ -7,16 +7,19 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI.WebControls;
+using System.Net;
+using Codex.Models;
 
 namespace Codex.Services
 {
     public class FileService
     {
         private readonly Database _db;
-        private AssignmentService _assignmentService;
+        private readonly StudentService _studentService;
 
         public FileService() {
             _db = new Database();
+            _studentService = new StudentService();
         }
 
         /// <summary>
@@ -200,6 +203,61 @@ namespace Codex.Services
             foreach (var file in files) {
                 File.SetAttributes(file, FileAttributes.Normal);
                 File.Delete(file);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void DownloadSubmission(string userid, int? submissionId)
+        {
+            if (submissionId.HasValue)
+            {
+                var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
+                if (submission != null)
+                {
+                    var groupSubmissions = _studentService.GetSubmissionsByAssignmentGroup(userid, submission.ProblemId, submission.AssignmentId);
+                    if (true) // check if user is related to the submission group
+                    {
+                        var path = GetSubmissionsPath() +
+                                   submission.AssignmentId + "\\" +
+                                   submission.ProblemId + "\\" +
+                                   submission.Id + "\\" +
+                                   submission.Id + "." + submission.Problem.Filetype;
+
+                        DownloadFile(path, submission.OriginalFileName);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void DownloadAttachment(string userid, int? attachmentId)
+        {
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void DownloadFile(string path, string originalFileName)
+        {
+            string filePath = path;
+            FileInfo file = new FileInfo(filePath);
+            if (file.Exists)
+            {
+                WebClient req = new WebClient();
+                HttpResponse response = HttpContext.Current.Response;
+                response.Clear();
+                response.ClearContent();
+                response.ClearHeaders();
+                response.Buffer = true;
+                response.AddHeader("Content-Disposition", "attachment;filename=\"" + originalFileName + "\"");
+                byte[] data = req.DownloadData(filePath);
+                response.BinaryWrite(data);
+                response.End();
             }
         }
     }

@@ -12,10 +12,14 @@ namespace Codex.Controllers
     public class SubmissionController : Controller
     {
         private readonly SubmissionService _submissionService;
+        private readonly FileService _fileService;
+        private readonly UserService _userService;
 
         public SubmissionController()
         {
             _submissionService = new SubmissionService();
+            _fileService = new FileService();
+            _userService = new UserService();
         }
 
         // GET: Submission
@@ -33,6 +37,12 @@ namespace Codex.Controllers
             else {
                 return RedirectToAction("Index", "Student");
             }
+        }
+
+        // GET: File
+        public void DownloadFile(int? id)
+        {
+            _fileService.DownloadSubmission(_userService.GetUserIdByName(User.Identity.Name), id);
         }
     }
 }
