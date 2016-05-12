@@ -94,6 +94,11 @@ namespace Codex.Controllers
             return Json(false);
         }
 
+        public ActionResult GradeSubmission(double grade, int submissionId)
+        {
+            return Json(false);
+        }
+
         public ActionResult UpdateProblem(TeacherProblemUpdateViewModel problem) {
             return Json(_teacherService.UpdateProblem(problem));
         }

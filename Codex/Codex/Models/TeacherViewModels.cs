@@ -80,4 +80,31 @@ namespace Codex.Models
         public int? FailedTests { get; set; }
         public double? SubmissionGrade { get; set; }
     }
+    public class TeacherCreateAssignmentViewModel
+    {
+        public int CourseInstanceId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public int MaxCollaborators { get; set; }
+        public List<int> AssignmentProblems { get; set; }
+    }
+
+    public class TeacherCreateProblemViewModel
+    {
+        public int CourseId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Filetype { get; set; }
+        public string Attachment { get; set; }
+        public string Language { get; set; }
+        public List<TeacherCreateTestCaseViewModel> testCases { get; set; }
+    }
+    public class TeacherCreateTestCaseViewModel
+    {
+        public int ProblemId { get; set; }
+        public string Input { get; set; }
+        public string ExpectedOutput { get; set; }
+    }
 }
