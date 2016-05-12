@@ -210,10 +210,10 @@ namespace Codex.Services
         /// Download a submission
         /// Unfinished
         /// </summary>
-        public void DownloadSubmission(string userid, int? submissionId)
+        public void DownloadSubmission(string userid, int submissionId)
         {
             var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userid);
-            if (submissionId.HasValue && user != null)
+            if (user != null)
             {
                 var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
                 if (submission != null)
@@ -244,10 +244,10 @@ namespace Codex.Services
         /// Download an attachment
         /// Unfinished
         /// </summary>
-        public void DownloadAttachment(string userid, int? problemid)
+        public void DownloadAttachment(string userid, int problemid)
         {
             var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userid);
-            if (problemid.HasValue && user != null)
+            if (user != null)
             {
                 var problem = _db.Problems.SingleOrDefault(x => x.Id == problemid);
                 if (problem != null)
