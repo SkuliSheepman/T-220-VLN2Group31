@@ -244,9 +244,36 @@ namespace Codex.Services
         /// Download an attachment
         /// Unfinished
         /// </summary>
-        public void DownloadAttachment(string userid, int? attachmentId)
+        public void DownloadAttachment(string userid, int? problemid)
         {
+            var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userid);
+            if (problemid.HasValue && user != null)
+            {
+                var problem = _db.Problems.SingleOrDefault(x => x.Id == problemid);
+                if (problem != null)
+                {
+                    var assignment = (from assign in _db.Assignments
+                                      join relation in _db.AssignmentProblems
+                                      on assign.Id equals relation.AssignmentId
+                                      where relation.ProblemId == problemid
+                                      select assign).SingleOrDefault();
 
+                    if (assignment != null)
+                    {
+                        if (user.CourseInstances.Contains(assignment.CourseInstance))
+                        {
+                            if (problem.Attachment != null)
+                            {
+                                var path = GetAttachmentsPath() +
+                                       problem.Id + "\\" +
+                                       problem.Id + "." + problem.Attachment.Split('.')[1];
+
+                                DownloadFile(path, problem.Attachment);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
