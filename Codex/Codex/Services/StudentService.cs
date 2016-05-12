@@ -179,20 +179,26 @@ namespace Codex.Services
                 return 0;
             }
         }
-
-        public StudentSubmissionViewModel GetBestSubmission(string studentId, int problemId, int assignmentId)
-        {
+        
+        /// <summary>
+        /// Get the most recent submisssion with the fewest failed cases, or null if there are no submissions
+        /// </summary>
+        public StudentSubmissionViewModel GetBestSubmission(List<StudentSubmissionViewModel> groupSubmissions) {
             var bestSubmission = new StudentSubmissionViewModel();
-            var groupSubmissions = GetSubmissionsByAssignmentGroup(studentId, problemId, assignmentId);
-            var sortedSubmissions = new List<StudentSubmissionViewModel>();
+            if (groupSubmissions.Count != 0) {
+                //List is sorted by FailedTests (Null last) then by Submission time, fewest failed cases first, in order of submissison time
+                groupSubmissions = groupSubmissions.OrderByDescending(x => x.FailedTests.HasValue)
+                                                   .ThenBy(x => x.FailedTests)
+                                                   .ThenByDescending(x => x.SubmissionTime)
+                                                   .ToList();
 
-            //List is sorted by FailedTests in descending order then by Submission time, fewest failed cases first, in order of submissison time
-            groupSubmissions.OrderByDescending(x => x.FailedTests).ThenBy(x => x.SubmissionTime);
-            
-            //The first submission in the list will be the most recent submission with the fewest failed cases
-            bestSubmission = sortedSubmissions.FirstOrDefault();
+                //The first submission in the list will be the most recent submission with the fewest failed cases
+                bestSubmission = groupSubmissions.First();
 
-            return bestSubmission;
+                return bestSubmission;
+            }
+            //if there are no submissions, return null
+            else return null;
         }
     }
 }
