@@ -56,6 +56,11 @@ namespace Codex.Controllers
             return View(model);
         }
 
+        public ActionResult Assignment(int? id)
+        {
+            return View();
+        }
+
         public ActionResult Submit(HttpPostedFileBase file, int? assignmentId, int? problemId) {
             if (file != null && 0 < file.ContentLength && assignmentId.HasValue && problemId.HasValue) {
                 var userId = _userService.GetUserIdByName(User.Identity.Name);
