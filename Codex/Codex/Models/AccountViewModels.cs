@@ -112,5 +112,7 @@ namespace Codex.Models
     public class AccountSettingsViewModel
     {
         public string FullName { get; set; }
+        public string NewPassword { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }
