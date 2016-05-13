@@ -86,19 +86,13 @@
                     contentType: false,
                     success: function (responseData) {
                         status.empty();
-                        if (responseData === "success") {
+                        console.log(responseData);
+                        if (responseData) {
                             Materialize.toast("Submission has been evaluated", 4000);
-                        }
-                        else if (responseData === "max") {
-                            Materialize.toast("Sorry! You've reached the maximum submissions for this problem :(", 4000);
-                        }
-                        else if(responseData) {
-                            Materialize.toast("Oh noes, something went wrong: " + responseData + "-error", 4000);
                         }
                         else {
                             Materialize.toast("Oh noes, something went wrong :(", 4000);
                         }
-
                     },
                     error: function (xhr) {
                         status.empty();
@@ -121,5 +115,67 @@
         submitButton.tooltip("remove");
         submitButton.removeClass("disabled grey lighten-4", 1000, "easeInBack");
         submitButton.addClass("waves-effect waves-light-blue blue-text light-blue lighten-5");
+    });
+
+    // Leave assignment group
+    $(".leave-assignment-group").on('click', function (e) {
+
+        var assignmentId = $("#assignmentid").html();
+
+        var formData = {
+            "assignmentId":assignmentId
+        }
+        
+        $.ajax({
+            url: "/Student/LeaveAssignmentGroup",
+            data: JSON.stringify(formData),
+            method: "POST",
+            contentType: "application/json",
+            success: function (responseData) {
+                if (responseData) {
+                    window.location.reload();
+                }
+                else {
+                    Materialize.toast("An error occurred", 4000);
+                }
+
+            },
+            error: function () {
+                Materialize.toast("Something awful happened :(", 4000);
+            }
+        });
+
+    });
+
+    // Add user to group
+    $(".add-user-to-group-button").on('click', function (e) {
+
+        var formData = {
+
+            "userId": $("#loners").val(),
+            "assignmentId": $("#assignmentid").html(),
+            "groupId": $("#groupid").html()
+
+        }
+
+        $.ajax({
+            url: "/Student/AssignUserToGroup",
+            data: JSON.stringify(formData),
+            method: "POST",
+            contentType: "application/json",
+            success: function (responseData) {
+                if (responseData) {
+                    window.location.reload();
+                }
+                else {
+                    Materialize.toast("An error occurred", 4000);
+                }
+
+            },
+            error: function () {
+                Materialize.toast("Something awful happened :(", 4000);
+            }
+        });
+
     });
 });

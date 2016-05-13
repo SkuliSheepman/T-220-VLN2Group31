@@ -54,6 +54,7 @@ namespace Codex.Controllers
             };
 
             ViewBag.UserName = User.Identity.Name;
+            ViewBag.UserId = _userService.GetUserIdByName(User.Identity.Name);
             return View(model);
         }
 
@@ -82,6 +83,7 @@ namespace Codex.Controllers
 
                 ViewBag.UserName = User.Identity.Name;
                 ViewBag.UserId = _userService.GetUserIdByName(User.Identity.Name);
+                ViewBag.Loners = _studentService.GetLonelyCollaboratorsInCourseInstance(assignment.Id);
                 return View(assignment);
 
             }
@@ -130,12 +132,37 @@ namespace Codex.Controllers
         }
 
         // GET: File
-        public void DownloadAttachmentFile(int? problemid, int? assignmentid)
+        public void DownloadAttachmentFile(int? problemId, int? assignmentId)
         {
             var name = User.Identity.Name;
-            if (problemid.HasValue && assignmentid.HasValue)
+            if (problemId.HasValue && assignmentId.HasValue)
             {
-                _fileService.DownloadAttachment(_userService.GetUserIdByName(User.Identity.Name), problemid.Value, assignmentid.Value);
+                _fileService.DownloadAttachment(_userService.GetUserIdByName(User.Identity.Name), problemId.Value, assignmentId.Value);
+            }
+        }
+
+        // Leave group
+        public ActionResult LeaveAssignmentGroup(int? assignmentId)
+        {
+            if (assignmentId.HasValue)
+            {
+                return Json(_studentService.AssignUserToGroup(_userService.GetUserIdByName(User.Identity.Name), assignmentId.Value));
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
+
+        // Add user to assignment group
+        public ActionResult AssignUserToGroup(string userId, int? assignmentId, int? groupId)
+        {
+            if (userId != null && assignmentId.HasValue && groupId.HasValue)
+            {
+                return Json(_studentService.AssignUserToGroup(userId, assignmentId.Value, groupId.Value));
+            } else
+            {
+                return Json(true);
             }
         }
     }
