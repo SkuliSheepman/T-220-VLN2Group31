@@ -594,7 +594,7 @@ namespace Codex.Services
 
                 // Remove all submissions for the assignment
 
-                foreach(var submission in _db.Submissions.Where(x => x.AssignmentId == assignmentId)) {
+                foreach (var submission in _db.Submissions.Where(x => x.AssignmentId == assignmentId)) {
                     RemoveSubmissionFromAssignmentById(assignmentId);
                 }
 
@@ -628,12 +628,9 @@ namespace Codex.Services
         /// <summary>
         /// Deletes all submissions for a specific assignment, used when deleteng an assignment from the database
         /// </summary>
-        /// <param name=""></param>
-        /// <returns></returns>
-        public bool RemoveSubmissionFromAssignmentById(int assignmentId)
-        {
+        public bool RemoveSubmissionFromAssignmentById(int assignmentId) {
             // Remove all testResults from submission
-            foreach(var testResult in _db.TestResults.Where(x => x.Submission.AssignmentId == assignmentId)) {
+            foreach (var testResult in _db.TestResults.Where(x => x.Submission.AssignmentId == assignmentId)) {
                 RemoveTestResultFromSubmissionById(testResult.SubmissionId);
             }
 
@@ -651,10 +648,7 @@ namespace Codex.Services
         /// <summary>
         /// Deletes all Test results connected to a submission. Used when deleting submission from the database
         /// </summary>
-        /// <param name="submissionId"></param>
-        /// <returns></returns>
-        public bool RemoveTestResultFromSubmissionById(int submissionId)
-        {
+        public bool RemoveTestResultFromSubmissionById(int submissionId) {
             _db.TestResults.RemoveRange(_db.TestResults.Where(x => x.SubmissionId == submissionId));
 
             try {
@@ -665,10 +659,10 @@ namespace Codex.Services
                 return false;
             }
         }
+
         /// <summary>
         /// Delete a problem from the database via it's Id
         /// </summary>
-
         public bool DeleteProblemById(int problemId) {
             var problem = _db.Problems.SingleOrDefault(x => x.Id == problemId);
 
@@ -846,11 +840,9 @@ namespace Codex.Services
         /// <summary>
         /// Grades a single submission
         /// </summary>
-        public bool GradeSubmissionById(int submissionId, double grade)
-        {
+        public bool GradeSubmissionById(int submissionId, double grade) {
             var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
-            if(submission != null)
-            {
+            if (submission != null) {
                 submission.SubmissionGrade.Grade = grade;
 
                 try {
@@ -868,12 +860,11 @@ namespace Codex.Services
         /// Used to calculate new total grade for assignment based on one submissionId, called right after grading that submission in the teacher controller.
         /// Updates the totalGrade for all collaborators in the AssignmentGroups table.
         /// </summary>
-        public bool UpdateAssignmentGradeBySubmissionId(int submissionId)
-        {
+        public bool UpdateAssignmentGradeBySubmissionId(int submissionId) {
             // Get the initial submission
             var initialSubmission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
 
-            if(initialSubmission != null) {
+            if (initialSubmission != null) {
                 //Gets all collaborators in the assignment
                 var studentService = new StudentService();
                 var collaborators = studentService.GetCollaborators(initialSubmission.AssignmentId, initialSubmission.StudentId);
@@ -884,19 +875,15 @@ namespace Codex.Services
                 // Initializes the totalGrade to 0.0
                 var totalGrade = 0.0;
 
-                if(collaborators != null && problemsInAssignemnt != null)
-                {
-                    foreach (var problem in problemsInAssignemnt)
-                    {
+                if (collaborators != null && problemsInAssignemnt != null) {
+                    foreach (var problem in problemsInAssignemnt) {
                         var problemWeight = problem.Weight/100;
                         var problemGrade = 0.0;
-                        foreach (var student in collaborators)
-                        {
+                        foreach (var student in collaborators) {
                             var submission = _db.Submissions.Where(x => x.StudentId == student.Id && x.AssignmentId == initialSubmission.AssignmentId && x.ProblemId == initialSubmission.ProblemId).OrderByDescending(y => y.SubmissionGrade.Grade).FirstOrDefault();
                             // Checks if the best submission from the student is the best amongst his collaborators. If it is it is assigned to the problemGrade variable
-                            if (submission != null && submission.SubmissionGrade.Grade.Value * problemWeight > problemGrade)
-                            {
-                                problemGrade = submission.SubmissionGrade.Grade.Value * problemWeight;
+                            if (submission != null && submission.SubmissionGrade.Grade.Value*problemWeight > problemGrade) {
+                                problemGrade = submission.SubmissionGrade.Grade.Value*problemWeight;
                             }
                         }
                         // Update totalGrade with the best problemGrade
@@ -906,11 +893,9 @@ namespace Codex.Services
 
                 // The database update is made here, assigning the totalGrade to all groupMembers in the assignment
                 var group = initialSubmission.Assignment.AssignmentGroups.SingleOrDefault(x => x.AssignmentId == initialSubmission.AssignmentId && x.UserId == initialSubmission.StudentId);
-                if(group != null)
-                {
+                if (group != null) {
                     var groupMembers = _db.AssignmentGroups.Where(x => x.AssignmentId == initialSubmission.AssignmentId && x.GroupNumber == group.GroupNumber);
-                    foreach (var member in groupMembers)
-                    {
+                    foreach (var member in groupMembers) {
                         member.AssignmentGrade = totalGrade;
                     }
                 }
