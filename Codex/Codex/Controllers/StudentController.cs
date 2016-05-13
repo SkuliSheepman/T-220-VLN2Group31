@@ -16,6 +16,7 @@ namespace Codex.Controllers
     [Authorize]
     public class StudentController : Controller
     {
+
         private readonly UserService _userService;
         private readonly FileService _fileService;
         private readonly StudentService _studentService;
@@ -26,8 +27,9 @@ namespace Codex.Controllers
             _studentService = new StudentService();
         }
 
-
-        // GET: Student
+        /// <summary>
+        /// Gets all assignments/problems and submissions related to the student
+        /// </summary>
         public ActionResult Index() {
             var studentId = _userService.GetUserIdByName(User.Identity.Name);
 
@@ -58,6 +60,9 @@ namespace Codex.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Gets a specific assignment as a single view from a query ID
+        /// </summary>
         [Authorize]
         public ActionResult Assignment(int? id)
         {
@@ -92,6 +97,9 @@ namespace Codex.Controllers
 
         }
 
+        /// <summary>
+        /// Submits a user soloution to a problem in an uploaded file
+        /// </summary>
         public ActionResult Submit(HttpPostedFileBase file, int assignmentId, int problemId) {
             var studentId = _userService.GetUserIdByName(User.Identity.Name);
             var submissionAllowed = _studentService.IsSubmissionAllowed(studentId, assignmentId, problemId);
@@ -131,7 +139,9 @@ namespace Codex.Controllers
             return Json(false);
         }
 
-        // GET: File
+        /// <summary>
+        /// Downloads an attachment for a problem
+        /// </summary>
         public void DownloadAttachmentFile(int? problemId, int? assignmentId)
         {
             var name = User.Identity.Name;
@@ -141,7 +151,9 @@ namespace Codex.Controllers
             }
         }
 
-        // Leave group
+        /// <summary>
+        /// Makes the current session user leave the assignment id group
+        /// </summary>
         public ActionResult LeaveAssignmentGroup(int? assignmentId)
         {
             if (assignmentId.HasValue)
@@ -154,7 +166,9 @@ namespace Codex.Controllers
             }
         }
 
-        // Add user to assignment group
+        /// <summary>
+        /// Assigns a user to a group as long as it's provided with an assignment id and groupid
+        /// </summary>
         public ActionResult AssignUserToGroup(string userId, int? assignmentId, int? groupId)
         {
             if (userId != null && assignmentId.HasValue && groupId.HasValue)
