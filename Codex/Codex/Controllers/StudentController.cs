@@ -124,25 +124,38 @@ namespace Codex.Controllers
         }
 
         // GET: File
-        public void DownloadAttachmentFile(int? problemid, int? assignmentid)
+        public void DownloadAttachmentFile(int? problemId, int? assignmentId)
         {
             var name = User.Identity.Name;
-            if (problemid.HasValue && assignmentid.HasValue)
+            if (problemId.HasValue && assignmentId.HasValue)
             {
-                _fileService.DownloadAttachment(_userService.GetUserIdByName(User.Identity.Name), problemid.Value, assignmentid.Value);
+                _fileService.DownloadAttachment(_userService.GetUserIdByName(User.Identity.Name), problemId.Value, assignmentId.Value);
             }
         }
 
         // Leave group
-        public ActionResult LeaveAssignmentGroup(int? assignmentid)
+        public ActionResult LeaveAssignmentGroup(int? assignmentId)
         {
-            return View();
+            if (assignmentId.HasValue)
+            {
+                return Json(_studentService.AssignUserToGroup(_userService.GetUserIdByName(User.Identity.Name), assignmentId.Value));
+            }
+            else
+            {
+                return Json(true);
+            }
         }
 
         // Add user to assignment group
-        public ActionResult AssignUserToGroup(int? userid, int? assignmentid)
+        public ActionResult AssignUserToGroup(string userId, int? assignmentId, int? groupId)
         {
-            return View();
+            if (userId != null && assignmentId.HasValue && groupId.HasValue)
+            {
+                return Json(_studentService.AssignUserToGroup(userId, assignmentId.Value, groupId.Value));
+            } else
+            {
+                return Json(true);
+            }
         }
     }
 }

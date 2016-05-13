@@ -7,6 +7,7 @@
     <div class="col s12">
         <div class="card-panel">
 
+            <div id="assignmentid" class="hiddendiv">@Model.Id</div>
             <blockquote>
                 <!-- Course -->
                 <div class="row clear-margin">
@@ -36,7 +37,8 @@
 
             <div class="divider"></div>
             <!-- Assignment collaborators-->
-            @if (Model.MaxCollaborators > 1 || true)
+            <div id="groupid" class="hiddendiv">@Model.Collaborators[0].GroupNumber</div>
+            @if (Model.MaxCollaborators > 1 && DateTime.Now < Model.EndTime)
             {
                 <div class="collapsible-body-container">
                     <ul class="collapsible" data-collapsible="accordion">
@@ -54,17 +56,17 @@
                             <div class="collapsible-body">
                                 <table class="striped bordered">
                                     <tbody>
-                                        @for (int i = 0; i < Model.Collaborators.Count(); i++)
+                                        @foreach (var collaborator in Model.Collaborators)
                                         {
                                             <tr>
                                                 <td class="col s10" style="padding:12px">
-                                                    <span><b>@Model.Collaborators[i].Name</b></span>
+                                                    <span><b>@collaborator.Name</b></span>
                                                 </td>
                                                 <td class="col s2" style="padding:12px">
-                                                    @if (ViewBag.UserId == @Model.Collaborators[i].Id)
+                                                    @if (ViewBag.UserId == collaborator.Id)
                                                     {
-                                                        <div class="col s4">
-                                                            <a href="" class="waves-effect waves-light btn add-user-to-group-button" style="margin-top:-7px">Leave</a>
+                                                        <div class="col s3">
+                                                            <a href="#" class="waves-effect waves-light btn leave-assignment-group" style="margin-top:-7px;margin-left:-9px">Leave</a>
                                                         </div>
                                                     }
                                                 </td>
@@ -72,24 +74,27 @@
                                             <div class="divider"></div>
                                         }
                                     </tbody>
-                                    <tr style="background-color:white">
-                                        <td class="col s10">
-                                            <select>
-                                                @foreach (var loner in ViewBag.Loners)
-                                                {
-                                                    if (loner.Id != ViewBag.UserId)
+                                    @if ((Model.Collaborators.Count() < Model.MaxCollaborators) && ViewBag.Loners.Count > 0)
+                                    {
+                                        <tr style="background-color:white">
+                                            <td class="col s10">
+                                                <select id="loners">
+                                                    @foreach (var loner in ViewBag.Loners)
                                                     {
-                                                    <option value="@loner.Id">@loner.Name</option>
+                                                        if (loner.Id != ViewBag.UserId)
+                                                        {
+                                                        <option value="@loner.Id">@loner.Name</option>
+                                                        }
                                                     }
-                                                }
-                                            </select>
-                                        </td>
-                                        <td class="col s2">
-                                            <div class="col s4">
-                                                <a href="" class="waves-effect waves-light btn add-user-to-group-button" style="margin-top:10px">Add user</a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                                </select>
+                                            </td>
+                                            <td class="col s2">
+                                                <div class="col s4">
+                                                    <a href="#" class="waves-effect waves-light btn add-user-to-group-button" style="margin-top:10px">Add user</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
                                 </table>
                             </div>
                         </li>

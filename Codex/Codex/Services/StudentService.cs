@@ -10,9 +10,11 @@ namespace Codex.Services
     public class StudentService
     {
         private Database _db;
+        private CourseService _courseService;
 
         public StudentService() {
             _db = new Database();
+            _courseService = new CourseService();
         }
 
         /// <summary>
@@ -205,9 +207,9 @@ namespace Codex.Services
         /// <summary>
         /// Get an assignment by it's id
         /// </summary>
-        public StudentAssignmentViewModel GetStudentAssignmentById(int assignmentid, string studentid) {
+        public StudentAssignmentViewModel GetStudentAssignmentById(int assignmentId, string studentId) {
 
-            var group = _db.AssignmentGroups.Where(x => x.UserId == studentid && x.AssignmentId == assignmentid).SingleOrDefault();
+            var group = _db.AssignmentGroups.Where(x => x.UserId == studentId && x.AssignmentId == assignmentId).SingleOrDefault();
             var assignment = new StudentAssignmentViewModel
             {
                 Id = group.Assignment.Id,
@@ -218,7 +220,7 @@ namespace Codex.Services
                 EndTime = group.Assignment.EndTime,
                 MaxCollaborators = group.Assignment.MaxCollaborators,
                 AssignmentGrade = group.AssignmentGrade,
-                Collaborators = GetCollaborators(assignmentid, studentid)
+                Collaborators = GetCollaborators(assignmentId, studentId)
             };
 
             return assignment;
@@ -226,10 +228,48 @@ namespace Codex.Services
         }
 
         /// <summary>
-        /// 
+        /// Assign user to an existing group or a new one 
+        /// </summary>
+        public bool AssignUserToGroup(string userId, int assignmentId, int groupNumber = -1)
+        {
+
+            var user = _db.AspNetUsers.FirstOrDefault(x => x.Id == userId);
+            var assignment = _db.Assignments.FirstOrDefault(x => x.Id == assignmentId);
+            var currentAssignmentGroupRelation = _db.AssignmentGroups.FirstOrDefault(x => x.UserId == userId && x.AssignmentId == assignmentId);
+
+            if (user != null && assignment != null)
+            {
+                if (groupNumber != -1)
+                {
+
+                    currentAssignmentGroupRelation.GroupNumber = groupNumber;
+
+                } else //new group
+                {
+                    
+                    var highestAssignmentProblemGroupNumber = _db.AssignmentGroups.Where(x => x.AssignmentId == assignmentId).OrderByDescending(y => y.GroupNumber).First().GroupNumber;
+                    currentAssignmentGroupRelation.GroupNumber = highestAssignmentProblemGroupNumber + 1;
+
+                }
+
+                try
+                {
+                    _db.SaveChanges();
+                    return true;
+                } catch
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Gets all students whom are alone in assignment groups
         /// </summary>
         public List<CollaboratorViewModel> GetLonelyCollaboratorsInCourseInstance(int assignmentid)
         {
+
             var loners = new List<CollaboratorViewModel>();
 
             var assignment = _db.Assignments.FirstOrDefault(x => x.Id == assignmentid);
