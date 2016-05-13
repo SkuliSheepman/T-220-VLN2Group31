@@ -10,6 +10,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Codex.Models;
 
+/// <summary>
+/// Part of the Asp.Net Identity, not built by us
+/// </summary>
 namespace Codex.Controllers
 {
     [Authorize]

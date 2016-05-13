@@ -21,7 +21,10 @@ namespace Codex.Controllers
             _fileService = new FileService();
         }
 
-        // GET: Teacher
+        /// <summary>
+        /// Index page for Teacher, populates the active semester dropdown, contains parameters for year, semester and selected courseInstance
+        /// This makes the site bookmarkable
+        /// </summary>
         public ActionResult Index(int? year, string semester, int? courseInstanceId) {
             var teacherId = _userService.GetUserIdByName(User.Identity.Name);
             var teacherActiveSemesters = _teacherService.GetTeacherActiveSemestersById(teacherId);

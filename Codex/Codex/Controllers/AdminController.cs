@@ -19,6 +19,9 @@ namespace Codex.Controllers
             _courseService = new CourseService();
         }
 
+        /// <summary>
+        /// Index page for admin, lists all users for easy access and editability
+        /// </summary>
         public ActionResult Users() {
             List<AdminCourseViewModel> allCourses = _courseService.GetAllCourseInstances();
 
@@ -35,6 +38,9 @@ namespace Codex.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Secondary view for Admin, lists all courses to be easily accessed and edited
+        /// </summary>
         public ActionResult Courses() {
             CourseService courseService = new CourseService();
 
@@ -45,6 +51,9 @@ namespace Codex.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Create user, action invoked by passing viewModel with ajax
+        /// </summary>
         public ActionResult CreateUser(AdminNewUserViewModel newUser) {
             if (newUser.Name == null && newUser.Email == null) {
                 return Json(false);
@@ -64,6 +73,11 @@ namespace Codex.Controllers
             return Json(false);
         }
 
+        /// <summary>
+        /// Create course action, invoked by passing a course view model with ajax
+        /// </summary>
+        /// <param name="newCourse"></param>
+        /// <returns></returns>
         public ActionResult CreateCourse(AdminNewCourseViewModel newCourse) {
             if (string.IsNullOrEmpty(newCourse.Name) || newCourse.Year == null || newCourse.Year < 2000) {
                 return Json(false);
@@ -72,6 +86,9 @@ namespace Codex.Controllers
             return Json(_courseService.CreateCourse(newCourse));
         }
 
+        /// <summary>
+        /// Action called by ajax request, submits a list of userIds to be deleted in bulk
+        /// </summary>
         public ActionResult DeleteSelectedUsers(List<string> userIds) {
             if (userIds == null || userIds.Count == 0) {
                 return Json(false);
@@ -80,6 +97,9 @@ namespace Codex.Controllers
             return Json(_userService.DeleteUsersByIds(userIds));
         }
 
+        /// <summary>
+        /// Action called by ajax request, submits a list of courseInstance Ids to be deleted in bulk
+        /// </summary>
         public ActionResult DeleteSelectedCourses(List<int> courseInstanceIds) {
             if (courseInstanceIds == null ||+ courseInstanceIds.Count == 0) {
                 return Json(false);
@@ -88,26 +108,41 @@ namespace Codex.Controllers
             return Json(_courseService.DeleteCourseInstancesById(courseInstanceIds));
         }
 
+        /// <summary>
+        /// Edit user action, sends a user with an ajax request with the changes to be edited
+        /// </summary>
         public ActionResult EditUser(ApplicationUser user) {
             return Json(_userService.EditUser(user));
         }
 
+        /// <summary>
+        /// Changepassword, resets the password for a given user sent as an ajax request
+        /// </summary>
         public ActionResult ChangePassword(string userId) {
             UserService userService = new UserService();
 
             return Json(userService.ResetPassword(userId));
         }
 
+        /// <summary>
+        /// Removes user from course by passing a AddCourseToUserViewModel with the courseInstanceId and userId
+        /// </summary>
         public ActionResult RemoveUserFromCourse(AdminAddCourseToUserViewModel model) {
             return Json(_courseService.RemoveUserFromCourse(model));
         }
 
+        /// <summary>
+        /// Adds user to course by passing a view model including the userId and the courseInstanceId
+        /// </summary>
         public ActionResult AddUserToCourse(AdminAddCourseToUserViewModel model) {
             return Json(_courseService.AddUserToCourse(model));
         }
 
+        /// <summary>
+        /// Edit course, passes a Course View Model with values that are updated in the database
+        /// </summary>
         public ActionResult EditCourse(AdminCourseViewModel course) {
-            if (string.IsNullOrEmpty(course.Name) || course.Year == null || course.Year < 2000) {
+            if (string.IsNullOrEmpty(course.Name) || course.Year == 0 || course.Year < 2000) {
                 return Json(false);
             }
             return Json(_courseService.UpdateCourse(course));
