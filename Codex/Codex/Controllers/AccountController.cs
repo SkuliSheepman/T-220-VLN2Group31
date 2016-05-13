@@ -513,7 +513,8 @@ namespace Codex.Controllers
             var userId = userService.GetUserIdByName(User.Identity.Name);
             var model = new AccountSettingsViewModel();
             model = userService.GetUserSettingsById(userId);
-            
+
+            ViewBag.UserName = User.Identity.Name;
             return View(model);                
         }
 

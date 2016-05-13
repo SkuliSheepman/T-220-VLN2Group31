@@ -259,8 +259,6 @@ namespace Codex.Services
         /// <summary>
         /// Helper function for adding a user to assignments, adds him to a single assignment in course
         /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="assignmentId"></param>
         public void AssignNewGroupForUserInAssignment(string userId, int assignmentId)
         {
             var highestAssignmentProblemGroupNumber = _db.AssignmentGroups.Where(x => x.AssignmentId == assignmentId).OrderByDescending(y => y.GroupNumber).ToList();
@@ -367,6 +365,9 @@ namespace Codex.Services
             }
         }
 
+        /// <summary>
+        /// Gets all courses the teacher has been assigned on a specific year and semester
+        /// </summary>
         public List<Codex.Models.TeacherModels.HelperModels.CourseHelperModel> GetTeacherCoursesByDate(string teacherName, int year, string semester) {
             var teacherId = _userService.GetUserIdByName(teacherName);
             var userCourses = GetCoursesByUserId(teacherId);
