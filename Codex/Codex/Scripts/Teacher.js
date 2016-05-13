@@ -16,7 +16,7 @@
     /* Ajax functions */
 
     // Set test cases for a problem
-    function setTestCasesForProblem(id, testCases, problemCreationFlag) {
+    function setTestCasesForProblem(id, testCases, problemCreationFlag, hasAttachment) {
         $.ajax({
             url: "/Teacher/UpdateTestCases",
             data: JSON.stringify({ testCases: testCases, problemId : id }),
@@ -25,8 +25,22 @@
             dataType: "json",
             success: function (responseData) {
                 if (responseData) {
-                    if (problemCreationFlag === true) {
-                        setAttachmentForProblem(id, $("#new-problem-attachment").prop("files")[0], true);
+                    if (problemCreationFlag == true) {
+                        if (hasAttachment == true) {
+                            setAttachmentForProblem(id, $("#new-problem-attachment").prop("files")[0], true);
+                        }
+                        else {
+                            Materialize.toast("Problem created", 4000);
+                        }
+                    }
+                    else {
+                        if (hasAttachment == true) {
+                            setAttachmentForProblem(id, $("#new-problem-attachment").prop("files")[0], false);
+                        }
+                        else {
+                            Materialize.toast("Problem edited", 4000);
+                        }
+                        
                     }
                 }
                 else {
@@ -251,6 +265,9 @@
             //"TestCases": JSON.stringify(testCases)
         }
         
+        var hasAttachment = ($("#new-problem-attachment").val().length != 0);
+
+
         $.ajax({
             url: $("#create-problem-form").attr("action"),
             data: formData,
@@ -259,7 +276,7 @@
             success: function (responseData) {
                 if (responseData !== 0) {
                     // Set test cases
-                    setTestCasesForProblem(responseData, testCases, true);
+                    setTestCasesForProblem(responseData, testCases, true, hasAttachment);
                 }
                 else {
                     Materialize.toast("An error occurred adding the problem to the database", 4000);
