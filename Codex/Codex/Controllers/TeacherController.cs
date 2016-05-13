@@ -109,7 +109,12 @@ namespace Codex.Controllers
         }
 
         public ActionResult GradeSubmission(double grade, int submissionId) {
-            return Json(false);
+            var gradeSubmission = _teacherService.GradeSubmissionById(submissionId, grade);
+            if (gradeSubmission)
+            {
+                return Json(_teacherService.UpdateAssignmentGradeBySubmissionId(submissionId));
+            }
+            return Json(gradeSubmission);
         }
 
         public ActionResult UpdateProblem(TeacherProblemUpdateViewModel problem) {
@@ -118,6 +123,18 @@ namespace Codex.Controllers
 
         public ActionResult NewAssignment(TeacherCreateAssignmentViewModel assignment) {
             return Json(_teacherService.CreateNewAssignment(assignment));
+        }
+
+        public ActionResult DeleteAssignment(int assignmentId) {
+            return Json(_teacherService.DeleteAssignmentById(assignmentId));
+        }
+
+        public ActionResult RemoveProblem(int assignmentId, int problemId) {
+            return Json(_teacherService.RemoveProblemFromAssignmentByIds(assignmentId, problemId));
+        }
+
+        public ActionResult DeleteProblem(int problemId) {
+            return Json(_teacherService.DeleteProblemById(problemId));
         }
 
         /* Creating a new problem requires 3 methods due to AJAX and model binding being weird when uploading a file, with data and a list of data */

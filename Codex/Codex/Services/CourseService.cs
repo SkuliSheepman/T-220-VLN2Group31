@@ -212,6 +212,7 @@ namespace Codex.Services
 
             if (model.Position == 1) {
                 courseInstance.AspNetUsers.Add(user);
+                AddUserToCourseAssignments(user.Id, courseInstance.Id);
             }
             else {
                 Teacher teacher = new Teacher {
@@ -231,6 +232,48 @@ namespace Codex.Services
             }
             catch (Exception e) {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Helper function for Adding user to course, adds him to all unclosed assignments in the course
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="courseInstanceId"></param>
+        public void AddUserToCourseAssignments(string userId, int courseInstanceId)
+        {
+            var assignments = _db.Assignments.Where(x => x.CourseInstanceId == courseInstanceId && DateTime.Now < x.EndTime);
+            var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userId);
+            if(user == null)
+            {
+            }
+            else
+            {
+                foreach (var assignment in assignments)
+                {
+                    AssignNewGroupForUserInAssignment(userId, assignment.Id);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Helper function for adding a user to assignments, adds him to a single assignment in course
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="assignmentId"></param>
+        public void AssignNewGroupForUserInAssignment(string userId, int assignmentId)
+        {
+            var highestAssignmentProblemGroupNumber = _db.AssignmentGroups.Where(x => x.AssignmentId == assignmentId).OrderByDescending(y => y.GroupNumber).ToList();
+
+            if (highestAssignmentProblemGroupNumber != null && highestAssignmentProblemGroupNumber.Any())
+            {
+                var assGroup = new AssignmentGroup
+                {
+                    UserId = userId,
+                    AssignmentId = assignmentId,
+                    GroupNumber = highestAssignmentProblemGroupNumber[0].GroupNumber + 1
+                };
+                _db.AssignmentGroups.Add(assGroup);
             }
         }
 

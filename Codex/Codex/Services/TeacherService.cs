@@ -320,7 +320,6 @@ namespace Codex.Services
         }
 
         public bool CreateNewAssignment(TeacherCreateAssignmentViewModel assignment) {
-
             var newAssignment = new Assignment {
                 CourseInstanceId = assignment.CourseInstanceId,
                 Description = assignment.Description,
@@ -354,10 +353,8 @@ namespace Codex.Services
 
             // Create groups for students
             var count = 1;
-            foreach (var student in students)
-            {
-                _db.AssignmentGroups.Add(new AssignmentGroup
-                {
+            foreach (var student in students) {
+                _db.AssignmentGroups.Add(new AssignmentGroup {
                     UserId = student.Id,
                     AssignmentId = newAssignment.Id,
                     GroupNumber = count
@@ -365,16 +362,13 @@ namespace Codex.Services
                 count++;
             }
 
-            try
-            {
+            try {
                 _db.SaveChanges();
                 return true;
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 return false;
             }
-
         }
 
         public bool SetTestCasesForProblemByProblemId(int problemId, List<TeacherTestCaseViewModel> testCases) {
@@ -426,10 +420,8 @@ namespace Codex.Services
             if (courseId != 0) {
                 var problems = _db.Problems.Where(x => x.CourseId == courseId);
 
-                foreach (var problem in problems)
-                {
-                    var p = new TeacherProblemUpdateViewModel
-                    {
+                foreach (var problem in problems) {
+                    var p = new TeacherProblemUpdateViewModel {
                         Id = problem.Id,
                         Description = problem.Description,
                         Name = problem.Name,
@@ -440,10 +432,8 @@ namespace Codex.Services
                         TestCases = new List<TeacherTestCaseViewModel>()
                     };
 
-                    foreach (var testCase in problem.TestCases)
-                    {
-                        var t = new TeacherTestCaseViewModel
-                        {
+                    foreach (var testCase in problem.TestCases) {
+                        var t = new TeacherTestCaseViewModel {
                             Input = testCase.Input,
                             Output = testCase.ExpectedOutput
                         };
@@ -456,6 +446,116 @@ namespace Codex.Services
             }
 
             return problemList;
+        }
+
+        /// <summary>
+        /// Delete an assignment from the database via it's Id
+        /// </summary>
+        public bool DeleteAssignmentById(int assignmentId) {
+            var assignment = _db.Assignments.SingleOrDefault(x => x.Id == assignmentId);
+
+            if (assignment != null) {
+                // Remove the problems from the assignment first
+
+                foreach (var assignmentProblem in _db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId)) {
+                    RemoveProblemFromAssignmentByIds(assignmentId, assignmentProblem.ProblemId);
+                }
+
+                _db.Assignments.Remove(assignment);
+
+                // Remove all submissions for the assignment
+
+                foreach(var submission in _db.Submissions.Where(x => x.AssignmentId == assignmentId)) {
+                    RemoveSubmissionFromAssignmentById(assignmentId);
+                }
+
+                try {
+                    _db.SaveChanges();
+                    return true;
+                }
+                catch (Exception e) {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Delete a connection between an assignment and a problem using the assignment ID and problem ID
+        /// </summary>
+        public bool RemoveProblemFromAssignmentByIds(int assignmentId, int problemId) {
+            _db.AssignmentProblems.RemoveRange(_db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId && x.ProblemId == problemId));
+
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Deletes all submissions for a specific assignment, used when deleteng an assignment from the database
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public bool RemoveSubmissionFromAssignmentById(int assignmentId)
+        {
+            // Remove all testResults from submission
+            foreach(var testResult in _db.TestResults.Where(x => x.Submission.AssignmentId == assignmentId)) {
+                RemoveTestResultFromSubmissionById(testResult.SubmissionId);
+            }
+
+            _db.Submissions.RemoveRange(_db.Submissions.Where(x => x.AssignmentId == assignmentId));
+
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Deletes all Test results connected to a submission. Used when deleting submission from the database
+        /// </summary>
+        /// <param name="submissionId"></param>
+        /// <returns></returns>
+        public bool RemoveTestResultFromSubmissionById(int submissionId)
+        {
+            _db.TestResults.RemoveRange(_db.TestResults.Where(x => x.SubmissionId == submissionId));
+
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Delete a problem from the database via it's Id
+        /// </summary>
+
+        public bool DeleteProblemById(int problemId) {
+            var problem = _db.Problems.SingleOrDefault(x => x.Id == problemId);
+
+            if (problem != null) {
+                _db.Problems.Remove(problem);
+
+                try {
+                    _db.SaveChanges();
+                    return true;
+                }
+                catch (Exception e) {
+                    return false;
+                }
+            }
+
+            return false;
         }
 
         public void CheckUngradedAssignments(int courseInstanceId) {
@@ -543,6 +643,92 @@ namespace Codex.Services
             }
 
             return timeRemaining;
+        }
+
+        /// <summary>
+        /// Grades a single submission
+        /// </summary>
+        public bool GradeSubmissionById(int submissionId, double grade)
+        {
+            var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
+            if(submission != null)
+            {
+                submission.SubmissionGrade.Grade = grade;
+
+                try {
+                    _db.SaveChanges();
+                    return true;
+                }
+                catch (Exception e) {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Used to calculate new total assignment grade based on submissionId, used right after grading that submission.
+        /// </summary>
+        public bool UpdateAssignmentGradeBySubmissionId(int submissionId)
+        {
+            // Get all collaborators in assignment
+            // Get their highest graded submission for each problem in assignment
+            // Get the weight of each problem in assignment
+            // Add the grades together based on their weight
+            // Set that number as AssignmentGrade for each student in the AssignmentGroups Table
+
+            // Get the initial submission
+            var initialSubmission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
+
+            if(initialSubmission != null) {
+                //Gets all collaborators in the assignment
+                var studentService = new StudentService();
+                var collaborators = studentService.GetCollaborators(initialSubmission.AssignmentId, initialSubmission.StudentId);
+
+                // Gets all problems in the assignment
+                var problemsInAssignemnt = _db.AssignmentProblems.Where(x => x.AssignmentId == initialSubmission.AssignmentId);
+
+                // Initializes the totalGrade to 0.0
+                var totalGrade = 0.0;
+
+                if(collaborators != null && problemsInAssignemnt != null)
+                {
+                    foreach (var problem in problemsInAssignemnt)
+                    {
+                        var problemWeight = problem.Weight;
+                        var problemGrade = 0.0;
+                        foreach (var student in collaborators)
+                        {
+                            var submission = _db.Submissions.Where(x => x.StudentId == student.Id && x.AssignmentId == initialSubmission.AssignmentId && x.ProblemId == initialSubmission.ProblemId).OrderByDescending(y => y.SubmissionGrade.Grade).FirstOrDefault();
+                            // Checks if the best submission from the student is the best amongst his collaborators. If it is it is assigned to the problemGrade variable
+                            if (submission != null && submission.SubmissionGrade.Grade.Value * problemWeight > problemGrade)
+                            {
+                                problemGrade = submission.SubmissionGrade.Grade.Value * problemWeight;
+                            }
+                        }
+                        // Update totalGrade with the best problemGrade
+                        totalGrade += problemGrade;
+                    }
+                }
+
+                // The database update is made here, assigning the totalGrade to all groupMembers in the assignment
+                var group = initialSubmission.Assignment.AssignmentGroups.SingleOrDefault(x => x.AssignmentId == initialSubmission.AssignmentId && x.UserId == initialSubmission.StudentId);
+                if(group != null)
+                {
+                    var groupMembers = _db.AssignmentGroups.Where(x => x.AssignmentId == initialSubmission.AssignmentId && x.GroupNumber == group.GroupNumber);
+                    foreach (var member in groupMembers)
+                    {
+                        member.AssignmentGrade = totalGrade;
+                    }
+                }
+            }
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
         }
     }
 }

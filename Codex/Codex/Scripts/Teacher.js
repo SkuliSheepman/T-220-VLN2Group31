@@ -289,7 +289,84 @@
 
     // Delete assignment
     $("#delete-assignment-button").on("click", function() {
-        
+        var formData = {
+            "assignmentId": DROPDOWN_ASSIGNMENT_ID
+        };
+
+        $.ajax({
+            url: "/Teacher/DeleteAssignment",
+            data: JSON.stringify(formData),
+            method: "POST",
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (responseData) {
+                if (responseData) {
+                    Materialize.toast("Assignment deleted", 4000);
+                }
+                else {
+                    Materialize.toast("An error occurred deleting the assignment", 4000);
+                }
+
+            },
+            error: function () {
+                Materialize.toast("Something awful happened :(", 4000);
+            }
+        });
+    });
+
+    // Delete problem
+    $("#delete-problem-button").on("click", function () {
+        var formData = {
+            "problemId": DROPDOWN_PROBLEM_ID
+        };
+
+        $.ajax({
+            url: "/Teacher/DeleteProblem",
+            data: JSON.stringify(formData),
+            method: "POST",
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (responseData) {
+                if (responseData) {
+                    Materialize.toast("Problem deleted", 4000);
+                }
+                else {
+                    Materialize.toast("An error occurred deleting the problem", 4000);
+                }
+
+            },
+            error: function () {
+                Materialize.toast("Something awful happened :(", 4000);
+            }
+        });
+    });
+
+    // Remove problem from assignment
+    $("#remove-problem-button").on("click", function () {
+        var formData = {
+            "assignmentId": DROPDOWN_ASSIGNMENT_ID,
+            "problemId": DROPDOWN_PROBLEM_ID
+        };
+
+        $.ajax({
+            url: "/Teacher/RemoveProblem",
+            data: JSON.stringify(formData),
+            method: "POST",
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (responseData) {
+                if (responseData) {
+                    Materialize.toast("Problem removed", 4000);
+                }
+                else {
+                    Materialize.toast("An error occurred removing the problem", 4000);
+                }
+
+            },
+            error: function () {
+                Materialize.toast("Something awful happened :(", 4000);
+            }
+        });
     });
 
 });
