@@ -210,23 +210,19 @@ namespace Codex.Services
         /// <summary>
         /// Download a submission
         /// </summary>
-        public void DownloadSubmission(string userid, int submissionId)
-        {
+        public void DownloadSubmission(string userid, int submissionId) {
             var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userid);
-            if (user != null)
-            {
+            if (user != null) {
                 var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
-                if (submission != null)
-                {
+                if (submission != null) {
                     var collaborators = new List<CollaboratorViewModel>();
                     bool isTeacher = submission.Assignment.CourseInstance.Teachers.Any(x => x.AspNetUser == user);
 
-                    if (!isTeacher)
-                    {
+                    if (!isTeacher) {
                         collaborators = _studentService.GetCollaborators(submission.AssignmentId, userid);
                     }
 
-                    if (collaborators.Count != 0 || isTeacher)  // check if user is related to the submission group
+                    if (collaborators.Count != 0 || isTeacher) // check if user is related to the submission group
                     {
                         var path = GetSubmissionsPath() +
                                    submission.AssignmentId + "\\" +
@@ -243,25 +239,19 @@ namespace Codex.Services
         /// <summary>
         /// Download an attachment
         /// </summary>
-        public void DownloadAttachment(string userid, int problemid, int assignmentid)
-        {
+        public void DownloadAttachment(string userid, int problemid, int assignmentid) {
             var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userid);
-            if (user != null)
-            {
+            if (user != null) {
                 var problem = _db.Problems.SingleOrDefault(x => x.Id == problemid);
-                if (problem != null)
-                {
+                if (problem != null) {
                     var assignment = _db.Assignments.SingleOrDefault(x => x.Id == assignmentid);
 
-                    if (assignment != null)
-                    {
-                        if (user.CourseInstances.Contains(assignment.CourseInstance))
-                        {
-                            if (problem.Attachment != null)
-                            {
+                    if (assignment != null) {
+                        if (user.CourseInstances.Contains(assignment.CourseInstance)) {
+                            if (problem.Attachment != null) {
                                 var path = GetAttachmentsPath() +
-                                       problem.Id + "\\" +
-                                       problem.Id + "." + problem.Attachment.Split('.')[1];
+                                           problem.Id + "\\" +
+                                           problem.Id + "." + problem.Attachment.Split('.')[1];
 
                                 DownloadFile(path, problem.Attachment);
                             }
@@ -274,14 +264,12 @@ namespace Codex.Services
         /// <summary>
         /// Download a file with a unique ID and assign it's original name to it
         /// </summary>
-        public void DownloadFile(string path, string originalFileName)
-        {
+        public void DownloadFile(string path, string originalFileName) {
             string filePath = path;
             FileInfo file = new FileInfo(filePath);
             WebClient req = new WebClient();
             HttpResponse response = HttpContext.Current.Response;
-            if (File.Exists(filePath))
-            {
+            if (File.Exists(filePath)) {
                 response.Clear();
                 response.ClearContent();
                 response.ClearHeaders();
@@ -290,8 +278,8 @@ namespace Codex.Services
                 byte[] data = req.DownloadData(filePath);
                 response.BinaryWrite(data);
                 response.End();
-            } else
-            {
+            }
+            else {
                 response.Clear();
                 response.ClearContent();
                 response.ClearHeaders();

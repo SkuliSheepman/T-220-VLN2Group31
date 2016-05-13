@@ -843,16 +843,12 @@ namespace Codex.Services
         public bool GradeSubmissionById(int submissionId, double grade) {
             var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
 
-            if(submission != null)
-            {
-                if(submission.SubmissionGrade != null)
-                {
+            if (submission != null) {
+                if (submission.SubmissionGrade != null) {
                     submission.SubmissionGrade.Grade = grade;
                 }
-                else
-                {
-                    _db.SubmissionGrades.Add(new SubmissionGrade
-                    {
+                else {
+                    _db.SubmissionGrades.Add(new SubmissionGrade {
                         SubmissionId = submission.Id,
                         Grade = grade
                     });
@@ -895,9 +891,8 @@ namespace Codex.Services
                         foreach (var student in collaborators) {
                             var submission = _db.Submissions.Where(x => x.StudentId == student.Id && x.AssignmentId == initialSubmission.AssignmentId && x.ProblemId == initialSubmission.ProblemId).OrderByDescending(y => y.SubmissionGrade.Grade).FirstOrDefault();
                             // Checks if the best submission from the student is the best amongst his collaborators. If it is it is assigned to the problemGrade variable
-                            if (submission != null && submission.SubmissionGrade != null && submission.SubmissionGrade.Grade.Value * problemWeight > problemGrade)
-                            {
-                                problemGrade = submission.SubmissionGrade.Grade.Value * problemWeight;
+                            if (submission != null && submission.SubmissionGrade != null && submission.SubmissionGrade.Grade.Value*problemWeight > problemGrade) {
+                                problemGrade = submission.SubmissionGrade.Grade.Value*problemWeight;
                             }
                         }
                         // Update totalGrade with the best problemGrade

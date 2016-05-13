@@ -126,54 +126,46 @@ namespace Codex.Services
         }
 
 
-        public AccountSettingsViewModel GetUserSettingsById(string userId)
-        {
+        public AccountSettingsViewModel GetUserSettingsById(string userId) {
             var user = new AccountSettingsViewModel();
             var db = new Database();
             var userQuery = db.AspNetUsers.SingleOrDefault(x => x.Id == userId);
-            if (userQuery != null)
-            {
+            if (userQuery != null) {
                 user.FullName = userQuery.FullName;
             }
             return user;
         }
-        public bool ChangeName(string userId, string newName)
-        {
+
+        public bool ChangeName(string userId, string newName) {
             var db = new Database();
             var user = db.AspNetUsers.SingleOrDefault(x => x.Id == userId);
 
-            if(user != null)
-            {
+            if (user != null) {
                 user.FullName = newName;
-                try
-                {
+                try {
                     db.SaveChanges();
                     return true;
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     return false;
                 }
             }
-            return false;       
+            return false;
         }
-        public bool ChangePassword(string userId, string newPassword, string confirmPassword)
-        {
-            if(newPassword != confirmPassword)
-            {
+
+        public bool ChangePassword(string userId, string newPassword, string confirmPassword) {
+            if (newPassword != confirmPassword) {
                 return false;
             }
             var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_db));
             var user = GetUserById(userId);
             um.RemovePassword(userId);
             um.AddPassword(userId, newPassword);
-            try
-            {
+            try {
                 _db.SaveChanges();
                 return true;
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 return false;
             }
         }

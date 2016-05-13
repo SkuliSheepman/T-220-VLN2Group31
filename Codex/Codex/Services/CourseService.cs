@@ -98,8 +98,7 @@ namespace Codex.Services
                 return new List<AdminCourseTeacherViewModel>();
             }
 
-            var teachers = course.Teachers.Select(teacher => new AdminCourseTeacherViewModel
-            {
+            var teachers = course.Teachers.Select(teacher => new AdminCourseTeacherViewModel {
                 Id = teacher.AspNetUser.Id,
                 Email = teacher.AspNetUser.Email,
                 IsAssistant = teacher.IsAssistant,
@@ -240,17 +239,12 @@ namespace Codex.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="courseInstanceId"></param>
-        public void AddUserToCourseAssignments(string userId, int courseInstanceId)
-        {
+        public void AddUserToCourseAssignments(string userId, int courseInstanceId) {
             var assignments = _db.Assignments.Where(x => x.CourseInstanceId == courseInstanceId && DateTime.Now < x.EndTime);
             var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userId);
-            if(user == null)
-            {
-            }
-            else
-            {
-                foreach (var assignment in assignments)
-                {
+            if (user == null) {}
+            else {
+                foreach (var assignment in assignments) {
                     AssignNewGroupForUserInAssignment(userId, assignment.Id);
                 }
             }
@@ -259,14 +253,11 @@ namespace Codex.Services
         /// <summary>
         /// Helper function for adding a user to assignments, adds him to a single assignment in course
         /// </summary>
-        public void AssignNewGroupForUserInAssignment(string userId, int assignmentId)
-        {
+        public void AssignNewGroupForUserInAssignment(string userId, int assignmentId) {
             var highestAssignmentProblemGroupNumber = _db.AssignmentGroups.Where(x => x.AssignmentId == assignmentId).OrderByDescending(y => y.GroupNumber).ToList();
 
-            if (highestAssignmentProblemGroupNumber != null && highestAssignmentProblemGroupNumber.Any())
-            {
-                var assGroup = new AssignmentGroup
-                {
+            if (highestAssignmentProblemGroupNumber != null && highestAssignmentProblemGroupNumber.Any()) {
+                var assGroup = new AssignmentGroup {
                     UserId = userId,
                     AssignmentId = assignmentId,
                     GroupNumber = highestAssignmentProblemGroupNumber[0].GroupNumber + 1
@@ -283,8 +274,7 @@ namespace Codex.Services
                                   join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
                                   join _user in _db.AspNetUsers on userId equals _user.Id
                                   where _courseInstance.AspNetUsers.Contains(_user)
-                                  select new {_courseInstance, _course}).Select(pair => new AdminUserCoursesViewModel
-                                  {
+                                  select new {_courseInstance, _course}).Select(pair => new AdminUserCoursesViewModel {
                                       CourseInstanceId = pair._courseInstance.Id,
                                       Name = pair._course.Name,
                                       Position = 1,
@@ -297,8 +287,7 @@ namespace Codex.Services
                                   join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
                                   where _courseInstance.Teachers.Any(user => user.UserId == userId)
                                         && _courseInstance.Teachers.Any(user => user.IsAssistant == false)
-                                  select new {_courseInstance, _course}).Select(pair => new AdminUserCoursesViewModel
-                                  {
+                                  select new {_courseInstance, _course}).Select(pair => new AdminUserCoursesViewModel {
                                       CourseInstanceId = pair._courseInstance.Id,
                                       Name = pair._course.Name,
                                       Position = 2,
@@ -311,8 +300,7 @@ namespace Codex.Services
                                     join _course in _db.Courses on _courseInstance.CourseId equals _course.Id
                                     where _courseInstance.Teachers.Any(user => user.UserId == userId)
                                           && _courseInstance.Teachers.Any(user => user.IsAssistant == true)
-                                    select new {_courseInstance, _course}).Select(pair => new AdminUserCoursesViewModel
-                                    {
+                                    select new {_courseInstance, _course}).Select(pair => new AdminUserCoursesViewModel {
                                         CourseInstanceId = pair._courseInstance.Id,
                                         Name = pair._course.Name,
                                         Position = 3,
@@ -366,34 +354,6 @@ namespace Codex.Services
         }
 
         /// <summary>
-        /// Gets all courses the teacher has been assigned on a specific year and semester
-        /// </summary>
-        public List<Codex.Models.TeacherModels.HelperModels.CourseHelperModel> GetTeacherCoursesByDate(string teacherName, int year, string semester) {
-            var teacherId = _userService.GetUserIdByName(teacherName);
-            var userCourses = GetCoursesByUserId(teacherId);
-            var teacherCourses = new List<Codex.Models.TeacherModels.HelperModels.CourseHelperModel>();
-
-            foreach (var course in userCourses) {
-                if (course.Year == year && course.SemesterName == semester) {
-                    if (course.Position != 1) {
-                        var teacherCourseHelperModel = new Codex.Models.TeacherModels.HelperModels.CourseHelperModel {
-                            Id = course.CourseInstanceId,
-                            Year = course.Year,
-                            Semester = course.SemesterName,
-                            Name = course.Name
-                        };
-
-                        if (!teacherCourses.Contains(teacherCourseHelperModel)) {
-                            teacherCourses.Add(teacherCourseHelperModel);
-                        }
-                    }
-                }
-            }
-
-            return teacherCourses;
-        }
-
-        /// <summary>
         /// Get the name of a base course by base course ID
         /// </summary>
         public int GetCourseIdByCourseName(string name) {
@@ -410,12 +370,10 @@ namespace Codex.Services
         /// <summary>
         /// Get the ID of a base course by course instance ID
         /// </summary>
-        public int GetCourseIdByCourseCourseInstanceId(int id)
-        {
+        public int GetCourseIdByCourseCourseInstanceId(int id) {
             var course = _db.CourseInstances.SingleOrDefault(x => x.Id == id);
 
-            if (course != null)
-            {
+            if (course != null) {
                 return course.CourseId;
             }
             else {
