@@ -463,6 +463,12 @@ namespace Codex.Services
 
                 _db.Assignments.Remove(assignment);
 
+                // Remove all submissions for the assignment
+
+                foreach(var submission in _db.Submissions.Where(x => x.AssignmentId == assignmentId)) {
+                    RemoveSubmissionFromAssignmentById(assignmentId);
+                }
+
                 try {
                     _db.SaveChanges();
                     return true;
@@ -490,6 +496,23 @@ namespace Codex.Services
             }
         }
 
+        /// <summary>
+        /// Deletes all submissions for a specific assignment, used when deleteng an assignment from the database
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public bool RemoveSubmissionFromAssignmentById(int assignmentId)
+        {
+            _db.Submissions.RemoveRange(_db.Submissions.Where(x => x.AssignmentId == assignmentId));
+
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
         /// <summary>
         /// Delete a problem from the database via it's Id
         /// </summary>
