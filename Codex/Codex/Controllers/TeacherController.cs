@@ -109,7 +109,12 @@ namespace Codex.Controllers
         }
 
         public ActionResult GradeSubmission(double grade, int submissionId) {
-            return Json(false);
+            var gradeSubmission = _teacherService.GradeSubmissionById(submissionId, grade);
+            if (gradeSubmission)
+            {
+                return Json(_teacherService.UpdateAssignmentGradeBySubmissionId(submissionId));
+            }
+            return Json(gradeSubmission);
         }
 
         public ActionResult UpdateProblem(TeacherProblemUpdateViewModel problem) {
