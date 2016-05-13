@@ -10,7 +10,6 @@ namespace Codex.Models
         public List<TeacherActiveSemesterViewModel> ActiveSemesters { get; set; }
         public List<TeacherCourseViewModel> TeacherCourses { get; set; }
         public TeacherCourseViewModel CourseSelected { get; set; }
-        public TeacherProblemUpdateViewModel ProblemModel { get; set; }
     }
     public class TeacherActiveSemesterViewModel
     {
@@ -87,6 +86,7 @@ namespace Codex.Models
 
     public class TeacherTestCaseViewModel
     {
+        public int Id { get; set; }
         public string Input { get; set; }
         public string Output { get; set; }
     }
@@ -102,6 +102,7 @@ namespace Codex.Models
     }
     public class TeacherCreateAssignmentViewModel
     {
+        public int Id { get; set; }
         public int CourseInstanceId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

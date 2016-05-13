@@ -134,13 +134,20 @@ input[type="file"] {
     font-family: monospace;
 }
 
-.new-problem-input {
+.new-problem-input, .new-assignment-problemEntry {
     position: relative;
 }
 
 .new-problem-input i{
     position: absolute;
     top: 0.3em;
+    right: 0.5em;
+    cursor: pointer;
+}
+
+.new-assignment-problemEntry i {
+    position: absolute;
+    top: -0.3em;
     right: 0.5em;
     cursor: pointer;
 }
@@ -240,6 +247,11 @@ input[type="file"] {
     font-size: 1.5em;
     margin: 0;
     padding: 0;
+}
+
+/* Problem list */
+.problem-list-entry {
+    cursor: pointer;
 }
 
 /* Test case container */

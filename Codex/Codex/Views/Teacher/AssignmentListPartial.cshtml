@@ -15,16 +15,30 @@
             <div class="col s3 grey-text truncate center-align">
                 <span class="search-criteria">@assignment.Course</span>
             </div>
-            <div class="col s3 grey-text center-align hide-on-med-and-down">
+            <div class="col s2 grey-text center-align hide-on-med-and-down">
                 <span>@assignment.NumberOfProblems</span>
             </div>
 
             <!-- Vertical ellipsis dropdown menu -->
             <div class="right">
-                <a href="#" class="dropdown-button stop-propagation" data-constrainwidth="false" data-alignment="right" data-activates="dropdown-@assignment.Id">
+                <a href="#" class="dropdown-button stop-propagation assignment-dropdown" data-constrainwidth="false" data-alignment="right" data-activates="dropdown-@assignment.Id">
                     <i class="material-icons">more_vert</i>
                 </a>
             </div>
+
+            <!-- Assignment dropdown content -->
+            <ul id="dropdown-@assignment.Id" class="dropdown-content stop-propagation">
+                <li>
+                    <a class="modal-trigger waves-effect waves-light edit-assignment-button" href="#edit-assignment-modal">
+                        Edit
+                    </a>
+                </li>
+                <li>
+                    <a class="modal-trigger waves-effect waves-light delete-assignment-button" href="#delete-assignment-modal">
+                        Delete
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 
@@ -56,13 +70,13 @@
 
                                     <!-- Vertical ellipsis dropdown menu -->
                                     <div class="right">
-                                        <a href="#" class="dropdown-button stop-propagation" data-constrainwidth="false" data-alignment="right" data-activates="dropdown-@assignment.Id-@problem.Id">
+                                        <a href="#" class="dropdown-button stop-propagation problem-dropdown" data-constrainwidth="false" data-alignment="right" data-activates="dropdown-@assignment.Id-@problem.Id">
                                             <i class="material-icons">more_vert</i>
                                         </a>
                                     </div>
 
                                     <!-- Problem dropdown content -->
-                                    <ul id="dropdown-@assignment.Id-@problem.Id" class="dropdown-content stop-propagation problem-dropdown">
+                                    <ul id="dropdown-@assignment.Id-@problem.Id" class="dropdown-content stop-propagation">
                                         <li>
                                             <a class="waves-effect waves-light edit-problem-button" href="#">
                                                 Edit
@@ -74,6 +88,7 @@
                                             </a>
                                         </li>
                                     </ul>
+
                                 </div>
                             </div>
 
@@ -243,21 +258,6 @@
                                     </div>
                                 }
                             </div>
-
-                            <!-- Assignment dropdown content -->
-                            <ul id="dropdown-@assignment.Id" class="dropdown-content stop-propagation assignment-dropdown">
-                                <li>
-                                    <a class="waves-effect waves-light edit-assignment-button" href="#">
-                                        Edit
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="modal-trigger waves-effect waves-light delete-assignment-button" href="#delete-assignment-modal">
-                                        Delete
-                                    </a>
-                                </li>
-                            </ul>
-
                         </li>
                     }
                 </ul>
