@@ -17,6 +17,9 @@ namespace Codex.Services
             _db = new Database();
         }
 
+        /// <summary>
+        /// Get a submission by its ID
+        /// </summary>
         public SubmissionViewModel GetSubmissionById(int submissionId) {
             var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
 

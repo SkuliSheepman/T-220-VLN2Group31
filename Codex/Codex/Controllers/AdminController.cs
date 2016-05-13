@@ -101,7 +101,7 @@ namespace Codex.Controllers
         /// Action called by ajax request, submits a list of courseInstance Ids to be deleted in bulk
         /// </summary>
         public ActionResult DeleteSelectedCourses(List<int> courseInstanceIds) {
-            if (courseInstanceIds == null ||+ courseInstanceIds.Count == 0) {
+            if (courseInstanceIds == null || +courseInstanceIds.Count == 0) {
                 return Json(false);
             }
 

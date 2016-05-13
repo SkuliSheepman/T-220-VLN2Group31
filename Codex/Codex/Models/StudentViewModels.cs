@@ -5,12 +5,18 @@ using System.Web;
 
 namespace Codex.Models
 {
+    /// <summary>
+    /// Main student view model
+    /// </summary>
     public class StudentViewModel
     {
-        public string studentId { get; set; }
+        public string StudentId { get; set; }
         public List<StudentAssignmentViewModel> Assignments { get; set; }
     }
 
+    /// <summary>
+    /// View model for assignments
+    /// </summary>
     public class StudentAssignmentViewModel
     {
         public int Id { get; set; }
@@ -28,6 +34,10 @@ namespace Codex.Models
         public List<StudentProblemViewModel> Problems { get; set; }
     }
 
+
+    /// <summary>
+    /// View model for collaborators
+    /// </summary>
     public class CollaboratorViewModel
     {
         public string Id { get; set; }
@@ -35,6 +45,10 @@ namespace Codex.Models
         public int GroupNumber { get; set; }
     }
 
+
+    /// <summary>
+    /// View model for problems
+    /// </summary>
     public class StudentProblemViewModel
     {
         public int Id { get; set; }
@@ -52,6 +66,9 @@ namespace Codex.Models
         public List<StudentSubmissionViewModel> Submissions { get; set; }
     }
 
+    /// <summary>
+    /// View model for submissions
+    /// </summary>
     public class StudentSubmissionViewModel
     {
         public int Id { get; set; }
@@ -62,6 +79,10 @@ namespace Codex.Models
         public string Owner { get; set; }
     }
 
+
+    /// <summary>
+    /// View model for test cases
+    /// </summary>
     public class StudentTestCaseViewModel
     {
         public int Id { get; set; }

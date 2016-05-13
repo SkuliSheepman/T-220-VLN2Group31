@@ -5,17 +5,29 @@ using System.Web;
 
 namespace Codex.Models
 {
+    /// <summary>
+    /// Main teacher view model
+    /// </summary>
     public class TeacherViewModel
     {
         public List<TeacherActiveSemesterViewModel> ActiveSemesters { get; set; }
         public List<TeacherCourseViewModel> TeacherCourses { get; set; }
         public TeacherCourseViewModel CourseSelected { get; set; }
     }
+
+    /// <summary>
+    /// View model for the active semester
+    /// </summary>
     public class TeacherActiveSemesterViewModel
     {
         public int Year { get; set; }
         public string Semester { get; set; }
     }
+
+
+    /// <summary>
+    /// View model for a course
+    /// </summary>
     public class TeacherCourseViewModel
     {
         public int Id { get; set; }
@@ -29,6 +41,10 @@ namespace Codex.Models
         public List<TeacherAssignmentViewModel> ClosedAssignments { get; set; }
         public List<TeacherProblemUpdateViewModel> ProblemList { get; set; }
     }
+
+    /// <summary>
+    /// VIew model for assignments
+    /// </summary>
     public class TeacherAssignmentViewModel
     {
         public int Id { get; set; }
@@ -43,6 +59,10 @@ namespace Codex.Models
         public List<TeacherProblemViewModel> Problems { get; set; }
     }
 
+
+    /// <summary>
+    /// View model for problems
+    /// </summary>
     public class TeacherProblemViewModel
     {
         public int Id { get; set; }
@@ -51,6 +71,9 @@ namespace Codex.Models
         public List<TeacherAssignmentGroupViewModel> Groups { get; set; }
     }
 
+    /// <summary>
+    ///  View model for assignment groups
+    /// </summary>
     public class TeacherAssignmentGroupViewModel
     {
         public int GroupNumber { get; set; }
@@ -60,6 +83,10 @@ namespace Codex.Models
         public List<TeacherSubmissionViewModel> Submissions { get; set; }
     }
 
+
+    /// <summary>
+    /// View model for updating a problem
+    /// </summary>
     public class TeacherProblemUpdateViewModel
     {
         public int Id { get; set; }
@@ -73,6 +100,10 @@ namespace Codex.Models
         public List<TeacherTestCaseViewModel> TestCases { get; set; }
     }
 
+
+    /// <summary>
+    /// View model for problem creation
+    /// </summary>
     public class TeacherNewProblemViewModel
     {
         public string CourseName { get; set; }
@@ -84,6 +115,10 @@ namespace Codex.Models
         //public List<TeacherTestCaseViewModel> TestCases { get; set; }
     }
 
+
+    /// <summary>
+    /// View model for test cases
+    /// </summary>
     public class TeacherTestCaseViewModel
     {
         public int Id { get; set; }
@@ -91,6 +126,9 @@ namespace Codex.Models
         public string Output { get; set; }
     }
 
+    /// <summary>
+    /// View model for submissions
+    /// </summary>
     public class TeacherSubmissionViewModel
     {
         public int Id { get; set; }
@@ -100,6 +138,10 @@ namespace Codex.Models
         public int? FailedTests { get; set; }
         public double? SubmissionGrade { get; set; }
     }
+
+    /// <summary>
+    /// View model for assignment creation
+    /// </summary>
     public class TeacherCreateAssignmentViewModel
     {
         public int Id { get; set; }
@@ -112,23 +154,10 @@ namespace Codex.Models
         public List<TeacherAssignmentProblemViewModel> Problems { get; set; }
     }
 
-    public class TeacherCreateProblemViewModel
-    {
-        public int CourseId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Filetype { get; set; }
-        public string Attachment { get; set; }
-        public string Language { get; set; }
-        public List<TeacherCreateTestCaseViewModel> testCases { get; set; }
-    }
-    public class TeacherCreateTestCaseViewModel
-    {
-        public int ProblemId { get; set; }
-        public string Input { get; set; }
-        public string ExpectedOutput { get; set; }
-    }
 
+    /// <summary>
+    /// View model for assignment problems
+    /// </summary>
     public class TeacherAssignmentProblemViewModel
     {
         public int ProblemId { get; set; }
