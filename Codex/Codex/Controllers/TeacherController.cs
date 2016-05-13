@@ -120,6 +120,18 @@ namespace Codex.Controllers
             return Json(_teacherService.CreateNewAssignment(assignment));
         }
 
+        public ActionResult DeleteAssignment(int assignmentId) {
+            return Json(_teacherService.DeleteAssignmentById(assignmentId));
+        }
+
+        public ActionResult RemoveProblem(int assignmentId, int problemId) {
+            return Json(_teacherService.RemoveProblemFromAssignmentByIds(assignmentId, problemId));
+        }
+
+        public ActionResult DeleteProblem(int problemId) {
+            return Json(_teacherService.DeleteProblemById(problemId));
+        }
+
         /* Creating a new problem requires 3 methods due to AJAX and model binding being weird when uploading a file, with data and a list of data */
 
         public ActionResult NewProblem(TeacherNewProblemViewModel problem) {

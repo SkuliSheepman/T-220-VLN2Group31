@@ -320,7 +320,6 @@ namespace Codex.Services
         }
 
         public bool CreateNewAssignment(TeacherCreateAssignmentViewModel assignment) {
-
             var newAssignment = new Assignment {
                 CourseInstanceId = assignment.CourseInstanceId,
                 Description = assignment.Description,
@@ -354,10 +353,8 @@ namespace Codex.Services
 
             // Create groups for students
             var count = 1;
-            foreach (var student in students)
-            {
-                _db.AssignmentGroups.Add(new AssignmentGroup
-                {
+            foreach (var student in students) {
+                _db.AssignmentGroups.Add(new AssignmentGroup {
                     UserId = student.Id,
                     AssignmentId = newAssignment.Id,
                     GroupNumber = count
@@ -365,16 +362,13 @@ namespace Codex.Services
                 count++;
             }
 
-            try
-            {
+            try {
                 _db.SaveChanges();
                 return true;
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 return false;
             }
-
         }
 
         public bool SetTestCasesForProblemByProblemId(int problemId, List<TeacherTestCaseViewModel> testCases) {
@@ -426,10 +420,8 @@ namespace Codex.Services
             if (courseId != 0) {
                 var problems = _db.Problems.Where(x => x.CourseId == courseId);
 
-                foreach (var problem in problems)
-                {
-                    var p = new TeacherProblemUpdateViewModel
-                    {
+                foreach (var problem in problems) {
+                    var p = new TeacherProblemUpdateViewModel {
                         Id = problem.Id,
                         Description = problem.Description,
                         Name = problem.Name,
@@ -440,10 +432,8 @@ namespace Codex.Services
                         TestCases = new List<TeacherTestCaseViewModel>()
                     };
 
-                    foreach (var testCase in problem.TestCases)
-                    {
-                        var t = new TeacherTestCaseViewModel
-                        {
+                    foreach (var testCase in problem.TestCases) {
+                        var t = new TeacherTestCaseViewModel {
                             Input = testCase.Input,
                             Output = testCase.ExpectedOutput
                         };
@@ -456,6 +446,69 @@ namespace Codex.Services
             }
 
             return problemList;
+        }
+
+        /// <summary>
+        /// Delete an assignment from the database via it's Id
+        /// </summary>
+        public bool DeleteAssignmentById(int assignmentId) {
+            var assignment = _db.Assignments.SingleOrDefault(x => x.Id == assignmentId);
+
+            if (assignment != null) {
+                // Remove the problems from the assignment first
+
+                foreach (var assignmentProblem in _db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId)) {
+                    RemoveProblemFromAssignmentByIds(assignmentId, assignmentProblem.ProblemId);
+                }
+
+                _db.Assignments.Remove(assignment);
+
+                try {
+                    _db.SaveChanges();
+                    return true;
+                }
+                catch (Exception e) {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Delete a connection between an assignment and a problem using the assignment ID and problem ID
+        /// </summary>
+        public bool RemoveProblemFromAssignmentByIds(int assignmentId, int problemId) {
+            _db.AssignmentProblems.RemoveRange(_db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId && x.ProblemId == problemId));
+
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Delete a problem from the database via it's Id
+        /// </summary>
+        public bool DeleteProblemById(int problemId) {
+            var problem = _db.Problems.SingleOrDefault(x => x.Id == problemId);
+
+            if (problem != null) {
+                _db.Problems.Remove(problem);
+
+                try {
+                    _db.SaveChanges();
+                    return true;
+                }
+                catch (Exception e) {
+                    return false;
+                }
+            }
+
+            return false;
         }
 
         public void CheckUngradedAssignments(int courseInstanceId) {
