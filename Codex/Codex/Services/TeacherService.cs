@@ -12,11 +12,17 @@ namespace Codex.Services
         private readonly Database _db;
         private readonly CourseService _courseService;
 
+        /// <summary>
+        /// Constructor initializes database connection
+        /// </summary>
         public TeacherService() {
             _db = new Database();
             _courseService = new CourseService();
         }
 
+        /// <summary>
+        /// Get all courses a teacher is teaching by user ID
+        /// </summary>
         public List<TeacherCourseViewModel> GetCoursesByUserId(string teacherId) {
             var teacherCoursesQuery = _db.Teachers.Where(x => x.UserId == teacherId);
             var courseList = new List<TeacherCourseViewModel>();
@@ -91,12 +97,18 @@ namespace Codex.Services
             }
         }
 
+        /// <summary>
+        /// Get courses a teacher is teaching in a specific semester in a specific year
+        /// </summary>
         public List<TeacherCourseViewModel> GetTeacherCoursesByDate(string userId, int year, string semester) {
             var teacherCourses = GetCoursesByUserId(userId);
             var datedTeacherCourses = teacherCourses.Where(x => x.Year == year && x.Semester == semester).ToList();
             return datedTeacherCourses;
         }
 
+        /// <summary>
+        /// Get all assignments in a specific course instance
+        /// </summary>
         public List<TeacherAssignmentViewModel> GetAssignmentsInCourseInstanceById(int courseInstanceId) {
             var course = _db.CourseInstances.SingleOrDefault(x => x.Id == courseInstanceId);
             var assignments = course.Assignments.Select(assignment => new TeacherAssignmentViewModel {
@@ -111,6 +123,9 @@ namespace Codex.Services
             return assignments;
         }
 
+        /// <summary>
+        /// Get all problems in a specific assignment
+        /// </summary>
         public List<TeacherProblemViewModel> GetProblemsInAssignmentById(int assignmentId) {
             var problemQuery = _db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId);
             var problemList = new List<TeacherProblemViewModel>();
@@ -124,6 +139,9 @@ namespace Codex.Services
             return problemList;
         }
 
+        /// <summary>
+        /// Get all assignment groups for a specific assignment
+        /// </summary>
         public List<TeacherAssignmentGroupViewModel> GetAssignmentGroups(int assignmentId) {
             var groupQuery = _db.AssignmentGroups.Where(x => x.AssignmentId == assignmentId);
             var groupNumberSet = new HashSet<int>();
@@ -176,6 +194,9 @@ namespace Codex.Services
             return assignmentGroupList;
         }
 
+        /// <summary>
+        /// Get all submissions from a specific assignment group
+        /// </summary>
         public List<TeacherSubmissionViewModel> GetSubmissionsFromGroupByStudentIds(List<string> studentIds, int assignmentId, int problemId) {
             var submissionList = new List<TeacherSubmissionViewModel>();
             foreach (var studentId in studentIds) {
@@ -193,7 +214,9 @@ namespace Codex.Services
             return submissionList;
         }
 
-        // Gets submission with fewest FailedTests and Newest SubmissionTime
+        /// <summary>
+        /// Gets submission with fewest FailedTests and Newest SubmissionTime
+        /// </summary>
         public TeacherSubmissionViewModel GetBestSubmissionFromSubmissionList(List<TeacherSubmissionViewModel> submissions) {
             var bestSubmission = new TeacherSubmissionViewModel();
             foreach (var submission in submissions) {
@@ -207,6 +230,9 @@ namespace Codex.Services
             return bestSubmission;
         }
 
+        /// <summary>
+        /// Get the assignments that are open in a given list
+        /// </summary>
         public List<TeacherAssignmentViewModel> GetOpenAssignmentsFromList(List<TeacherAssignmentViewModel> assignments) {
             var openAssignments = assignments
                 .Where(
@@ -217,6 +243,9 @@ namespace Codex.Services
             return openAssignments;
         }
 
+        /// <summary>
+        /// Get all assignments that have not yet opened from a given list
+        /// </summary>
         public List<TeacherAssignmentViewModel> GetUpcomingAssignmentsFromList(List<TeacherAssignmentViewModel> assignments) {
             var upcomingAssignments = assignments
                 .Where(
@@ -226,6 +255,9 @@ namespace Codex.Services
             return upcomingAssignments;
         }
 
+        /// <summary>
+        /// Get all assignments that require grading from a given list
+        /// </summary>
         public List<TeacherAssignmentViewModel> GetRequiresGradingAssignmentsFromList(List<TeacherAssignmentViewModel> assignments) {
             var notGradedAssignments = assignments
                 .Where(
@@ -234,6 +266,9 @@ namespace Codex.Services
             return notGradedAssignments;
         }
 
+        /// <summary>
+        /// Get all assignments that are closed from a given list
+        /// </summary>
         public List<TeacherAssignmentViewModel> GetClosedAssignmentsFromList(List<TeacherAssignmentViewModel> assignments) {
             var closedAssignments = assignments
                 .Where(
@@ -459,6 +494,9 @@ namespace Codex.Services
             return false;
         }
 
+        /// <summary>
+        /// Set test cases for a specific problem
+        /// </summary>
         public bool SetTestCasesForProblemByProblemId(int problemId, List<TeacherTestCaseViewModel> testCases) {
             foreach (var testCase in testCases) {
                 var newTestCase = new TestCase {
@@ -479,6 +517,9 @@ namespace Codex.Services
             }
         }
 
+        /// <summary>
+        /// Set attachment to a specific problem
+        /// </summary>
         public bool SetAttachmentToProblemInDatabaseByProblemId(int problemId, string attachmentName) {
             var problem = _db.Problems.SingleOrDefault(x => x.Id == problemId);
 
@@ -712,12 +753,15 @@ namespace Codex.Services
             return null;
         }
 
+        /// <summary>
+        /// Checks all closed and required grading assignments to see if they are graded
+        /// </summary>
         public void CheckUngradedAssignments(int courseInstanceId) {
             // Gets all closed and ungraded assignments in courseInstance
             var assignmentsQuery = _db.Assignments.Where(x => x.CourseInstanceId == courseInstanceId && x.EndTime < DateTime.Now && x.IsGraded == false);
             foreach (var assignment in assignmentsQuery) {
                 // Assumes the assignment is graded
-                bool IsGraded = true;
+                var IsGraded = true;
 
                 // Gets all problems in assignment
                 var problemQuery = _db.AssignmentProblems.Where(x => x.AssignmentId == assignment.Id);
@@ -746,7 +790,7 @@ namespace Codex.Services
                             }
                         }
                         // If no submission that is graded is found we break and render the assignment still NOT Graded
-                        if (groupSubmissionsQuery == null) {
+                        if (!groupSubmissionsQuery.Any()) {
                             IsGraded = false;
                             break;
                         }
@@ -757,7 +801,7 @@ namespace Codex.Services
                 }
                 // We have iterated through the entire assignment and there is no problem with at least one group with no graded submission
                 // So we update the database and set the assignment to IsGraded = true
-                if (IsGraded == true) {
+                if (IsGraded) {
                     assignment.IsGraded = true;
                     try {
                         _db.SaveChanges();
