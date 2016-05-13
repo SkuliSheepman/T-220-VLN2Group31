@@ -53,6 +53,7 @@ namespace Codex.Controllers
             };
 
             ViewBag.UserName = User.Identity.Name;
+            ViewBag.UserId = _userService.GetUserIdByName(User.Identity.Name);
             return View(model);
         }
 
@@ -81,6 +82,7 @@ namespace Codex.Controllers
 
                 ViewBag.UserName = User.Identity.Name;
                 ViewBag.UserId = _userService.GetUserIdByName(User.Identity.Name);
+                ViewBag.Loners = _studentService.GetLonelyCollaboratorsInCourseInstance(assignment.Id);
                 return View(assignment);
 
             }
@@ -129,6 +131,18 @@ namespace Codex.Controllers
             {
                 _fileService.DownloadAttachment(_userService.GetUserIdByName(User.Identity.Name), problemid.Value, assignmentid.Value);
             }
+        }
+
+        // Leave group
+        public ActionResult LeaveAssignmentGroup(int? assignmentid)
+        {
+            return View();
+        }
+
+        // Add user to assignment group
+        public ActionResult AssignUserToGroup(int? userid, int? assignmentid)
+        {
+            return View();
         }
     }
 }

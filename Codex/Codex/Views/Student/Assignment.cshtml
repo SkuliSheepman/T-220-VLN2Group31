@@ -36,46 +36,62 @@
 
             <div class="divider"></div>
             <!-- Assignment collaborators-->
-            @if (Model.MaxCollaborators > 1)
+            @if (Model.MaxCollaborators > 1 || true)
             {
                 <div class="collapsible-body-container">
                     <ul class="collapsible" data-collapsible="accordion">
                         <li class="grey lighten-1">
                             <div class="collapsible-header">
                                 <div class="row clear-margin">
-                                    <div class="col s4 truncate">
+                                    <div class="col s10 truncate">
                                         <span class="search-criteria">Collaborators</span>
                                     </div>
-                                    <!--<div class="col s2 grey-text truncate right-align">
+                                    <div class="col s2 grey-text truncate right-align">
                                         <span>Maximum: @Model.MaxCollaborators</span>
-                                    </div>-->
+                                    </div>
                                 </div>
                             </div>
                             <div class="collapsible-body">
-                                <table class="striped centered bordered">
-                                    <thead>
-                                        <tr>
-                                            <th data-field="id" class="hiddendiv">Id</th>
-                                            <th data-field="name">Name</th>
-                                            <th data-field="remove">Remove</th>
-                                        </tr>
-                                    </thead>
+                                <table class="striped bordered">
                                     <tbody>
-                                        @foreach (var collaborator in Model.Collaborators)
+                                        @for (int i = 0; i < Model.Collaborators.Count(); i++)
                                         {
                                             <tr>
-                                                <td class="hiddendiv"></td>
-                                                <td>@collaborator.Name</td>
-                                                <td>
-                                                    <a href="#" class="remove-teacher-from-course">
-                                                        <i class="material-icons red-text">clear</i>
-                                                    </a>
+                                                <td class="col s10" style="padding:12px">
+                                                    <span><b>@Model.Collaborators[i].Name</b></span>
+                                                </td>
+                                                <td class="col s2" style="padding:12px">
+                                                    @if (ViewBag.UserId == @Model.Collaborators[i].Id)
+                                                    {
+                                                        <div class="col s4">
+                                                            <a href="" class="waves-effect waves-light btn add-user-to-group-button" style="margin-top:-7px">Leave</a>
+                                                        </div>
+                                                    }
                                                 </td>
                                             </tr>
                                             <div class="divider"></div>
                                         }
                                     </tbody>
-                            </table>
+                                    <tr style="background-color:white">
+                                        <td class="col s10">
+                                            <select>
+                                                @foreach (var loner in ViewBag.Loners)
+                                                {
+                                                    if (loner.Id != ViewBag.UserId)
+                                                    {
+                                                    <option value="@loner.Id">@loner.Name</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </td>
+                                        <td class="col s2">
+                                            <div class="col s4">
+                                                <a href="" class="waves-effect waves-light btn add-user-to-group-button" style="margin-top:10px">Add user</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                         </li>
                     </ul>
                 </div>

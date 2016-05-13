@@ -292,10 +292,7 @@ namespace Codex.Services
                 byte[] data = req.DownloadData(filePath);
                 response.BinaryWrite(data);
                 response.End();
-            } else
-            {
-                
-            }
+            };
         }
 
         /// <summary>

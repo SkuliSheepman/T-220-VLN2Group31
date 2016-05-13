@@ -224,5 +224,32 @@ namespace Codex.Services
             return assignment;
 
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<CollaboratorViewModel> GetLonelyCollaboratorsInCourseInstance(int assignmentid)
+        {
+            var loners = new List<CollaboratorViewModel>();
+
+            var assignment = _db.Assignments.FirstOrDefault(x => x.Id == assignmentid);
+
+            var usersInCourseInstance = _db.CourseInstances.FirstOrDefault(x => x.Id == assignment.CourseInstanceId);
+
+            foreach (var user in usersInCourseInstance.AspNetUsers)
+            {
+                var collaborators = GetCollaborators(assignment.Id, user.Id);
+                if (collaborators.Count() == 1)
+                {
+                    loners.Add(new CollaboratorViewModel
+                    {
+                        Id = user.Id,
+                        Name = user.FullName
+                    });
+                }
+            }
+
+            return loners;
+        }
     }
 }
