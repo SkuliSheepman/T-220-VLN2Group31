@@ -125,6 +125,8 @@
             row.find("input[id^='new-assignment-weight']").val(problem.Weight).focus();
             row.find("input[id^='new-assignment-submission']").val(problem.MaxSubmissions).focus();
         });
+
+        $("#edit-assignment-modal").openModal();
     }
 
     // Fill in the form the problems's info to be edited
@@ -145,6 +147,8 @@
             panel.find("textarea:last").val(testCase.Output);
             panel.find("input.test-case-id").val(testCase.Id).focus();
         });
+
+        $("#edit-problem-modal").openModal();
     }
 
     // Add problem entry
@@ -593,10 +597,35 @@
 
     // Click problem entry in problem list
     $(".problem-list-entry").on("click", function () {
-        $("#edit-problem-modal").openModal();
-
         var formData = {
             "problemId": $(this).find(".hiddendiv").text()
+        };
+
+        $.ajax({
+            url: "/Teacher/GetProblemForEdit",
+            data: JSON.stringify(formData),
+            method: "POST",
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (responseData) {
+                if (responseData) {
+                    fillInProblemEdit(responseData);
+                }
+                else {
+                    Materialize.toast("An error occurred retrieving the problem", 4000);
+                }
+
+            },
+            error: function () {
+                Materialize.toast("Something awful happened :(", 4000);
+            }
+        });
+    });
+
+    // Click edit problem
+    $(".edit-problem-button").on("click", function () {
+        var formData = {
+            "problemId": DROPDOWN_PROBLEM_ID
         };
 
         $.ajax({

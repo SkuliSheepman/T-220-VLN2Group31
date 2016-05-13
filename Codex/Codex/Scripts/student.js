@@ -103,7 +103,7 @@
 
                             // Compile error
                             if (responseData.Message === "compile") {
-                                var result = "<a href='/Submissions/Index/" + responseData.SubmissionId + "' class='red-text stop-propagation'>" +
+                                var result = "<a href='/Submission/Index/" + responseData.SubmissionId + "' class='red-text stop-propagation'>" +
                                                 "<span class='hide-on-small-and-down'>" +
                                                     "Compile error" +
                                                 "</span>" +
@@ -113,7 +113,7 @@
                             }
                             // Failed
                             else if(0 < responseData.Message){
-                                var result = "<a href='/Submissions/Index/" + responseData.SubmissionId + "' class='red-text stop-propagation'>" +
+                                var result = "<a href='/Submission/Index/" + responseData.SubmissionId + "' class='red-text stop-propagation'>" +
                                                 "<span class='hide-on-small-and-down'>" +
                                                     responseData.Message + " tests failed" +
                                                 "</span>" +
@@ -123,7 +123,7 @@
                             }
                             // Passed
                             else if (responseData.Message === 0) {
-                                var result = "<a href='/Submissions/Index/" +
+                                var result = "<a href='/Submission/Index/" +
                                             responseData.SubmissionId +
                                             "' class='green-text stop-propagation'>" +
                                             "<span class='hide-on-small-and-down'>" +
