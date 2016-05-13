@@ -278,10 +278,10 @@ namespace Codex.Services
         {
             string filePath = path;
             FileInfo file = new FileInfo(filePath);
+            WebClient req = new WebClient();
+            HttpResponse response = HttpContext.Current.Response;
             if (File.Exists(filePath))
             {
-                WebClient req = new WebClient();
-                HttpResponse response = HttpContext.Current.Response;
                 response.Clear();
                 response.ClearContent();
                 response.ClearHeaders();
@@ -290,7 +290,15 @@ namespace Codex.Services
                 byte[] data = req.DownloadData(filePath);
                 response.BinaryWrite(data);
                 response.End();
-            };
+            } else
+            {
+                response.Clear();
+                response.ClearContent();
+                response.ClearHeaders();
+                response.Buffer = true;
+                response.AddHeader("WARNING", "This file doesn't seem to exist on the server");
+                response.End();
+            }
         }
     }
 }
