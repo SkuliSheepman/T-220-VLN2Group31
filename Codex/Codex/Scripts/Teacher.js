@@ -233,7 +233,7 @@
 
     // New problem form
     $("#new-problem-modal-create-button").on("click", function (e) {
-
+        e.preventDefault();
         var testCases = [];
         $("#create-problem-form .new-problem-input").each(function () {
             var input = $(this).find("textarea:first").val();
@@ -274,7 +274,7 @@
 
     // Edit problem form
     $("#edit-problem-modal-edit-button").on("click", function (e) {
-
+        e.preventDefault();
         var testCases = [];
         $("#edit-problem-form .new-problem-input").each(function () {
             var id = $(this).find("input.test-case-id").val();
@@ -315,7 +315,8 @@
         });
     });
 
-    $("#create-problem-form .btn-floating, #edit-problem-form .btn-floating").on("click", function () {
+    $("#create-problem-form .btn-floating, #edit-problem-form .btn-floating").on("click", function (e) {
+        e.preventDefault();
         newTestCaseEntry($(this));
     });
 
@@ -328,7 +329,7 @@
 
     // New assignment form
     $("#new-assignment-modal-create-button").on("click", function (e) {
-
+        e.preventDefault();
         var problems = [];
         $("#create-assignment-form .new-assignment-problemEntry").each(function () {
             var problemId = $(this).find("select").val();
@@ -357,6 +358,7 @@
             success: function (responseData) {
                 if (responseData) {
                     Materialize.toast("Assignment created", 4000);
+                    $("#new-assignment-modal").closeModal();
                 }
                 else {
                     Materialize.toast("An error occurred creating an assignment", 4000);
@@ -370,12 +372,14 @@
     });
 
     // Add problem to new assignment
-    $("#create-assignment-form .btn-floating").on("click", function () {
+    $("#create-assignment-form .btn-floating").on("click", function (e) {
+        e.preventDefault();
         newProblemEntry($(this));
     });
 
     // Add problem to edit assignment
-    $("#edit-assignment-form .btn-floating").on("click", function () {
+    $("#edit-assignment-form .btn-floating").on("click", function (e) {
+        e.preventDefault();
         newProblemEntry($(this));
     });
 
@@ -388,7 +392,7 @@
 
     // Edit assignment form
     $("#edit-assignment-modal-edit-button").on("click", function (e) {
-
+        e.preventDefault();
         var problems = [];
         $("#edit-assignment-form .new-assignment-problemEntry").each(function () {
             var problemId = $(this).find("select").val();
@@ -418,6 +422,7 @@
             success: function (responseData) {
                 if (responseData) {
                     Materialize.toast("Assignment edited", 4000);
+                    $("#edit-assignment-modal").closeModal();
                 }
                 else {
                     Materialize.toast("An error occurred editing an assignment", 4000);
@@ -431,7 +436,8 @@
     });
 
     // Set problem and assignment ID when dropdown is clicked
-    $(".problem-dropdown").on("click", function() {
+    $(".problem-dropdown").on("click", function (e) {
+        e.preventDefault();
         var idSplit = $(this).attr("data-activates").split("-");
 
         DROPDOWN_ASSIGNMENT_ID = idSplit[1];
@@ -439,14 +445,16 @@
     });
 
     // Set assignment ID when dropdown is clicked
-    $(".assignment-dropdown").on("click", function () {
+    $(".assignment-dropdown").on("click", function (e) {
+        e.preventDefault();
         var idSplit = $(this).attr("data-activates").split("-");
         
         DROPDOWN_ASSIGNMENT_ID = idSplit[1];
     });
 
     // Delete assignment
-    $("#delete-assignment-button").on("click", function() {
+    $("#delete-assignment-button").on("click", function (e) {
+        e.preventDefault();
         var formData = {
             "assignmentId": DROPDOWN_ASSIGNMENT_ID
         };
@@ -460,6 +468,7 @@
             success: function (responseData) {
                 if (responseData) {
                     Materialize.toast("Assignment deleted", 4000);
+                    $("#delete-assignment-modal").closeModal();
                 }
                 else {
                     Materialize.toast("An error occurred deleting the assignment", 4000);
@@ -473,7 +482,8 @@
     });
 
     // Delete problem
-    $("#delete-problem-button").on("click", function () {
+    $("#delete-problem-button").on("click", function (e) {
+        e.preventDefault();
         var formData = {
             "problemId": DROPDOWN_PROBLEM_ID
         };
@@ -487,6 +497,7 @@
             success: function (responseData) {
                 if (responseData) {
                     Materialize.toast("Problem deleted", 4000);
+                    $("#delete-problem-modal").closeModal();
                 }
                 else {
                     Materialize.toast("An error occurred deleting the problem", 4000);
@@ -500,7 +511,8 @@
     });
 
     // Remove problem from assignment
-    $("#remove-problem-button").on("click", function () {
+    $("#remove-problem-button").on("click", function (e) {
+        e.preventDefault();
         var formData = {
             "assignmentId": DROPDOWN_ASSIGNMENT_ID,
             "problemId": DROPDOWN_PROBLEM_ID
@@ -515,6 +527,7 @@
             success: function (responseData) {
                 if (responseData) {
                     Materialize.toast("Problem removed", 4000);
+                    $("#remove-problem-modal").closeModal();
                 }
                 else {
                     Materialize.toast("An error occurred removing the problem", 4000);
@@ -528,12 +541,14 @@
     });
 
     // Delete problem
-    $(".delete-problem").on("click", function () {
+    $(".delete-problem").on("click", function (e) {
+        e.preventDefault();
         DROPDOWN_PROBLEM_ID = $(this).closest(".problem-list-entry").find(".hiddendiv").text();
     });
 
     // Edit assignment dropdown button
-    $(".edit-assignment-button").on("click", function () {
+    $(".edit-assignment-button").on("click", function (e) {
+        e.preventDefault();
         var formData = {
             "assignmentId": DROPDOWN_ASSIGNMENT_ID
         };

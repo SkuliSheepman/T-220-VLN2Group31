@@ -4,235 +4,223 @@
 }
 
 <div class="row">
-    <div class="col s12">
-        <div class="card-panel">
+<div class="col s12">
+<div class="card-panel">
 
-            <div id="assignmentid" class="hiddendiv">@Model.Id</div>
-            <blockquote>
-                <!-- Course -->
-                <div class="row clear-margin">
-                    <div class="col s12">
-                        <span class="grey-text">Forritun</span>
-                    </div>
-                </div>
-
-                <!-- Assignment name -->
-                <div class="row">
-                    <div class="col s12">
-                        <h2 class="assignment-heading">@Model.Name</h2>
-                    </div>
-                </div>
-            </blockquote>
-
-            <div class="divider"></div>
-
-            <!-- Assignment description -->
-            <div class="section">
-                <div class="row clear-margin">
-                    <div class="col s12">
-                        <span>@Model.Description</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="divider"></div>
-            <!-- Assignment collaborators-->
-            <div id="groupid" class="hiddendiv">@Model.Collaborators[0].GroupNumber</div>
-            @if (Model.MaxCollaborators > 1 && DateTime.Now < Model.EndTime)
-            {
-                <div class="collapsible-body-container">
-                    <ul class="collapsible" data-collapsible="accordion">
-                        <li class="grey lighten-1">
-                            <div class="collapsible-header">
-                                <div class="row clear-margin">
-                                    <div class="col s10 truncate">
-                                        <span class="search-criteria">Collaborators</span>
-                                    </div>
-                                    <div class="col s2 grey-text truncate right-align">
-                                        <span>Maximum: @Model.MaxCollaborators</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="collapsible-body">
-                                <table class="striped bordered">
-                                    <tbody>
-                                        @foreach (var collaborator in Model.Collaborators)
-                                        {
-                                            <tr>
-                                                <td class="col s10" style="padding:12px">
-                                                    <span><b>@collaborator.Name</b></span>
-                                                </td>
-                                                <td class="col s2" style="padding:12px">
-                                                    @if (ViewBag.UserId == collaborator.Id)
-                                                    {
-                                                        <div class="col s3">
-                                                            <a href="#" class="waves-effect waves-light btn leave-assignment-group" style="margin-top:-7px;margin-left:-9px">Leave</a>
-                                                        </div>
-                                                    }
-                                                </td>
-                                            </tr>
-                                            <div class="divider"></div>
-                                        }
-                                    </tbody>
-                                    @if ((Model.Collaborators.Count() < Model.MaxCollaborators) && ViewBag.Loners.Count > 0)
-                                    {
-                                        <tr style="background-color:white">
-                                            <td class="col s10">
-                                                <select id="loners">
-                                                    @foreach (var loner in ViewBag.Loners)
-                                                    {
-                                                        if (loner.Id != ViewBag.UserId)
-                                                        {
-                                                        <option value="@loner.Id">@loner.Name</option>
-                                                        }
-                                                    }
-                                                </select>
-                                            </td>
-                                            <td class="col s2">
-                                                <div class="col s4">
-                                                    <a href="#" class="waves-effect waves-light btn add-user-to-group-button" style="margin-top:10px">Add user</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                </table>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            <div class="divider"></div>
-            }
-            <div class="collapsible-body-container">
-                @if (Model.Problems.Count != 0)
-                {
-                    <ul class="collapsible" data-collapsible="accordion">
-                        @foreach (var problem in Model.Problems)
-                        {
-                            <li class="grey lighten-1">
-                                <div class="collapsible-header">
-                                    <div class="row clear-margin">
-                                        <div class="col s3 truncate">
-                                            <span class="search-criteria">@problem.Name</span>
-                                        </div>
-                                        <div class="col s1 grey-text">
-                                            <span>@problem.Weight%</span>
-                                        </div>
-                                        <div class="col s2 grey-text truncate">
-                                            <span>@problem.Submissions.Count submissions</span>
-                                        </div>
-                                        <!-- todo: submit solution -->
-                                        <div class="col s3 m4">
-                                            @using (Html.BeginForm("Submit", "Student", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
-                                            {
-                                                <label for="file-@Model.Id-@problem.Id" class="file-upload stop-propagation tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
-                                                    <span class="waves-effect blue-text waves-light btn-flat">
-                                                        <i class="material-icons hide-on-small-and-down">insert_drive_file</i>
-                                                    </span>
-                                                </label>
-                                                                <input id="file-@Model.Id-@problem.Id" type="file" class="stop-propagation" />
-                                                                <button class="btn-flat grey lighten-4 disabled submission-submit-button narrow-button tooltipped" type="submit" name="action" data-position="top" data-delay="30" data-tooltip="No file selected">
-                                                                    <span>Submit</span>
-                                                                    <i class="material-icons right hide-on-med-and-down">send</i>
-                                                                </button>
-                                            }
-                                        </div>
-                                        <div class="col s3 m2 status right-align truncate">
-                                            @if (problem.IsAccepted)
-                                            {
-                                                <a href="#" class="green-text">
-                                                    <span class="hide-on-small-and-down">Accepted</span>
-                                                    <span class="material-icons">done</span>
-                                                </a>
-                                            }
-                                            else if (problem.BestSubmission != null)
-                                            {
-                                                <a href="#" class="red-text">
-                                                    <span class="hide-on-small-and-down">
-                                                        @problem.BestSubmission.FailedTests tests failed
-                                                    </span>
-                                                    <span class="material-icons">clear</span>
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <a href="#" class="grey-text">
-                                                    <span class="hide-on-small-and-down">Unattempted</span>
-                                                    <span class="material-icons">remove</span>
-                                                </a>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                                    <div class="collapsible-body">
-                                        <div class="card-panel grey lighten-3 clear-margin">
-                                            @if (problem.Attachment != null)
-                                            {
-                                                <span>Attachment: </span>
-                                                <span data-action="@Url.Action("DownloadAttachmentFile", "Student", new { problemid = problem.Id, assignmentid = Model.Id })" class="waves-effect blue-text waves-light btn-flat valign-wrapper attachment-download-button" style="padding:0;text-transform:none;" data-position="top" data-delay="30" data-tooltip="Download attachment">
-                                                    <i class="material-icons">attach_file</i><span>@problem.Attachment</span>
-                                                </span>
-                                                <div class="divider"></div><br />
-                                            }
-                                            <span>@problem.Description</span>
-                                        </div>
-                                        <div class="divier"></div>
-                                        <div class="collapsible-body-container">
-                                            @if (problem.Submissions.Count != 0)
-                                            {
-                                                <div class="collection z-depth-1">
-                                                    @foreach (var submission in problem.Submissions)
-                                                    {
-                                                        <a href="@Url.Action("Index", "Submission", new { id = submission.Id })" class="collection-item row">
-                                                            <div class="col s4 truncate">
-                                                                <span>@submission.OriginalFilename</span>
-                                                            </div>
-                                                            <div class="col s3 grey-text truncate">
-                                                                <span>@submission.SubmissionTime.ToString()</span>
-                                                            </div>
-                                                            <div class="col s2 truncate">
-                                                                <span data-action="@Url.Action("DownloadFile", "Submission", new { id = @submission.Id })" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
-                                                                    <i class="material-icons">file_download</i>
-                                                                </span>
-                                                            </div>
-                                                            <div class="col s3 status truncate right-align">
-                                                                @if (submission.FailedTests.HasValue)
-                                                                {
-                                                                    if (submission.FailedTests.Value == 0)
-                                                                    {
-                                                                        <span class="green-text">
-                                                                            <span class="hide-on-small-and-down">Accepted</span>
-                                                                            <span class="material-icons">done</span>
-                                                                        </span>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <span class="red-text">
-                                                                            <span class="hide-on-small-and-down">
-                                                                                @submission.FailedTests.Value tests failed
-                                                                            </span>
-                                                                            <span class="material-icons">clear</span>
-                                                                        </span>
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    <span class="red-text">
-                                                                        <span class="hide-on-small-and-down">Compile error</span>
-                                                                        <span class="material-icons">clear</span>
-                                                                    </span>
-                                                                }
-                                                            </div>
-                                                        </a>
-                                                    }
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-</li>
-                        }
-                    </ul>
-                }
-            </div>
+<div id="assignmentid" class="hiddendiv">@Model.Id</div>
+<blockquote>
+    <!-- Course -->
+    <div class="row clear-margin">
+        <div class="col s12">
+            <span class="grey-text">Forritun</span>
         </div>
     </div>
+
+    <!-- Assignment name -->
+    <div class="row">
+        <div class="col s12">
+            <h2 class="assignment-heading">@Model.Name</h2>
+        </div>
+    </div>
+</blockquote>
+
+<div class="divider"></div>
+
+<!-- Assignment description -->
+<div class="section">
+    <div class="row clear-margin">
+        <div class="col s12">
+            <span>@Model.Description</span>
+        </div>
+    </div>
+</div>
+
+<div class="divider"></div>
+<!-- Assignment collaborators-->
+<div id="groupid" class="hiddendiv">@Model.Collaborators[0].GroupNumber</div>
+@if (Model.MaxCollaborators > 1 && DateTime.Now < Model.EndTime) {
+    <div class="collapsible-body-container">
+        <ul class="collapsible" data-collapsible="accordion">
+            <li class="grey lighten-1">
+                <div class="collapsible-header">
+                    <div class="row clear-margin">
+                        <div class="col s10 truncate">
+                            <span class="search-criteria">Collaborators</span>
+                        </div>
+                        <div class="col s2 grey-text truncate right-align">
+                            <span>Maximum: @Model.MaxCollaborators</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="collapsible-body">
+                    <table class="striped bordered">
+                        <tbody>
+                            @foreach (var collaborator in Model.Collaborators) {
+                                <tr>
+                                    <td class="col s10" style="padding: 12px">
+                                        <span><b>@collaborator.Name</b></span>
+                                    </td>
+                                    <td class="col s2" style="padding: 12px">
+                                        @if (ViewBag.UserId == collaborator.Id) {
+                                            <div class="col s3">
+                                                <a href="#" class="waves-effect waves-light btn leave-assignment-group" style="margin-top: -7px; margin-left: -9px">Leave</a>
+                                            </div>
+                                        }
+                                    </td>
+                                </tr>
+                                <div class="divider"></div>
+                            }
+                        </tbody>
+                        @if ((Model.Collaborators.Count() < Model.MaxCollaborators) && ViewBag.Loners.Count > 0) {
+                            <tr style="background-color: white">
+                                <td class="col s10">
+                                    <select id="loners">
+                                        @foreach (var loner in ViewBag.Loners) {
+                                            if (loner.Id != ViewBag.UserId) {
+                                                <option value="@loner.Id">@loner.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </td>
+                                <td class="col s2">
+                                    <div class="col s4">
+                                        <a href="#" class="waves-effect waves-light btn add-user-to-group-button" style="margin-top: 10px">Add user</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="divider"></div>
+}
+<div class="collapsible-body-container">
+    @if (Model.Problems.Count != 0) {
+        <ul class="collapsible" data-collapsible="accordion">
+            @foreach (var problem in Model.Problems) {
+                <li class="grey lighten-1">
+                    <div class="collapsible-header">
+                        <div class="row clear-margin">
+                            <div class="col s3 truncate">
+                                <span class="search-criteria">@problem.Name</span>
+                            </div>
+                            <div class="col s1 grey-text">
+                                <span>@problem.Weight%</span>
+                            </div>
+                            <div class="col s2 grey-text truncate">
+                                <span>@problem.Submissions.Count submissions</span>
+                            </div>
+
+                            <div class="col s3 m4">
+                                @using (Html.BeginForm("Submit", "Student", FormMethod.Post, new {enctype = "multipart/form-data", role = "form"})) {
+                                    <label for="file-@Model.Id-@problem.Id" class="file-upload stop-propagation tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
+                                        <span class="waves-effect blue-text waves-light btn-flat">
+                                                        <i class="material-icons hide-on-small-and-down">insert_drive_file</i>
+                                                    </span>
+                                    </label>
+                                    <input id="file-@Model.Id-@problem.Id" type="file" class="stop-propagation"/>
+                                    <button class="btn-flat grey lighten-4 disabled submission-submit-button narrow-button tooltipped" type="submit" name="action" data-position="top" data-delay="30" data-tooltip="No file selected">
+                                        <span>Submit</span>
+                                        <i class="material-icons right hide-on-med-and-down">send</i>
+                                    </button>
+                                }
+                            </div>
+                            <div class="col s3 m2 status right-align truncate">
+                                @if (problem.IsAccepted) {
+                                    <a href="#" class="green-text">
+                                        <span class="hide-on-small-and-down">Accepted</span>
+                                        <span class="material-icons">done</span>
+                                    </a>
+                                }
+                                else if (problem.BestSubmission != null) {
+                                    <a href="#" class="red-text">
+                                        <span class="hide-on-small-and-down">
+                                            @if (problem.BestSubmission.FailedTests == null) {
+                                                @:Compile error
+                                            }
+                                            else {
+                                                @problem.BestSubmission.FailedTests
+                                                @: failed tests
+                                            }
+                                        </span>
+                                        <span class="material-icons">clear</span>
+                                    </a>
+                                }
+                                else {
+                                    <a href="#" class="grey-text">
+                                        <span class="hide-on-small-and-down">Unattempted</span>
+                                        <span class="material-icons">remove</span>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="card-panel grey lighten-3 clear-margin">
+                            @if (problem.Attachment != null) {
+                                <span>Attachment: </span>
+                                <span data-action="@Url.Action("DownloadAttachmentFile", "Student", new {problemid = problem.Id, assignmentid = Model.Id})" class="waves-effect blue-text waves-light btn-flat valign-wrapper attachment-download-button" style="padding: 0; text-transform: none;" data-position="top" data-delay="30" data-tooltip="Download attachment">
+                                    <i class="material-icons">attach_file</i><span>@problem.Attachment</span>
+                                </span>
+                                <div class="divider"></div>
+                                <br/>
+                            }
+                            <span>@problem.Description</span>
+                        </div>
+                        <div class="divier"></div>
+                        <div class="collapsible-body-container">
+                            @if (problem.Submissions.Count != 0) {
+                                <div class="collection z-depth-1">
+                                    @foreach (var submission in problem.Submissions) {
+                                        <a href="@Url.Action("Index", "Submission", new {id = submission.Id})" class="collection-item row">
+                                            <div class="col s4 truncate">
+                                                <span>@submission.OriginalFilename</span>
+                                            </div>
+                                            <div class="col s3 grey-text truncate">
+                                                <span>@submission.SubmissionTime.ToString()</span>
+                                            </div>
+                                            <div class="col s2 truncate">
+                                                <span data-action="@Url.Action("DownloadFile", "Submission", new {id = @submission.Id})" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
+                                                    <i class="material-icons">file_download</i>
+                                                </span>
+                                            </div>
+                                            <div class="col s3 status truncate right-align">
+                                                @if (submission.FailedTests.HasValue) {
+                                                    if (submission.FailedTests.Value == 0) {
+                                                        <span class="green-text">
+                                                            <span class="hide-on-small-and-down">Accepted</span>
+                                                            <span class="material-icons">done</span>
+                                                        </span>
+                                                    }
+                                                    else {
+                                                        <span class="red-text">
+                                                            <span class="hide-on-small-and-down">
+                                                                @submission.FailedTests.Value tests failed
+                                                            </span>
+                                                            <span class="material-icons">clear</span>
+                                                        </span>
+                                                    }
+                                                }
+                                                else {
+                                                    <span class="red-text">
+                                                        <span class="hide-on-small-and-down">Compile error</span>
+                                                        <span class="material-icons">clear</span>
+                                                    </span>
+                                                }
+                                            </div>
+                                        </a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+</div>
+</div>
+</div>
 </div>

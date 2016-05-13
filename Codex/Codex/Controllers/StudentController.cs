@@ -116,15 +116,18 @@ namespace Codex.Controllers
                 if (submissionId != 0) {
                     if (_fileService.UploadSubmissionToServer(file, assignmentId, problemId, submissionId)) {
                         if (_fileService.CompileCPlusPlusBySubmissionId(submissionId)) {
-                            if (_fileService.RunTestCasesBySubmissionId(submissionId)) {
-                                return Json("success");
+                            var failed = _fileService.RunTestCasesBySubmissionId(submissionId);
+                            if (failed != -1) {
+                                var obj = new { SubmissionId = submissionId, Message = failed };
+                                return Json(obj);
                             }
                             else {
                                 return Json("case");
                             }
                         }
                         else {
-                            return Json("compile");
+                            var obj = new { SubmissionId = submissionId, Message = "compile" };
+                            return Json(obj);
                         }
                     }
                     else {
