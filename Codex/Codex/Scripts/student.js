@@ -75,8 +75,6 @@
                 );
                 $(".preloader-wrapper").tooltip();
 
-                console.log(Array.from(formData.entries()));
-
                 // Ajax call
                 $.ajax({
                     url: $(this).parent().attr("action"),
@@ -86,9 +84,59 @@
                     contentType: false,
                     success: function (responseData) {
                         status.empty();
-                        console.log(responseData);
-                        if (responseData) {
+                        if (responseData === "max") {
+                            Materialize.toast("Your maximum submissions has been reached", 4000);
+                        }
+                        else if (responseData === "db") {
+                            Materialize.toast("An error occurred when inserting to database", 4000);
+                        }
+                        else if (responseData === "write") {
+                            Materialize.toast("An error occurred when writing file to server", 4000);
+                        }
+                        else if (responseData === "case") {
+                            Materialize.toast("An error occurred when running test cases", 4000);
+                        }
+                        else if (responseData) {
                             Materialize.toast("Submission has been evaluated", 4000);
+
+                            // Display results
+
+                            // Compile error
+                            if (responseData.Message === "compile") {
+                                var result = "<a href='/Submissions/Index/" + responseData.SubmissionId + "' class='red-text stop-propagation'>" +
+                                                "<span class='hide-on-small-and-down'>" +
+                                                    "Compile error" +
+                                                "</span>" +
+                                                "<span class='material-icons'>clear</span>" +
+                                             "</a>";
+                                status.html(result);
+                            }
+                            // Failed
+                            else if(0 < responseData.Message){
+                                var result = "<a href='/Submissions/Index/" + responseData.SubmissionId + "' class='red-text stop-propagation'>" +
+                                                "<span class='hide-on-small-and-down'>" +
+                                                    responseData.Message + " tests failed" +
+                                                "</span>" +
+                                                "<span class='material-icons'>clear</span>" +
+                                             "</a>";
+                                status.html(result);
+                            }
+                            // Passed
+                            else if (responseData.Message === 0) {
+                                var result = "<a href='/Submissions/Index/" +
+                                            responseData.SubmissionId +
+                                            "' class='green-text stop-propagation'>" +
+                                            "<span class='hide-on-small-and-down'>" +
+                                            "Accepted" +
+                                            "</span>" +
+                                            "<span class='material-icons'>done</span>" +
+                                            "</a>";
+                                status.html(result);
+                            }
+                            else {
+                                Materialize.toast("An error occurred displaying the results", 4000);
+                            }
+
                         }
                         else {
                             Materialize.toast("Oh noes, something went wrong :(", 4000);

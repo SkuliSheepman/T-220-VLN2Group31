@@ -506,6 +506,11 @@ namespace Codex.Controllers
         }
         #endregion
 
+
+        /// <summary>
+        ///  Settings page view: allows the user to change their name and password
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         public ActionResult Settings()
         { 
@@ -513,11 +518,14 @@ namespace Codex.Controllers
             var userId = userService.GetUserIdByName(User.Identity.Name);
             var model = new AccountSettingsViewModel();
             model = userService.GetUserSettingsById(userId);
-            
+
+            ViewBag.UserName = User.Identity.Name;
             return View(model);                
         }
 
-        
+        /// <summary>
+        /// Changes the users name
+        /// </summary>
         public ActionResult ChangeName(string newName)
         {
             var userService = new Services.UserService();
@@ -529,6 +537,9 @@ namespace Codex.Controllers
             return Json(userService.ChangeName(userId, newName));
         }
 
+        /// <summary>
+        /// Changes the users password
+        /// </summary>
         public ActionResult ChangePassword(string newPassword, string confirmPassword)
         {
             var userService = new Services.UserService();

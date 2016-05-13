@@ -30,7 +30,7 @@ namespace Codex.Services
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool CreateProblem(ProblemCreationViewModel newProblemViewModel) {
             // form an entity from the view model for the database

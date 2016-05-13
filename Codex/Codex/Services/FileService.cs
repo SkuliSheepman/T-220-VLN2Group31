@@ -119,8 +119,9 @@ namespace Codex.Services
 
         /// <summary>
         /// Run test cases for a submission via the submission's ID
+        /// Returns the number of failed test cases
         /// </summary>
-        public bool RunTestCasesBySubmissionId(int submissionId) {
+        public int RunTestCasesBySubmissionId(int submissionId) {
             var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
 
             if (submission != null) {
@@ -183,15 +184,15 @@ namespace Codex.Services
 
                     try {
                         _db.SaveChanges();
-                        return true;
+                        return failedTestCases;
                     }
                     catch (Exception e) {
-                        return false;
+                        return -1;
                     }
                 }
             }
 
-            return false;
+            return -1;
         }
 
         /// <summary>
@@ -208,7 +209,6 @@ namespace Codex.Services
 
         /// <summary>
         /// Download a submission
-        /// Unfinished
         /// </summary>
         public void DownloadSubmission(string userid, int submissionId)
         {
@@ -242,7 +242,6 @@ namespace Codex.Services
 
         /// <summary>
         /// Download an attachment
-        /// Unfinished
         /// </summary>
         public void DownloadAttachment(string userid, int problemid, int assignmentid)
         {
@@ -273,17 +272,16 @@ namespace Codex.Services
         }
 
         /// <summary>
-        /// Download a file
-        /// Unfinished
+        /// Download a file with a unique ID and assign it's original name to it
         /// </summary>
         public void DownloadFile(string path, string originalFileName)
         {
             string filePath = path;
             FileInfo file = new FileInfo(filePath);
+            WebClient req = new WebClient();
+            HttpResponse response = HttpContext.Current.Response;
             if (File.Exists(filePath))
             {
-                WebClient req = new WebClient();
-                HttpResponse response = HttpContext.Current.Response;
                 response.Clear();
                 response.ClearContent();
                 response.ClearHeaders();
@@ -292,16 +290,15 @@ namespace Codex.Services
                 byte[] data = req.DownloadData(filePath);
                 response.BinaryWrite(data);
                 response.End();
-            };
-        }
-
-        /// <summary>
-        /// Check if file exists
-        /// </summary>
-        public bool FileExists(string path)
-        {
-            FileInfo file = new FileInfo(path);
-            return file.Exists;
+            } else
+            {
+                response.Clear();
+                response.ClearContent();
+                response.ClearHeaders();
+                response.Buffer = true;
+                response.AddHeader("WARNING", "This file doesn't seem to exist on the server");
+                response.End();
+            }
         }
     }
 }
