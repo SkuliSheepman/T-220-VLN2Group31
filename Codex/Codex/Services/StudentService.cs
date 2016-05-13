@@ -241,18 +241,23 @@ namespace Codex.Services
         {
 
             var group = _db.AssignmentGroups.Where(x => x.UserId == studentid && x.AssignmentId == assignmentid).SingleOrDefault();
-            var assignment = new StudentAssignmentViewModel
+            var assignment = new StudentAssignmentViewModel();
+
+            if (group != null)
             {
-                Id = group.Assignment.Id,
-                Course = group.Assignment.CourseInstance.Course.Name,
-                Name = group.Assignment.Name,
-                Description = group.Assignment.Description,
-                StartTime = group.Assignment.StartTime,
-                EndTime = group.Assignment.EndTime,
-                MaxCollaborators = group.Assignment.MaxCollaborators,
-                AssignmentGrade = group.AssignmentGrade,
-                Collaborators = GetCollaborators(assignmentid, studentid)
-            };
+                assignment = new StudentAssignmentViewModel
+                {
+                    Id = group.Assignment.Id,
+                    Course = group.Assignment.CourseInstance.Course.Name,
+                    Name = group.Assignment.Name,
+                    Description = group.Assignment.Description,
+                    StartTime = group.Assignment.StartTime,
+                    EndTime = group.Assignment.EndTime,
+                    MaxCollaborators = group.Assignment.MaxCollaborators,
+                    AssignmentGrade = group.AssignmentGrade,
+                    Collaborators = GetCollaborators(assignmentid, studentid)
+                };
+            }
 
             return assignment;
 
@@ -345,19 +350,24 @@ namespace Codex.Services
 
             var assignment = _db.Assignments.FirstOrDefault(x => x.Id == assignmentid);
 
-            var usersInCourseInstance = _db.CourseInstances.FirstOrDefault(x => x.Id == assignment.CourseInstanceId);
-
-            foreach (var user in usersInCourseInstance.AspNetUsers)
+            if (assignment != null)
             {
-                var collaborators = GetCollaborators(assignment.Id, user.Id);
-                if (collaborators.Count() == 1)
+
+                var usersInCourseInstance = _db.CourseInstances.FirstOrDefault(x => x.Id == assignment.CourseInstanceId);
+
+                foreach (var user in usersInCourseInstance.AspNetUsers)
                 {
-                    loners.Add(new CollaboratorViewModel
+                    var collaborators = GetCollaborators(assignment.Id, user.Id);
+                    if (collaborators.Count() == 1)
                     {
-                        Id = user.Id,
-                        Name = user.FullName
-                    });
+                        loners.Add(new CollaboratorViewModel
+                        {
+                            Id = user.Id,
+                            Name = user.FullName
+                        });
+                    }
                 }
+
             }
 
             return loners;
