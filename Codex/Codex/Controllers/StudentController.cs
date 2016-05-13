@@ -89,14 +89,21 @@ namespace Codex.Controllers
 
         }
 
-        public ActionResult Submit(HttpPostedFileBase file, int? assignmentId, int? problemId) {
-            if (file != null && 0 < file.ContentLength && assignmentId.HasValue && problemId.HasValue) {
+        public ActionResult Submit(HttpPostedFileBase file, int assignmentId, int problemId) {
+            var studentId = _userService.GetUserIdByName(User.Identity.Name);
+            var submissionAllowed = _studentService.IsSubmissionAllowed(studentId, assignmentId, problemId);
+
+            if (!submissionAllowed) {
+                return Json("max");
+            }
+
+            if (file != null && 0 < file.ContentLength && assignmentId != 0 && problemId != 0) {
                 var userId = _userService.GetUserIdByName(User.Identity.Name);
 
-                var submissionId = _studentService.InsertSubmissionToDatabase(file, assignmentId.Value, problemId.Value, userId);
+                var submissionId = _studentService.InsertSubmissionToDatabase(file, assignmentId, problemId, userId);
 
                 if (submissionId != 0) {
-                    if (_fileService.UploadSubmissionToServer(file, assignmentId.Value, problemId.Value, submissionId)) {
+                    if (_fileService.UploadSubmissionToServer(file, assignmentId, problemId, submissionId)) {
                         if (_fileService.CompileCPlusPlusBySubmissionId(submissionId)) {
                             if (_fileService.RunTestCasesBySubmissionId(submissionId)) {
                                 return Json("success");

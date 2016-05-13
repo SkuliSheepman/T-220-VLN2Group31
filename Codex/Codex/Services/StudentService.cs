@@ -224,5 +224,18 @@ namespace Codex.Services
             return assignment;
 
         }
+
+        public bool IsSubmissionAllowed(string studentId, int assignmentId, int problemId)
+        {
+            var assignmentProblem = _db.AssignmentProblems.SingleOrDefault(x => x.AssignmentId == assignmentId && x.ProblemId == problemId);
+            if(assignmentProblem != null)
+            {
+                var totalSubmissions = _db.Submissions.Where(x => x.StudentId == studentId && x.AssignmentId == assignmentId && x.ProblemId == problemId).Count();
+                if(totalSubmissions < assignmentProblem.MaxSubmissions) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
