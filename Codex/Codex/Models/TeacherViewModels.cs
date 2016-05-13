@@ -105,10 +105,10 @@ namespace Codex.Models
         public int CourseInstanceId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public DateTime? StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
         public int MaxCollaborators { get; set; }
-        public List<int> AssignmentProblems { get; set; }
+        public List<TeacherAssignmentProblemViewModel> Problems { get; set; }
     }
 
     public class TeacherCreateProblemViewModel
@@ -126,5 +126,12 @@ namespace Codex.Models
         public int ProblemId { get; set; }
         public string Input { get; set; }
         public string ExpectedOutput { get; set; }
+    }
+
+    public class TeacherAssignmentProblemViewModel
+    {
+        public int ProblemId { get; set; }
+        public int Weight { get; set; }
+        public int MaxSubmissions { get; set; }
     }
 }

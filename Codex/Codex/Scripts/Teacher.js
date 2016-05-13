@@ -201,25 +201,27 @@
         });
 
         var formData = {
-            "CourseName": $("#new-assignment-course").val(),
+            "CourseInstanceId": $("#new-assignment-course").val(),
             "Name": $("#new-assignment-name").val(),
             "Description": $("#new-assignment-description").val(),
-            "StartDate": $("#new-assignment-start-date").val(),
-            "EndDate": $("#new-assignment-end-date").val(),
-            "Problems": JSON.stringify({ Problems: problems })
+            "MaxCollaborators": $("#new-assignment-collaborators").val(),
+            "StartTime": $("#new-assignment-start-date").val(),
+            "EndTime": $("#new-assignment-end-date").val(),
+            "Problems": problems
         };
 
         $.ajax({
             url: $("#create-assignment-form").attr("action"),
-            data: formData,
+            data: JSON.stringify(formData),
             method: "POST",
             dataType: "json",
+            contentType: 'application/json; charset=utf-8',
             success: function (responseData) {
-                if (responseData !== 0) {
-
+                if (responseData) {
+                    Materialize.toast("Assignment created", 4000);
                 }
                 else {
-                    Materialize.toast("An error occurred adding the problem to the database", 4000);
+                    Materialize.toast("An error occurred creating an assignment", 4000);
                 }
 
             },

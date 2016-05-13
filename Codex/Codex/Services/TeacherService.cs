@@ -319,6 +319,64 @@ namespace Codex.Services
             }
         }
 
+        public bool CreateNewAssignment(TeacherCreateAssignmentViewModel assignment) {
+
+            var newAssignment = new Assignment {
+                CourseInstanceId = assignment.CourseInstanceId,
+                Description = assignment.Description,
+                EndTime = DateTime.Parse(assignment.EndTime),
+                StartTime = DateTime.Parse(assignment.StartTime),
+                Name = assignment.Name,
+                MaxCollaborators = assignment.MaxCollaborators,
+                IsGraded = false
+            };
+
+            newAssignment = _db.Assignments.Add(newAssignment);
+
+            foreach (var assignmentProblem in assignment.Problems) {
+                var problem = _db.Problems.SingleOrDefault(x => x.Id == assignmentProblem.ProblemId);
+
+                if (problem == null) {
+                    continue;
+                }
+
+                var newAssignmentProblem = new AssignmentProblem {
+                    ProblemId = problem.Id,
+                    AssignmentId = newAssignment.Id,
+                    Weight = (byte)assignmentProblem.Weight,
+                    MaxSubmissions = assignmentProblem.MaxSubmissions
+                };
+
+                _db.AssignmentProblems.Add(newAssignmentProblem);
+            }
+
+            var students = _courseService.GetAllStudentsInCourseInstance(newAssignment.CourseInstanceId);
+
+            // Create groups for students
+            var count = 1;
+            foreach (var student in students)
+            {
+                _db.AssignmentGroups.Add(new AssignmentGroup
+                {
+                    UserId = student.Id,
+                    AssignmentId = newAssignment.Id,
+                    GroupNumber = count
+                });
+                count++;
+            }
+
+            try
+            {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
+
         public bool SetTestCasesForProblemByProblemId(int problemId, List<TeacherTestCaseViewModel> testCases) {
             foreach (var testCase in testCases) {
                 var newTestCase = new TestCase {

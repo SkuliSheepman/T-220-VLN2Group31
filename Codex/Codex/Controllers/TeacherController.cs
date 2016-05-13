@@ -108,8 +108,7 @@ namespace Codex.Controllers
             return Json(false);
         }
 
-        public ActionResult GradeSubmission(double grade, int submissionId)
-        {
+        public ActionResult GradeSubmission(double grade, int submissionId) {
             return Json(false);
         }
 
@@ -117,9 +116,8 @@ namespace Codex.Controllers
             return Json(_teacherService.UpdateProblem(problem));
         }
 
-        public ActionResult NewAssignment(TeacherAssignmentViewModel assignment)
-        {
-            return Json(assignment);
+        public ActionResult NewAssignment(TeacherCreateAssignmentViewModel assignment) {
+            return Json(_teacherService.CreateNewAssignment(assignment));
         }
 
         /* Creating a new problem requires 3 methods due to AJAX and model binding being weird when uploading a file, with data and a list of data */
@@ -128,18 +126,16 @@ namespace Codex.Controllers
             return Json(_teacherService.CreateNewProblem(problem));
         }
 
-        public ActionResult UpdateTestCases(List<TeacherTestCaseViewModel> testCases, int? problemId)
-        {
+        public ActionResult UpdateTestCases(List<TeacherTestCaseViewModel> testCases, int? problemId) {
             if (problemId.HasValue) {
                 return Json(_teacherService.SetTestCasesForProblemByProblemId(problemId.Value, testCases));
             }
             else {
                 return Json(false);
-            } 
+            }
         }
 
-        public ActionResult UpdateAttachment(HttpPostedFileBase attachment, int? problemId)
-        {
+        public ActionResult UpdateAttachment(HttpPostedFileBase attachment, int? problemId) {
             if (problemId.HasValue) {
                 if (_teacherService.SetAttachmentToProblemInDatabaseByProblemId(problemId.Value, attachment.FileName)) {
                     if (_fileService.UploadAttachmentToServer(attachment, problemId.Value)) {
@@ -153,7 +149,7 @@ namespace Codex.Controllers
                     return Json("database");
                 }
             }
-            
+
             return Json(false);
         }
     }
