@@ -7,13 +7,19 @@ using System.Web.Mvc;
 
 namespace Codex.Models
 {
-    // List all users View, Previously Named "UserViewModel"
+    /// <summary>
+    /// The main view model for the users page
+    /// </summary>
     public class AdminUsersViewModel
     {
         public AdminNewUserViewModel NewUserModel { get; set; }
         public List<AdminUserViewModel> Users { get; set; }
         public List<SelectListItem> AvailableCourses { get; set; }
     }
+
+    /// <summary>
+    /// View model for new user creation
+    /// </summary>
     public class AdminNewUserViewModel
     {
         [Required]
@@ -27,15 +33,21 @@ namespace Codex.Models
         [Required]
         [Display(Name = "Admin")]
         public bool Admin { get; set; }
+
         public List<AdminUserCoursesViewModel> UserCourses { get; set; }
     }
-    // Single user view model, listed in "UsersViewModel", previously called "UserHelperModel"
+
+
+    /// <summary>
+    /// Single user view model
+    /// </summary>
     public class AdminUserViewModel
     {
         public ApplicationUser UserInfo { get; set; }
         public bool IsAdmin { get; set; }
         public List<AdminUserCoursesViewModel> UserCourses { get; set; }
     }
+
     // List all courses for user, previously called "UserCourseHelperModel"
     public class AdminUserCoursesViewModel
     {
@@ -46,13 +58,21 @@ namespace Codex.Models
         public string SemesterName { get; set; }
         public int Position { get; set; }
     }
-    // List all courses View, previously called "CourseViewModel"
+
+
+    /// <summary>
+    /// Main view model for courses page
+    /// </summary>
     public class AdminCoursesViewModel
     {
         public AdminNewCourseViewModel NewCourseModel { get; set; }
         public List<AdminCourseViewModel> Courses { get; set; }
     }
-    // Single course view model, listed in "CoursesViewModel", previously called "CourseHelperModel"
+
+
+    /// <summary>
+    /// Single course view model
+    /// </summary>
     public class AdminCourseViewModel
     {
         public int Id { get; set; }
@@ -65,7 +85,11 @@ namespace Codex.Models
         public int StudentsCount { get; set; }
         public List<AdminCourseTeacherViewModel> Teachers { get; set; }
     }
-    // Single Teacher in Course, previously called "CourseTeacherHelperModel"
+
+
+    /// <summary>
+    /// View model for course teachers
+    /// </summary>
     public class AdminCourseTeacherViewModel
     {
         public string Id { get; set; }
@@ -73,6 +97,10 @@ namespace Codex.Models
         public string Email { get; set; }
         public bool? IsAssistant { get; set; }
     }
+
+    /// <summary>
+    /// View model for course creation
+    /// </summary>
     public class AdminNewCourseViewModel
     {
         public string Name { get; set; }
@@ -80,7 +108,11 @@ namespace Codex.Models
         public int Semester { get; set; }
         public int Year { get; set; }
     }
-    // Add course to user model, previously called "UserAddCourseHelperModel"
+
+
+    /// <summary>
+    /// View model for adding a user to a course
+    /// </summary>
     public class AdminAddCourseToUserViewModel
     {
         public int CourseId { get; set; }

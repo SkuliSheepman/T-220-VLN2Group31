@@ -81,7 +81,7 @@ namespace Codex.Controllers
         }
 
         public ActionResult DeleteSelectedCourses(List<int> courseInstanceIds) {
-            if (courseInstanceIds == null ||+ courseInstanceIds.Count == 0) {
+            if (courseInstanceIds == null || +courseInstanceIds.Count == 0) {
                 return Json(false);
             }
 

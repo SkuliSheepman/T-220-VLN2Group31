@@ -40,8 +40,7 @@ namespace Codex
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/materialize/css/materialize.css",
-                      "~/Content/site.css",
-                      "~/Content/login.css"));
+                      "~/Content/site.css"));
         }
     }
 }

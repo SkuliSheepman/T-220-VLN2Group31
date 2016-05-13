@@ -5,6 +5,9 @@ using System.Web;
 
 namespace Codex.Models
 {
+    /// <summary>
+    /// Main submission view model
+    /// </summary>
     public class SubmissionViewModel
     {
         public int Id { get; set; }
@@ -17,6 +20,9 @@ namespace Codex.Models
         public List<SubmissionTestCaseViewModel> PassedTestCases { get; set; }
     }
 
+    /// <summary>
+    /// View model for submission
+    /// </summary>
     public class SubmissionAssignmentViewModel
     {
         public int Id { get; set; }
@@ -26,6 +32,9 @@ namespace Codex.Models
         public bool IsDone { get; set; }
     }
 
+    /// <summary>
+    /// View model for problem
+    /// </summary>
     public class SubmissionProblemViewModel
     {
         public int Id { get; set; }
@@ -33,6 +42,10 @@ namespace Codex.Models
         public int Weight { get; set; }
     }
 
+
+    /// <summary>
+    /// View model for test cases
+    /// </summary>
     public class SubmissionTestCaseViewModel
     {
         public int TestCaseNumber { get; set; }

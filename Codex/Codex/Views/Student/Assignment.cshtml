@@ -37,9 +37,9 @@
 
             <div class="divider"></div>
             <!-- Assignment collaborators-->
-            <div id="groupid" class="hiddendiv">@Model.Collaborators[0].GroupNumber</div>
             @if (Model.MaxCollaborators > 1 && DateTime.Now < Model.EndTime)
             {
+                <div id="groupid" class="hiddendiv">@Model.Collaborators[0].GroupNumber</div>
                 <div class="collapsible-body-container">
                     <ul class="collapsible" data-collapsible="accordion">
                         <li class="grey lighten-1">

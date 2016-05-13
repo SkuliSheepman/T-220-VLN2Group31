@@ -154,9 +154,9 @@ namespace Codex.Services
             return collaborators;
         }
 
-        /*public List<AssignmentHelperModel> GetStudentAssignmentsByStudentId(string studentId) {
+        /*public List<AssignmentHelperModel> GetStudentAssignmentsByStudentId(string StudentId) {
             var assignments = (from _assignmentGroup in _db.AssignmentGroups
-                               where _assignmentGroup.UserId == studentId
+                               where _assignmentGroup.UserId == StudentId
                                join _assignment in _db.Assignments on _assignmentGroup.AssignmentId equals _assignment.Id
                                select new {_assignmentGroup, _assignment}).Select(_assignmentPair => new AssignmentHelperModel {
                                    Id = _assignmentPair._assignment.Id,
@@ -170,7 +170,7 @@ namespace Codex.Services
                                    AssignmentGrade = _assignmentPair._assignmentGroup.AssignmentGrade
                                }).ToList();
             foreach (var _assignment in assignments) {
-                _assignment.Collaborators = GetCollaborators(_assignment.Id, studentId);
+                _assignment.Collaborators = GetCollaborators(_assignment.Id, StudentId);
             }
             return assignments;
         }*/
