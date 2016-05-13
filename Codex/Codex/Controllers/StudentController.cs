@@ -49,6 +49,7 @@ namespace Codex.Controllers
             }
 
             StudentViewModel model = new StudentViewModel {
+                studentId = studentId,
                 Assignments = userAssignments
             };
 

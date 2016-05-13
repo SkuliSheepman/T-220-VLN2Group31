@@ -7,6 +7,7 @@ namespace Codex.Models
 {
     public class StudentViewModel
     {
+        public string studentId { get; set; }
         public List<StudentAssignmentViewModel> Assignments { get; set; }
     }
 
