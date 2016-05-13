@@ -16,7 +16,7 @@
                                     <span class="search-criteria">@assignment.Name</span>
                                 </div>
                                 <div class="col s1 left-align">
-                                    <a href="@Url.Action("Assignment", "Student", new { id = @assignment.Id })" class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
+                                    <a href="@Url.Action("Assignment", "Student", new {id = @assignment.Id})" class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
                                         <i class="material-icons blue-text">info</i>
                                     </a>
                                 </div>
@@ -61,9 +61,9 @@
                                                             <span>@problem.Weight%</span>
                                                         </div>
                                                         <div class="col s2 grey-text truncate">
-                                                            <span>@problem.Submissions.Where(x => x.Owner == Model.studentId).Count() / @problem.MaxSubmissions submissions</span>
+                                                            <span>@problem.Submissions.Count(x => x.Owner == Model.studentId) / @problem.MaxSubmissions submissions</span>
                                                         </div>
-                                                        <!-- todo: submit solution -->
+
                                                         <div class="col s3 m4">
                                                             @using (Html.BeginForm("Submit", "Student", FormMethod.Post, new {enctype = "multipart/form-data", role = "form"})) {
                                                                 <label for="file-@assignment.Id-@problem.Id" class="file-upload stop-propagation tooltipped" data-position="top" data-delay="30" data-tooltip="Choose files...">
@@ -80,15 +80,21 @@
                                                         </div>
                                                         <div class="col s3 m2 status right-align truncate">
                                                             @if (problem.IsAccepted) {
-                                                                <a href="#" class="green-text">
+                                                                <a href="@Url.Action("Index", "Submission", new { id = problem.BestSubmission.Id})" class="green-text stop-propagation">
                                                                     <span class="hide-on-small-and-down">Accepted</span>
                                                                     <span class="material-icons">done</span>
                                                                 </a>
                                                             }
                                                             else if (problem.BestSubmission != null) {
-                                                                <a href="#" class="red-text">
+                                                                <a href="@Url.Action("Index", "Submission", new { id = problem.BestSubmission.Id})" class="red-text stop-propagation">
                                                                     <span class="hide-on-small-and-down">
-                                                                        @problem.BestSubmission.FailedTests tests failed
+                                                                        @if (problem.BestSubmission.FailedTests == null) {
+                                                                            @:Compile error
+                                                                        }
+                                                                        else {
+                                                                            @problem.BestSubmission.FailedTests
+                                                                            @: failed tests
+                                                                        }
                                                                     </span>
                                                                     <span class="material-icons">clear</span>
                                                                 </a>
@@ -108,7 +114,7 @@
                                                         @if (problem.Submissions.Count != 0) {
                                                             <div class="collection z-depth-1">
                                                                 @foreach (var submission in problem.Submissions) {
-                                                                    <a href="@Url.Action("Index", "Submission", new { id = submission.Id })" class="collection-item row">
+                                                                    <a href="@Url.Action("Index", "Submission", new {id = submission.Id})" class="collection-item row">
                                                                         <div class="col s4 truncate">
                                                                             <span>@submission.OriginalFilename</span>
                                                                         </div>
@@ -116,7 +122,7 @@
                                                                             <span>@submission.SubmissionTime.ToString()</span>
                                                                         </div>
                                                                         <div class="col s2 truncate">
-                                                                            <span data-action="@Url.Action("DownloadFile", "Submission", new { id = @submission.Id })" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped stop-propagation" data-position="top" data-delay="30" data-tooltip="Download">
+                                                                            <span data-action="@Url.Action("DownloadFile", "Submission", new {id = @submission.Id})" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped stop-propagation" data-position="top" data-delay="30" data-tooltip="Download">
                                                                                 <i class="material-icons">file_download</i>
                                                                             </span>
                                                                         </div>
@@ -138,7 +144,7 @@
                                                                                 }
                                                                             }
                                                                             else {
-                                                                            <span class="red-text">
+                                                                                <span class="red-text">
                                                                                 <span class="hide-on-small-and-down">Compile error</span>
                                                                                 <span class="material-icons">clear</span>
                                                                             </span>
@@ -183,7 +189,7 @@
                                     <span class="search-criteria">@assignment.Name</span>
                                 </div>
                                 <div class="col s1 left-align">
-                                    <a href="@Url.Action("Assignment", "Student", new { id = @assignment.Id })" class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
+                                    <a href="@Url.Action("Assignment", "Student", new {id = @assignment.Id})" class="waves-effect waves-light-blue light-blue lighten-5 btn-flat narrow-button stop-propagation assignment-info-button tooltipped" href="#" data-position="top" data-delay="30" data-tooltip="Assignment details">
                                         <i class="material-icons blue-text">info</i>
                                     </a>
                                 </div>
@@ -228,8 +234,8 @@
                                                         <div class="col s1 m2 grey-text">
                                                             <span class="hide-on-small-and-down">Grade: </span>
                                                             <span>
-                                                                @if (problem.BestSubmission != null) { 
-                                                                        if (problem.BestSubmission.Grade.HasValue) {
+                                                                @if (problem.BestSubmission != null) {
+                                                                    if (problem.BestSubmission.Grade.HasValue) {
                                                                         @problem.BestSubmission.Grade.Value
                                                                     }
                                                                 }
@@ -270,9 +276,8 @@
                                                     <div class="collapsible-body-container">
                                                         @if (problem.Submissions.Count != 0) {
                                                             <div class="collection z-depth-1">
-                                                                @foreach (var submission in problem.Submissions)
-                                                                {
-                                                                    <a href="@Url.Action("Index", "Submission", new { id = submission.Id })" class="collection-item row">
+                                                                @foreach (var submission in problem.Submissions) {
+                                                                    <a href="@Url.Action("Index", "Submission", new {id = submission.Id})" class="collection-item row">
                                                                         <div class="col s4 truncate">
                                                                             <span>@submission.OriginalFilename</span>
                                                                         </div>
@@ -280,15 +285,13 @@
                                                                             <span>@submission.SubmissionTime.ToString()</span>
                                                                         </div>
                                                                         <div class="col s2 truncate">
-                                                                            <span data-action="@Url.Action("DownloadFile", "Submission", new { id = @submission.Id })" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
+                                                                            <span data-action="@Url.Action("DownloadFile", "Submission", new {id = @submission.Id})" class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button fill-width center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Download">
                                                                                 <i class="material-icons">file_download</i>
                                                                             </span>
                                                                         </div>
                                                                         <div class="col s3 status truncate right-align">
-                                                                            @if (submission.FailedTests.HasValue)
-                                                                            {
-                                                                                if (submission.FailedTests.Value == 0)
-                                                                                {
+                                                                            @if (submission.FailedTests.HasValue) {
+                                                                                if (submission.FailedTests.Value == 0) {
                                                                                     <span class="green-text">
                                                                                         <span class="hide-on-small-and-down">Accepted</span>
                                                                                         <span class="material-icons">done</span>
@@ -301,7 +304,6 @@
                                                                                         </span>
                                                                                         <span class="material-icons">clear</span>
                                                                                     </span>
-                                                                                    
                                                                                 }
                                                                             }
                                                                             else {
@@ -309,7 +311,6 @@
                                                                                     <span class="hide-on-small-and-down">Compile error</span>
                                                                                     <span class="material-icons">clear</span>
                                                                                 </span>
-                                                                                
                                                                             }
                                                                         </div>
                                                                     </a>

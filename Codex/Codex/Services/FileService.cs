@@ -119,8 +119,9 @@ namespace Codex.Services
 
         /// <summary>
         /// Run test cases for a submission via the submission's ID
+        /// Returns the number of failed test cases
         /// </summary>
-        public bool RunTestCasesBySubmissionId(int submissionId) {
+        public int RunTestCasesBySubmissionId(int submissionId) {
             var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
 
             if (submission != null) {
@@ -183,15 +184,15 @@ namespace Codex.Services
 
                     try {
                         _db.SaveChanges();
-                        return true;
+                        return failedTestCases;
                     }
                     catch (Exception e) {
-                        return false;
+                        return -1;
                     }
                 }
             }
 
-            return false;
+            return -1;
         }
 
         /// <summary>
