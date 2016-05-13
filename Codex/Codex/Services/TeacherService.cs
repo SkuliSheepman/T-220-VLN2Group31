@@ -667,16 +667,11 @@ namespace Codex.Services
         }
 
         /// <summary>
-        /// Used to calculate new total assignment grade based on submissionId, used right after grading that submission.
+        /// Used to calculate new total grade for assignment based on one submissionId, called right after grading that submission in the teacher controller.
+        /// Updates the totalGrade for all collaborators in the AssignmentGroups table.
         /// </summary>
         public bool UpdateAssignmentGradeBySubmissionId(int submissionId)
         {
-            // Get all collaborators in assignment
-            // Get their highest graded submission for each problem in assignment
-            // Get the weight of each problem in assignment
-            // Add the grades together based on their weight
-            // Set that number as AssignmentGrade for each student in the AssignmentGroups Table
-
             // Get the initial submission
             var initialSubmission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
 
