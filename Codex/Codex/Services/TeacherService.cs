@@ -644,5 +644,91 @@ namespace Codex.Services
 
             return timeRemaining;
         }
+
+        /// <summary>
+        /// Grades a single submission
+        /// </summary>
+        public bool GradeSubmissionById(int submissionId, double grade)
+        {
+            var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
+            if(submission != null)
+            {
+                submission.SubmissionGrade.Grade = grade;
+
+                try {
+                    _db.SaveChanges();
+                    return true;
+                }
+                catch (Exception e) {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Used to calculate new total assignment grade based on submissionId, used right after grading that submission.
+        /// </summary>
+        public bool UpdateAssignmentGradeBySubmissionId(int submissionId)
+        {
+            // Get all collaborators in assignment
+            // Get their highest graded submission for each problem in assignment
+            // Get the weight of each problem in assignment
+            // Add the grades together based on their weight
+            // Set that number as AssignmentGrade for each student in the AssignmentGroups Table
+
+            // Get the initial submission
+            var initialSubmission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
+
+            if(initialSubmission != null) {
+                //Gets all collaborators in the assignment
+                var studentService = new StudentService();
+                var collaborators = studentService.GetCollaborators(initialSubmission.AssignmentId, initialSubmission.StudentId);
+
+                // Gets all problems in the assignment
+                var problemsInAssignemnt = _db.AssignmentProblems.Where(x => x.AssignmentId == initialSubmission.AssignmentId);
+
+                // Initializes the totalGrade to 0.0
+                var totalGrade = 0.0;
+
+                if(collaborators != null && problemsInAssignemnt != null)
+                {
+                    foreach (var problem in problemsInAssignemnt)
+                    {
+                        var problemWeight = problem.Weight;
+                        var problemGrade = 0.0;
+                        foreach (var student in collaborators)
+                        {
+                            var submission = _db.Submissions.Where(x => x.StudentId == student.Id && x.AssignmentId == initialSubmission.AssignmentId && x.ProblemId == initialSubmission.ProblemId).OrderByDescending(y => y.SubmissionGrade.Grade).FirstOrDefault();
+                            // Checks if the best submission from the student is the best amongst his collaborators. If it is it is assigned to the problemGrade variable
+                            if (submission != null && submission.SubmissionGrade.Grade.Value * problemWeight > problemGrade)
+                            {
+                                problemGrade = submission.SubmissionGrade.Grade.Value * problemWeight;
+                            }
+                        }
+                        // Update totalGrade with the best problemGrade
+                        totalGrade += problemGrade;
+                    }
+                }
+
+                // The database update is made here, assigning the totalGrade to all groupMembers in the assignment
+                var group = initialSubmission.Assignment.AssignmentGroups.SingleOrDefault(x => x.AssignmentId == initialSubmission.AssignmentId && x.UserId == initialSubmission.StudentId);
+                if(group != null)
+                {
+                    var groupMembers = _db.AssignmentGroups.Where(x => x.AssignmentId == initialSubmission.AssignmentId && x.GroupNumber == group.GroupNumber);
+                    foreach (var member in groupMembers)
+                    {
+                        member.AssignmentGrade = totalGrade;
+                    }
+                }
+            }
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
     }
 }
