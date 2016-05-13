@@ -145,7 +145,7 @@ namespace Codex.Services
                 }
 
                 foreach (var studentId in assignmentGroup.StudentIds) {
-                    var submissions = _db.Submissions.Where(x => x.StudentId == studentId && x.AssignmentId == assignmentId);
+                    var submissions = _db.Submissions.Where(x => x.StudentId == studentId && x.AssignmentId == assignmentId).OrderByDescending(x => x.Time);
 
                     if (submissions.Any()) {
                         foreach (var submission in submissions) {
@@ -211,7 +211,7 @@ namespace Codex.Services
             var openAssignments = assignments
                 .Where(
                     x => x.StartTime < DateTime.Now
-                         && DateTime.Now < x.EndTime)
+                         && DateTime.Now < x.EndTime).OrderBy(x => x.StartTime)
                 .ToList();
 
             return openAssignments;
@@ -220,7 +220,7 @@ namespace Codex.Services
         public List<TeacherAssignmentViewModel> GetUpcomingAssignmentsFromList(List<TeacherAssignmentViewModel> assignments) {
             var upcomingAssignments = assignments
                 .Where(
-                    x => DateTime.Now < x.StartTime)
+                    x => DateTime.Now < x.StartTime).OrderBy(x => x.StartTime)
                 .ToList();
 
             return upcomingAssignments;
@@ -229,7 +229,7 @@ namespace Codex.Services
         public List<TeacherAssignmentViewModel> GetRequiresGradingAssignmentsFromList(List<TeacherAssignmentViewModel> assignments) {
             var notGradedAssignments = assignments
                 .Where(
-                    x => x.EndTime < DateTime.Now && x.IsGraded == false)
+                    x => x.EndTime < DateTime.Now && x.IsGraded == false).OrderBy(x => x.EndTime)
                 .ToList();
             return notGradedAssignments;
         }
@@ -237,44 +237,10 @@ namespace Codex.Services
         public List<TeacherAssignmentViewModel> GetClosedAssignmentsFromList(List<TeacherAssignmentViewModel> assignments) {
             var closedAssignments = assignments
                 .Where(
-                    x => x.EndTime < DateTime.Now && x.IsGraded)
+                    x => x.EndTime < DateTime.Now && x.IsGraded).OrderBy(x => x.EndTime)
                 .ToList();
             return closedAssignments;
         }
-
-        /*
-        public TeacherProblemUpdateViewModel UpdateProblem(TeacherProblemUpdateViewModel problemViewModel) {
-            var problemExists = _db.Problems.SingleOrDefault(x => x.Id == problemViewModel.Id);
-            /*var problem = new Problem
-            {
-                CourseId = problemViewModel.CourseId,
-                Name = problemViewModel.Name,
-                Description = problemViewModel.Description,
-                Filetype = problemViewModel.Filetype,
-                Attachment = problemViewModel.Attachment,
-                Language = problemViewModel.Language
-            };*/
-        /*
-            var problem = new Problem {
-                CourseId = problemViewModel.CourseId,
-                Name = problemViewModel.Name,
-                Description = problemViewModel.Description,
-                Filetype = problemViewModel.Filetype,
-                Attachment = problemViewModel.AttachmentName,
-                Language = problemViewModel.Language
-            };
-
-            if (problemExists != null) {
-                problem.Id = problemViewModel.Id;
-                problemExists = problem;
-            }
-            else {
-                _db.Problems.Add(problem);
-            }
-
-            _db.SaveChanges();
-            return problemViewModel;
-        }*/
 
         /// <summary>
         /// Create a new problem via TeacherNewProblemViewModel
