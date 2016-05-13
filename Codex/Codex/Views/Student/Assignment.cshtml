@@ -53,7 +53,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="collapsible-body">
+                            <span class="collapsible-body">
                                 <table class="striped bordered">
                                     <tbody>
                                         @foreach (var collaborator in Model.Collaborators)
@@ -66,7 +66,9 @@
                                                     @if (ViewBag.UserId == collaborator.Id)
                                                     {
                                                         <div class="col s3">
-                                                            <a href="#" class="waves-effect waves-light btn leave-assignment-group" style="margin-top:-7px;margin-left:-9px">Leave</a>
+                                                            <span class="waves-effect waves-light-blue btn-flat narrow-button black-text blue lighten-2 leave-assignment-group center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Leave group">
+                                                                <a style="color:white">Leave</a>
+                                                            </span>
                                                         </div>
                                                     }
                                                 </td>
@@ -83,23 +85,26 @@
                                                     {
                                                         if (loner.Id != ViewBag.UserId)
                                                         {
-                                                        <option value="@loner.Id">@loner.Name</option>
+                                                            <option value="@loner.Id">@loner.Name</option>
                                                         }
                                                     }
                                                 </select>
                                             </td>
                                             <td class="col s2">
                                                 <div class="col s4">
-                                                    <a href="#" class="waves-effect waves-light btn add-user-to-group-button" style="margin-top:10px">Add user</a>
+                                                    <div class="col s3">
+                                                        <span class="waves-effect waves-light-blue btn-flat narrow-button black-text blue lighten-2 add-user-to-group-button center-align tooltipped" style="margin-top:10px" data-position="top" data-delay="30" data-tooltip="Add user to group">
+                                                            <a style="color:white"  >Add</a>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
                                     }
                                 </table>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                            </li>
+                        </ul>
+                    </div>
             <div class="divider"></div>
             }
             <div class="collapsible-body-container">
