@@ -208,7 +208,6 @@ namespace Codex.Services
 
         /// <summary>
         /// Download a submission
-        /// Unfinished
         /// </summary>
         public void DownloadSubmission(string userid, int submissionId)
         {
@@ -242,7 +241,6 @@ namespace Codex.Services
 
         /// <summary>
         /// Download an attachment
-        /// Unfinished
         /// </summary>
         public void DownloadAttachment(string userid, int problemid, int assignmentid)
         {
@@ -273,8 +271,7 @@ namespace Codex.Services
         }
 
         /// <summary>
-        /// Download a file
-        /// Unfinished
+        /// Download a file with a unique ID and assign it's original name to it
         /// </summary>
         public void DownloadFile(string path, string originalFileName)
         {
@@ -293,15 +290,6 @@ namespace Codex.Services
                 response.BinaryWrite(data);
                 response.End();
             };
-        }
-
-        /// <summary>
-        /// Check if file exists
-        /// </summary>
-        public bool FileExists(string path)
-        {
-            FileInfo file = new FileInfo(path);
-            return file.Exists;
         }
     }
 }
