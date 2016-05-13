@@ -18,6 +18,13 @@
             <div class="col s3 grey-text center-align hide-on-med-and-down">
                 <span>@assignment.NumberOfProblems</span>
             </div>
+
+            <!-- Vertical ellipsis dropdown menu -->
+            <div class="right">
+                <a href="#" class="dropdown-button stop-propagation" data-constrainwidth="false" data-alignment="right" data-activates="dropdown-@assignment.Id">
+                    <i class="material-icons">more_vert</i>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -46,6 +53,27 @@
                                         <span>@problem.Groups.Count </span>
                                         <span>submissions</span>
                                     </div>
+
+                                    <!-- Vertical ellipsis dropdown menu -->
+                                    <div class="right">
+                                        <a href="#" class="dropdown-button stop-propagation" data-constrainwidth="false" data-alignment="right" data-activates="dropdown-@assignment.Id-@problem.Id">
+                                            <i class="material-icons">more_vert</i>
+                                        </a>
+                                    </div>
+
+                                    <!-- Problem dropdown content -->
+                                    <ul id="dropdown-@assignment.Id-@problem.Id" class="dropdown-content stop-propagation problem-dropdown">
+                                        <li>
+                                            <a class="waves-effect waves-light edit-problem-button" href="#">
+                                                Edit
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="modal-trigger waves-effect waves-light remove-problem-button" href="#remove-problem-modal">
+                                                Remove
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
 
@@ -215,6 +243,21 @@
                                     </div>
                                 }
                             </div>
+
+                            <!-- Assignment dropdown content -->
+                            <ul id="dropdown-@assignment.Id" class="dropdown-content stop-propagation assignment-dropdown">
+                                <li>
+                                    <a class="waves-effect waves-light edit-assignment-button" href="#">
+                                        Edit
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="modal-trigger waves-effect waves-light delete-assignment-button" href="#delete-assignment-modal">
+                                        Delete
+                                    </a>
+                                </li>
+                            </ul>
+
                         </li>
                     }
                 </ul>

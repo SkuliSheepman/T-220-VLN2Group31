@@ -75,6 +75,8 @@
 
     /* Global variables */
     var PROBLEMS = 1;
+    var DROPDOWN_ASSIGNMENT_ID = 0;
+    var DROPDOWN_PROBLEM_ID = 0;
 
     $("#new-problem-modal-button").on('click', function (e) {
         //$("#new-problem-modal").openModal();
@@ -268,6 +270,26 @@
         $(this).parent().fadeOut(500, function () {
             $(this).remove();
         });
+    });
+
+    // Set problem and assignment ID when dropdown is clicked
+    $(".problem-dropdown").on("click", function() {
+        var idSplit = $(this).attr("id").split("-");
+
+        DROPDOWN_ASSIGNMENT_ID = idSplit[1];
+        DROPDOWN_PROBLEM_ID = idSplit[2];
+    });
+
+    // Set assignment ID when dropdown is clicked
+    $(".assignment-dropdown").on("click", function () {
+        var idSplit = $(this).attr("id").split("-");
+
+        DROPDOWN_ASSIGNMENT_ID = idSplit[1];
+    });
+
+    // Delete assignment
+    $("#delete-assignment-button").on("click", function() {
+        
     });
 
 });
