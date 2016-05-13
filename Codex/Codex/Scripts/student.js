@@ -86,19 +86,13 @@
                     contentType: false,
                     success: function (responseData) {
                         status.empty();
-                        if (responseData === "success") {
+                        console.log(responseData);
+                        if (responseData) {
                             Materialize.toast("Submission has been evaluated", 4000);
-                        }
-                        else if (responseData === "max") {
-                            Materialize.toast("Sorry! You've reached the maximum submissions for this problem :(", 4000);
-                        }
-                        else if(responseData) {
-                            Materialize.toast("Oh noes, something went wrong: " + responseData + "-error", 4000);
                         }
                         else {
                             Materialize.toast("Oh noes, something went wrong :(", 4000);
                         }
-
                     },
                     error: function (xhr) {
                         status.empty();
