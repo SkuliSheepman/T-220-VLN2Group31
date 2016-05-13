@@ -56,18 +56,16 @@
                             <span class="collapsible-body">
                                 <table class="striped bordered">
                                     <tbody>
-                                        @foreach (var collaborator in Model.Collaborators)
-                                        {
+                                        @foreach (var collaborator in Model.Collaborators) {
                                             <tr>
-                                                <td class="col s10" style="padding:12px">
+                                                <td class="col s10" style="padding: 12px">
                                                     <span><b>@collaborator.Name</b></span>
                                                 </td>
-                                                <td class="col s2" style="padding:12px">
-                                                    @if (ViewBag.UserId == collaborator.Id)
-                                                    {
+                                                <td class="col s2" style="padding: 12px">
+                                                    @if (ViewBag.UserId == collaborator.Id) {
                                                         <div class="col s3">
                                                             <span class="waves-effect waves-light-blue btn-flat narrow-button black-text blue lighten-2 leave-assignment-group center-align tooltipped" data-position="top" data-delay="30" data-tooltip="Leave group">
-                                                                <a style="color:white">Leave</a>
+                                                                <a style="color: white">Leave</a>
                                                             </span>
                                                         </div>
                                                     }
@@ -76,15 +74,12 @@
                                             <div class="divider"></div>
                                         }
                                     </tbody>
-                                    @if ((Model.Collaborators.Count() < Model.MaxCollaborators) && ViewBag.Loners.Count > 0)
-                                    {
-                                        <tr style="background-color:white">
+                                    @if ((Model.Collaborators.Count() < Model.MaxCollaborators) && ViewBag.Loners.Count > 0) {
+                                        <tr style="background-color: white">
                                             <td class="col s10">
                                                 <select id="loners">
-                                                    @foreach (var loner in ViewBag.Loners)
-                                                    {
-                                                        if (loner.Id != ViewBag.UserId)
-                                                        {
+                                                    @foreach (var loner in ViewBag.Loners) {
+                                                        if (loner.Id != ViewBag.UserId) {
                                                             <option value="@loner.Id">@loner.Name</option>
                                                         }
                                                     }
@@ -93,8 +88,8 @@
                                             <td class="col s2">
                                                 <div class="col s4">
                                                     <div class="col s3">
-                                                        <span class="waves-effect waves-light-blue btn-flat narrow-button black-text blue lighten-2 add-user-to-group-button center-align tooltipped" style="margin-top:10px" data-position="top" data-delay="30" data-tooltip="Add user to group">
-                                                            <a style="color:white">Add</a>
+                                                        <span class="waves-effect waves-light-blue btn-flat narrow-button black-text blue lighten-2 add-user-to-group-button center-align tooltipped" style="margin-top: 10px" data-position="top" data-delay="30" data-tooltip="Add user to group">
+                                                            <a style="color: white">Add</a>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -102,6 +97,7 @@
                                         </tr>
                                     }
                                 </table>
+                            </span>
                         </li>
                     </ul>
                 </div>
@@ -125,7 +121,7 @@
                                         <div class="col s2 grey-text truncate">
                                             <span>@problem.Submissions.Count submissions</span>
                                         </div>
-                                        <!-- todo: submit solution -->
+                                        
                                         <div class="col s3 m4">
                                             @using (Html.BeginForm("Submit", "Student", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
                                             {
@@ -135,10 +131,10 @@
                                                     </span>
                                                 </label>
                                                 <input id="file-@Model.Id-@problem.Id" type="file" class="stop-propagation" />
-                                                                <button class="btn-flat grey lighten-4 disabled submission-submit-button narrow-button tooltipped" type="submit" name="action" data-position="top" data-delay="30" data-tooltip="No file selected">
-                                                                    <span>Submit</span>
-                                                                    <i class="material-icons right hide-on-med-and-down">send</i>
-                                                                </button>
+                                                <button class="btn-flat grey lighten-4 disabled submission-submit-button narrow-button tooltipped" type="submit" name="action" data-position="top" data-delay="30" data-tooltip="No file selected">
+                                                    <span>Submit</span>
+                                                    <i class="material-icons right hide-on-med-and-down">send</i>
+                                                </button>
                                             }
                                         </div>
                                         <div class="col s3 m2 status right-align truncate">
