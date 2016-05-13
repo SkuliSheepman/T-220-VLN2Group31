@@ -168,7 +168,7 @@
 
                                                             <!-- Grading -->
                                                             <div class="col s5 m3 center-align">
-                                                                @if (assignment.EndTime > DateTime.Now && 0 < group.BestSubmission.Id){
+                                                                @if (assignment.EndTime < DateTime.Now && 0 < group.BestSubmission.Id){
                                                                     <form class="row clear-margin grade-form" action="@Url.Action("GradeSubmission","Teacher")" method="post" role="form">
                                                                         <div class="input-field col s6 clear-margin">
                                                                             <input type="number" id="grade-@group.BestSubmission.Id" name="grade-@group.BestSubmission.Id" class="grade-input stop-propagation" placeholder="Grade" value="@group.BestSubmission.SubmissionGrade.Value" />
