@@ -104,6 +104,11 @@
     </a>
     <ul>
         <li>
+            <a id="problem-list-modal-button" class="modal-trigger btn-floating red tooltipped" href="#problem-list-modal" data-position="left" data-delay="50" data-tooltip="Problem list">
+                <i class="material-icons">assignment_late</i>
+            </a>
+        </li>
+        <li>
             <a id="new-assignment-modal-button" class="modal-trigger btn-floating red tooltipped" href="#new-assignment-modal" data-position="left" data-delay="50" data-tooltip="New assignment">
                 <i class="material-icons">assignment_late</i>
             </a>
@@ -122,14 +127,13 @@
         <h4 class="center-align">New problem</h4>
         <div class="divider"></div>
 
-        @using (Html.BeginForm("NewProblem", "Teacher", FormMethod.Post, new { @id = "create-problem-form", role = "form" }))
-        {
+        @using (Html.BeginForm("NewProblem", "Teacher", FormMethod.Post, new {@id = "create-problem-form", role = "form"})) {
             @Html.AntiForgeryToken()
 
             <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">title</i>
-                    <input id="new-problem-name" name="new-problem-name" type="text" class="validate" />
+                    <input id="new-problem-name" name="new-problem-name" type="text" class="validate"/>
                     <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-name" data-valmsg-replace="true"></span>
                     <label for="new-problem-name">Name</label>
                 </div>
@@ -147,21 +151,21 @@
             <div class="row">
                 <div class="input-field col s12 m4">
                     <i class="material-icons prefix">email</i>
-                    <input id="new-problem-course" name="new-problem-course" type="text" class="validate disabled" disabled value="@Model.CourseSelected.Name" />
+                    <input id="new-problem-course" name="new-problem-course" type="text" class="validate disabled" disabled value="@Model.CourseSelected.Name"/>
                     <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-course" data-valmsg-replace="true"></span>
                     <label for="new-problem-course">Course</label>
                 </div>
 
                 <div class="input-field col s12 m4">
                     <i class="material-icons prefix">email</i>
-                    <input id="new-problem-language" name="new-problem-language" type="text" class="validate" />
+                    <input id="new-problem-language" name="new-problem-language" type="text" class="validate"/>
                     <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-language" data-valmsg-replace="true"></span>
                     <label for="new-problem-language">Language</label>
                 </div>
 
                 <div class="input-field col s12 m4">
                     <i class="material-icons prefix">email</i>
-                    <input id="new-problem-filetype" name="new-problem-filetype" type="text" class="validate" />
+                    <input id="new-problem-filetype" name="new-problem-filetype" type="text" class="validate"/>
                     <span class="field-validation-valid text-danger" data-valmsg-for="new-problem-filetype" data-valmsg-replace="true"></span>
                     <label for="new-problem-filetype">Allowed filetype</label>
                 </div>
@@ -171,10 +175,10 @@
                 <div class="file-field input-field col s12">
                     <div class="btn">
                         <span>Attachment</span>
-                        <input type="file" name="new-problem-attachment" id="new-problem-attachment" />
+                        <input type="file" name="new-problem-attachment" id="new-problem-attachment"/>
                     </div>
                     <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text" />
+                        <input class="file-path validate" type="text"/>
                     </div>
                 </div>
             </div>
@@ -199,6 +203,86 @@
     </div>
     <div class="modal-footer">
         <a id="new-problem-modal-create-button" href="#" class="btn-flat">Create</a>
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+    </div>
+</div>
+
+<!-- Edit problem modal -->
+<div id="edit-problem-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4 class="center-align">Edit problem</h4>
+        <div class="divider"></div>
+
+        @using (Html.BeginForm("EditProblemInformation", "Teacher", FormMethod.Post, new { @id = "edit-problem-form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">title</i>
+                    <input id="edit-problem-name" name="edit-problem-name" type="text" class="validate" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="edit-problem-name" data-valmsg-replace="true"></span>
+                    <label for="edit-problem-name">Name</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">email</i>
+                    <textarea id="edit-problem-description" name="edit-problem-description" class="materialize-textarea"></textarea>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="edit-problem-description" data-valmsg-replace="true"></span>
+                    <label for="edit-problem-description">Description</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12 m4">
+                    <i class="material-icons prefix">email</i>
+                    <input id="edit-problem-course" name="edit-problem-course" type="text" class="validate disabled" disabled value="@Model.CourseSelected.Name" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="edit-problem-course" data-valmsg-replace="true"></span>
+                    <label for="edit-problem-course">Course</label>
+                </div>
+
+                <div class="input-field col s12 m4">
+                    <i class="material-icons prefix">email</i>
+                    <input id="edit-problem-language" name="edit-problem-language" type="text" class="validate" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="edit-problem-language" data-valmsg-replace="true"></span>
+                    <label for="edit-problem-language">Language</label>
+                </div>
+
+                <div class="input-field col s12 m4">
+                    <i class="material-icons prefix">email</i>
+                    <input id="edit-problem-filetype" name="edit-problem-filetype" type="text" class="validate" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="edit-problem-filetype" data-valmsg-replace="true"></span>
+                    <label for="edit-problem-filetype">Allowed filetype</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="file-field input-field col s12">
+                    <div class="btn">
+                        <span>Attachment</span>
+                        <input type="file" name="edit-problem-attachment" id="edit-problem-attachment" />
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h6>Test cases</h6>
+
+            <a class="btn-floating btn-large waves-effect waves-light blue right tooltipped" data-position="left" data-delay="50" data-tooltip="Add another input/output pair">
+                <i class="material-icons">add</i>
+            </a>
+
+            <input type="hidden" id="edit-problem-id" value="" />
+        }
+    </div>
+    <div class="modal-footer">
+        <a id="edit-problem-modal-edit-button" href="#" class="btn-flat">Edit</a>
         <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
     </div>
 </div>
@@ -265,8 +349,9 @@
             }
 
             <div class="row new-assignment-problemEntry">
+                <i class="material-icons red-text">clear</i>
                 <div class="input-field col s4 new-assignment-problem-list">
-                    @Html.DropDownList("new-assignment-problemlist", selectionList)
+                    @Html.DropDownList("new-assignment-problemlist1", selectionList)
                     <label>Problem</label>
                 </div>
 
@@ -288,11 +373,161 @@
             </a>
 
             <input type="hidden" id="new-assignment-course" value="@Model.CourseSelected.Id"/>
+
+            <div class="input-field col s4 hiddendiv">
+                @Html.DropDownList("new-assignment-problemlist", selectionList)
+                <label>Problem</label>
+            </div>
         }
     </div>
     <div class="modal-footer">
         <a id="new-assignment-modal-create-button" href="#" class="btn-flat">Create</a>
         <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+    </div>
+</div>
+
+<!-- Edit assignment modal -->
+<div id="edit-assignment-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4 class="center-align">Edit assignment</h4>
+        <div class="divider"></div>
+
+        @using (Html.BeginForm("EditAssignmentInformation", "Teacher", FormMethod.Post, new {@id = "edit-assignment-form", role = "form"})) {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">title</i>
+                    <input id="edit-assignment-name" name="edit-assignment-name" type="text" class="validate"/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="edit-assignment-name" data-valmsg-replace="true"></span>
+                    <label for="edit-assignment-name">Name</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">email</i>
+                    <textarea id="edit-assignment-description" name="edit-assignment-description" class="materialize-textarea"></textarea>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="edit-assignment-description" data-valmsg-replace="true"></span>
+                    <label for="edit-assignment-description">Description</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s4">
+                    <label for="edit-assignment-start-date">Open date</label>
+                    <input type="date" class="datepicker" id="edit-assignment-start-date" name="edit-assignment-start-date"/>
+                </div>
+
+                <div class="input-field col s4">
+                    <label for="edit-assignment-start-date">Due date</label>
+                    <input type="date" class="datepicker" id="edit-assignment-end-date" name="edit-assignment-end-date"/>
+                </div>
+
+                <div class="input-field col s4">
+                    <input type="number" min="0" id="edit-assignment-collaborators" name="edit-assignment-collaborators"/>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="edit-assignment-collaborators" data-valmsg-replace="true"></span>
+                    <label for="edit-assignment-collaborators">Max collaborators</label>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h6>Problems</h6>
+        @*
+    // Create list
+    var selectionList = new List<SelectListItem>();
+
+    foreach (var problem in Model.CourseSelected.ProblemList)
+    {
+        var item = new SelectListItem
+        {
+            Text = problem.Name,
+            Value = problem.Id.ToString()
+        };
+
+        selectionList.Add(item);
+    }
+
+    <div class="row new-assignment-problemEntry">
+        <div class="input-field col s4 new-assignment-problem-list">
+            @Html.DropDownList("edit-assignment-problemlist", selectionList)
+            <label>Problem</label>
+        </div>
+
+        <div class="input-field col s4">
+            <input type="number" min="0" id="edit-assignment-weight1" name="edit-assignment-weight1" />
+            <span class="field-validation-valid text-danger" data-valmsg-for="edit-assignment-weight1" data-valmsg-replace="true"></span>
+            <label for="edit-assignment-weight1">Weight %</label>
+        </div>
+
+        <div class="input-field col s4">
+            <input type="number" min="0" id="edit-assignment-max-submission1" name="edit-assignment-max-submission1" />
+            <span class="field-validation-valid text-danger" data-valmsg-for="edit-assignment-max-submission1" data-valmsg-replace="true"></span>
+            <label for="edit-assignment-max-submission1">Max submissions</label>
+        </div>
+    </div>
+        *@
+            <a class="btn-floating btn-large waves-effect waves-light blue right tooltipped" data-position="left" data-delay="50" data-tooltip="Add another problem">
+                <i class="material-icons">add</i>
+            </a>
+
+            <input type="hidden" id="edit-assignment-course" value="@Model.CourseSelected.Id"/>
+            <input type="hidden" id="edit-assignment-id" value=""/>
+        }
+    </div>
+    <div class="modal-footer">
+        <a id="edit-assignment-modal-edit-button" href="#" class="btn-flat">Edit</a>
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+    </div>
+</div>
+
+<!-- Delete Assignment modal -->
+<div id="problem-list-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4 class="center-align">@Model.CourseSelected.Name - problem list</h4>
+        <div class="divider"></div>
+
+        <div class="row">
+            <div class="col s12">
+                <table class="striped centered bordered responsive-table highlight">
+                    <thead>
+                        <tr>
+                            <th data-field="id" class="hiddendiv">Id</th>
+                            <th data-field="title">Title</th>
+                            <th data-field="language">Language</th>
+                            <th data-field="test-cases"># of test cases</th>
+                            <th data-field="filetype">Allowed filetype</th>
+                            <th data-field="delete">Delete</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var problem in Model.CourseSelected.ProblemList)
+                        {
+                            <tr class="problem-list-entry">
+                                <td class="hiddendiv">@problem.Id</td>
+                                <td>@problem.Name</td>
+                                <td>@problem.Language</td>
+                                <td>@problem.TestCases.Count</td>
+                                <td>@problem.Filetype</td>
+                                <td>
+                                    <a href="#delete-problem-modal" class="modal-trigger delete-problem stop-propagation">
+                                        <i class="material-icons red-text">clear</i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
     </div>
 </div>
 

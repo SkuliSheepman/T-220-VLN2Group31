@@ -248,7 +248,7 @@ namespace Codex.Services
                 {
                     
                     var highestAssignmentProblemGroupNumber = _db.AssignmentGroups.Where(x => x.AssignmentId == assignmentId).OrderByDescending(y => y.GroupNumber).First().GroupNumber;
-                    currentAssignmentGroupRelation.GroupNumber = highestAssignmentProblemGroupNumber + 1;
+                    currentAssignmentGroupRelation.GroupNumber = highestAssignmentProblemGroupNumber    ;
 
                 }
 
@@ -262,6 +262,32 @@ namespace Codex.Services
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Removes a user from a specific group
+        /// </summary>
+        public bool RemoveUserFromGroupById(string userId, int assignmentId)
+        {
+
+            var assignmentGroupRelation = _db.AssignmentGroups
+                                  .FirstOrDefault(x => x.UserId == userId
+                                                  && x.AssignmentId == assignmentId);
+
+            if (assignmentGroupRelation != null)
+            {
+                _db.AssignmentGroups.Remove(assignmentGroupRelation);
+            }
+
+            try
+            {
+                _db.SaveChanges();
+                return true;
+            } catch
+            {
+                return false;
+            }
+
         }
 
         /// <summary>

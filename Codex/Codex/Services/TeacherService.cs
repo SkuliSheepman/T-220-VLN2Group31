@@ -242,6 +242,7 @@ namespace Codex.Services
             return closedAssignments;
         }
 
+        /*
         public TeacherProblemUpdateViewModel UpdateProblem(TeacherProblemUpdateViewModel problemViewModel) {
             var problemExists = _db.Problems.SingleOrDefault(x => x.Id == problemViewModel.Id);
             /*var problem = new Problem
@@ -253,7 +254,7 @@ namespace Codex.Services
                 Attachment = problemViewModel.Attachment,
                 Language = problemViewModel.Language
             };*/
-
+        /*
             var problem = new Problem {
                 CourseId = problemViewModel.CourseId,
                 Name = problemViewModel.Name,
@@ -273,7 +274,7 @@ namespace Codex.Services
 
             _db.SaveChanges();
             return problemViewModel;
-        }
+        }*/
 
         /// <summary>
         /// Create a new problem via TeacherNewProblemViewModel
@@ -319,6 +320,9 @@ namespace Codex.Services
             }
         }
 
+        /// <summary>
+        /// Create a new assignment via TeacherCreateAssignmentViewModel
+        /// </summary>
         public bool CreateNewAssignment(TeacherCreateAssignmentViewModel assignment) {
             var newAssignment = new Assignment {
                 CourseInstanceId = assignment.CourseInstanceId,
@@ -369,6 +373,124 @@ namespace Codex.Services
             catch (Exception e) {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Update assignment information via TeacherCreateAssignmentViewModel
+        /// </summary>
+        public bool UpdateAssignment(TeacherCreateAssignmentViewModel assignment) {
+            var dbAssignment = _db.Assignments.SingleOrDefault(x => x.Id == assignment.Id);
+
+            if (dbAssignment != null) {
+                dbAssignment.Description = assignment.Description;
+                dbAssignment.Name = assignment.Name;
+                dbAssignment.EndTime = DateTime.Parse(assignment.EndTime);
+                dbAssignment.StartTime = DateTime.Parse(assignment.StartTime);
+                dbAssignment.MaxCollaborators = assignment.MaxCollaborators;
+
+                // Remove problems
+                foreach (var assignmentProblem in _db.AssignmentProblems.Where(x => x.AssignmentId == assignment.Id)) {
+                    var found = assignment.Problems.Any(problem => assignmentProblem.ProblemId == problem.ProblemId);
+
+                    if (!found) {
+                        RemoveProblemFromAssignmentByIds(assignmentProblem.AssignmentId, assignmentProblem.ProblemId);
+                    }
+                }
+
+                // Add/Edit existing problems
+                foreach (var problem in assignment.Problems) {
+                    var dbAssignmentProblem = _db.AssignmentProblems.SingleOrDefault(x => x.AssignmentId == assignment.Id && x.ProblemId == problem.ProblemId);
+
+                    if (dbAssignmentProblem != null) {
+                        dbAssignmentProblem.MaxSubmissions = problem.MaxSubmissions;
+                        dbAssignmentProblem.Weight = (byte)problem.Weight;
+                    }
+                    else {
+                        var newAssignmentProblem = new AssignmentProblem {
+                            ProblemId = problem.ProblemId,
+                            AssignmentId = assignment.Id,
+                            Weight = (byte)problem.Weight,
+                            MaxSubmissions = problem.MaxSubmissions
+                        };
+
+                        _db.AssignmentProblems.Add(newAssignmentProblem);
+                    }
+                }
+
+                try {
+                    _db.SaveChanges();
+                    return true;
+                }
+                catch (Exception e) {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Update problem information via TeacherProblemUpdateViewModel
+        /// </summary>
+        public bool UpdateProblem(TeacherProblemUpdateViewModel problem) {
+            var dbProblem = _db.Problems.SingleOrDefault(x => x.Id == problem.Id);
+
+            if (dbProblem != null) {
+                dbProblem.Description = problem.Description;
+                dbProblem.Name = problem.Name;
+
+                // Filetype check
+                if (_db.Filetypes.SingleOrDefault(x => x.Type == problem.Filetype) == null) {
+                    var fileType = new Filetype {
+                        Type = problem.Filetype
+                    };
+
+                    _db.Filetypes.Add(fileType);
+                }
+
+                dbProblem.Filetype = problem.Filetype;
+
+                // Language check
+                if (_db.ProgrammingLanguages.SingleOrDefault(x => x.Language == problem.Language) == null) {
+                    var language = new ProgrammingLanguage {
+                        Language = problem.Filetype
+                    };
+
+                    _db.ProgrammingLanguages.Add(language);
+                }
+
+                dbProblem.Language = problem.Language;
+
+                var dbTestCases = _db.TestCases.Where(x => x.ProblemId == problem.Id);
+
+                // Delete removed test cases
+                foreach (var dbTestCase in dbTestCases) {
+                    var found = problem.TestCases.Any(x => x.Id == dbTestCase.Id);
+
+                    if (!found) {
+                        _db.TestCases.Remove(dbTestCase);
+                    }
+                }
+
+                // Add new test cases
+                foreach (var testCase in problem.TestCases.Where(x => x.Id == 0)) {
+                    _db.TestCases.Add(new TestCase {
+                        ExpectedOutput = testCase.Output,
+                        Input = testCase.Input,
+                        ProblemId = problem.Id
+                    });
+                }
+
+                try {
+                    _db.SaveChanges();
+                    return true;
+                }
+                catch (Exception e) {
+                    return false;
+                }
+            }
+
+            return false;
         }
 
         public bool SetTestCasesForProblemByProblemId(int problemId, List<TeacherTestCaseViewModel> testCases) {
@@ -558,6 +680,72 @@ namespace Codex.Services
             return false;
         }
 
+        /// <summary>
+        /// Get a problem by the problem's ID
+        /// </summary>
+        public TeacherProblemUpdateViewModel GetProblemById(int problemId) {
+            var problem = _db.Problems.SingleOrDefault(x => x.Id == problemId);
+
+            if (problem != null) {
+                var model = new TeacherProblemUpdateViewModel {
+                    Id = problem.Id,
+                    Name = problem.Name,
+                    Description = problem.Description,
+                    AttachmentName = problem.Attachment,
+                    Filetype = problem.Filetype,
+                    Language = problem.Language,
+                    TestCases = new List<TeacherTestCaseViewModel>()
+                };
+
+                var testCases = _db.TestCases.Where(x => x.ProblemId == problemId);
+
+                foreach (var testCase in testCases) {
+                    model.TestCases.Add(new TeacherTestCaseViewModel {
+                        Id = testCase.Id,
+                        Input = testCase.Input,
+                        Output = testCase.ExpectedOutput
+                    });
+                }
+
+                return model;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Get an assignment by the assignment's ID
+        /// </summary>
+        public TeacherCreateAssignmentViewModel GetAssignmentById(int assignmentId) {
+            var assignment = _db.Assignments.SingleOrDefault(x => x.Id == assignmentId);
+
+            if (assignment != null) {
+                var model = new TeacherCreateAssignmentViewModel {
+                    Name = assignment.Name,
+                    Description = assignment.Description,
+                    CourseInstanceId = assignment.CourseInstanceId,
+                    EndTime = assignment.EndTime.ToString(),
+                    StartTime = assignment.StartTime.ToString(),
+                    MaxCollaborators = assignment.MaxCollaborators,
+                    Problems = new List<TeacherAssignmentProblemViewModel>()
+                };
+
+                var problems = _db.AssignmentProblems.Where(x => x.AssignmentId == assignmentId);
+
+                foreach (var assignmentProblem in problems) {
+                    model.Problems.Add(new TeacherAssignmentProblemViewModel {
+                        MaxSubmissions = assignmentProblem.MaxSubmissions,
+                        ProblemId = assignmentProblem.ProblemId,
+                        Weight = assignmentProblem.Weight
+                    });
+                }
+
+                return model;
+            }
+
+            return null;
+        }
+
         public void CheckUngradedAssignments(int courseInstanceId) {
             // Gets all closed and ungraded assignments in courseInstance
             var assignmentsQuery = _db.Assignments.Where(x => x.CourseInstanceId == courseInstanceId && x.EndTime < DateTime.Now && x.IsGraded == false);
@@ -667,16 +855,11 @@ namespace Codex.Services
         }
 
         /// <summary>
-        /// Used to calculate new total assignment grade based on submissionId, used right after grading that submission.
+        /// Used to calculate new total grade for assignment based on one submissionId, called right after grading that submission in the teacher controller.
+        /// Updates the totalGrade for all collaborators in the AssignmentGroups table.
         /// </summary>
         public bool UpdateAssignmentGradeBySubmissionId(int submissionId)
         {
-            // Get all collaborators in assignment
-            // Get their highest graded submission for each problem in assignment
-            // Get the weight of each problem in assignment
-            // Add the grades together based on their weight
-            // Set that number as AssignmentGrade for each student in the AssignmentGroups Table
-
             // Get the initial submission
             var initialSubmission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
 
@@ -695,7 +878,7 @@ namespace Codex.Services
                 {
                     foreach (var problem in problemsInAssignemnt)
                     {
-                        var problemWeight = problem.Weight;
+                        var problemWeight = problem.Weight/100;
                         var problemGrade = 0.0;
                         foreach (var student in collaborators)
                         {

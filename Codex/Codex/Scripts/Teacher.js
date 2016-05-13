@@ -8,6 +8,11 @@
         selectYears: 15 // Creates a dropdown of 15 years to control year
     });
 
+    /* Global variables */
+    var PROBLEMS = 1;
+    var DROPDOWN_ASSIGNMENT_ID = 0;
+    var DROPDOWN_PROBLEM_ID = 0;
+
     /* Ajax functions */
 
     // Set test cases for a problem
@@ -73,10 +78,105 @@
         });
     }
 
-    /* Global variables */
-    var PROBLEMS = 1;
-    var DROPDOWN_ASSIGNMENT_ID = 0;
-    var DROPDOWN_PROBLEM_ID = 0;
+    /* Helper functions */
+
+    // Fill in the form the assignment's info to be edited
+    function fillInAssignmentEdit(assignment) {
+        $("#edit-assignment-id").val(DROPDOWN_ASSIGNMENT_ID).focus();
+        $("#edit-assignment-name").val(assignment.Name).focus();
+        $("#edit-assignment-description").val(assignment.Description).focus();
+
+        // Start time
+        var split = assignment.StartTime.split(".");
+
+        $("#edit-assignment-start-date").pickadate("picker")
+            .set("select", new Date(split[2].split(" ")[0], split[1] - 1, split[0]));
+
+        // End time
+        split = assignment.EndTime.split(".");
+
+        $("#edit-assignment-end-date").pickadate("picker")
+            .set("select", new Date(split[2].split(" ")[0], split[1] - 1, split[0]));
+
+        $("#edit-assignment-collaborators").val(assignment.MaxCollaborators).focus();
+
+        // Problems
+        
+        $.each(assignment.Problems, function(i, problem) {
+            newProblemEntry($("#edit-assignment-form .btn-floating"));
+
+            var row = $("#edit-assignment-form .btn-floating").prev();
+
+            row.find("select").val(problem.ProblemId).material_select();
+            row.find("input[id^='new-assignment-weight']").val(problem.Weight).focus();
+            row.find("input[id^='new-assignment-submission']").val(problem.MaxSubmissions).focus();
+        });
+    }
+
+    // Fill in the form the problems's info to be edited
+    function fillInProblemEdit(problem) {
+        $("#edit-problem-id").val(problem.Id).focus();
+        $("#edit-problem-name").val(problem.Name).focus();
+        $("#edit-problem-description").val(problem.Description).focus();
+        $("#edit-problem-language").val(problem.Language).focus();
+        $("#edit-problem-filetype").val(problem.Filetype).focus();
+
+        // Test cases
+        $.each(problem.TestCases, function (i, testCase) {
+            newTestCaseEntry($("#edit-problem-form .btn-floating"));
+
+            var panel = $("#edit-problem-form .btn-floating").prev();
+
+            panel.find("textarea:first").val(testCase.Input);
+            panel.find("textarea:last").val(testCase.Output);
+            panel.find("input.test-case-id").val(testCase.Id).focus();
+        });
+    }
+
+    // Add problem entry
+    function newProblemEntry(button){
+        PROBLEMS++;
+        var row = $("<div class='row new-assignment-problemEntry'><i class='material-icons red-text'>clear</i></div>");
+
+        // Problems
+        var select = $("<select></select>");
+        $("#new-assignment-problemlist option").clone().appendTo(select);
+
+        select = select.after("<label>Problem</label>");
+
+        var container = $("<div class='input-field col s4 new-assignment-problem-list'></div>");
+        select.appendTo(container);
+
+        container.appendTo(row);
+
+        // Weight
+        var weight = $("<div class='input-field col s4'><input type='number' min='0' id='new-assignment-weight" + PROBLEMS + "' name='new-assignment-weight" + PROBLEMS + "'/><span class='field-validation-valid text-danger' data-valmsg-for='new-assignment-weight" + PROBLEMS + "' data-valmsg-replace='true'></span><label for='new-assignment-weight" + PROBLEMS + "'>Weight %</label></div>");
+
+        weight.appendTo(row);
+
+        // Max submissions
+        var maxSubmissions = $("<div class='input-field col s4'><input type='number' min='0' id='new-assignment-submission" + PROBLEMS + "' name='new-assignment-submission" + PROBLEMS + "'/><span class='field-validation-valid text-danger' data-valmsg-for='new-assignment-submission" + PROBLEMS + "' data-valmsg-replace='true'></span><label for='new-assignment-submission" + PROBLEMS + "'>Max submissions</label></div>");
+
+        maxSubmissions.appendTo(row);
+
+        // Insert
+        button.before(row);
+
+        $("select").material_select();
+    }
+
+    // Insert a new test case block before the button
+    function newTestCaseEntry(button) {
+        var inputOutput = "<div class='card-panel new-problem-input'>" +
+                            "<input type='hidden' class='test-case-id' value=''/>" +
+                            "<i class='material-icons red-text'>clear</i>" +
+                            "<p>Input</p>" +
+                            "<textarea class='materialize-textarea'></textarea>" +
+                            "<p>Output</p>" +
+                            "<textarea class='materialize-textarea'></textarea>" +
+                          "</div>";
+        button.before(inputOutput);
+    }
 
     $("#new-problem-modal-button").on('click', function (e) {
         //$("#new-problem-modal").openModal();
@@ -172,20 +272,56 @@
         });
     });
 
-    $("#create-problem-form .btn-floating").on("click", function () {
-        var inputOutput = "<div class='card-panel new-problem-input'>" +
-                            "<i class='material-icons red-text'>clear</i>" +
-                            "<p>Input</p>" +
-                            "<textarea class='materialize-textarea'></textarea>" +
-                            "<p>Input</p>" +
-                            "<textarea class='materialize-textarea'></textarea>" +
-                          "</div>";
-        $(this).before(inputOutput);
+    // Edit problem form
+    $("#edit-problem-modal-edit-button").on("click", function (e) {
+
+        var testCases = [];
+        $("#edit-problem-form .new-problem-input").each(function () {
+            var id = $(this).find("input.test-case-id").val();
+            var input = $(this).find("textarea:first").val();
+            var output = $(this).find("textarea:last").val();
+
+            testCases.push({ "Id": id, "Input": input, "Output": output });
+        });
+
+        var formData = {
+            "Id": $("#edit-problem-id").val(),
+            "CourseName": $("#edit-problem-course").val(),
+            "Name": $("#edit-problem-name").val(),
+            "Description": $("#edit-problem-description").val(),
+            "Filetype": $("#edit-problem-filetype").val(),
+            "Language": $("#edit-problem-language").val(),
+            "TestCases": testCases
+        }
+
+        $.ajax({
+            url: $("#edit-problem-form").attr("action"),
+            data: formData,
+            method: "POST",
+            dataType: "json",
+            success: function (responseData) {
+                if (responseData) {
+                    Materialize.toast("Problem edited", 4000);
+                    $("#edit-problem-modal").closeModal();
+                }
+                else {
+                    Materialize.toast("An error occurred editing the problem", 4000);
+                }
+
+            },
+            error: function () {
+                Materialize.toast("Something awful happened :(", 4000);
+            }
+        });
+    });
+
+    $("#create-problem-form .btn-floating, #edit-problem-form .btn-floating").on("click", function () {
+        newTestCaseEntry($(this));
     });
 
     // Remove test case from new problem
-    $("body").on("click", ".new-problem-input i", function () {
-        $(this).parent().fadeOut(500, function() {
+    $("body").on("click", ".new-problem-input i, .new-assignment-problemEntry i", function () {
+        $(this).parent().fadeOut(200, function() {
             $(this).remove();
         });
     });
@@ -233,36 +369,14 @@
         });
     });
 
-    // Add problem to assignment
+    // Add problem to new assignment
     $("#create-assignment-form .btn-floating").on("click", function () {
-        PROBLEMS++;
-        var row = $("<div class='row new-assignment-problemEntry'></div>");
+        newProblemEntry($(this));
+    });
 
-        // Problems
-        var select = $("<select></select>");
-        $("#new-assignment-problemlist option").clone().appendTo(select);
-
-        select = select.after("<label>Problem</label>");
-
-        var container = $("<div class='input-field col s4 new-assignment-problem-list'></div>");
-        select.appendTo(container);
-
-        container.appendTo(row);
-
-        // Weight
-        var weight = $("<div class='input-field col s4'><input type='number' min='0' id='new-assignment-weight" + PROBLEMS + "' name='new-assignment-weight" + PROBLEMS + "'/><span class='field-validation-valid text-danger' data-valmsg-for='new-assignment-weight" + PROBLEMS + "' data-valmsg-replace='true'></span><label for='new-assignment-weight" + PROBLEMS + "'>Weight %</label></div>");
-
-        weight.appendTo(row);
-
-        // Max submissions
-        var maxSubmissions = $("<div class='input-field col s4'><input type='number' min='0' id='new-assignment-submission" + PROBLEMS + "' name='new-assignment-submission" + PROBLEMS + "'/><span class='field-validation-valid text-danger' data-valmsg-for='new-assignment-submission" + PROBLEMS + "' data-valmsg-replace='true'></span><label for='new-assignment-submission" + PROBLEMS + "'>Max submissions</label></div>");
-
-        maxSubmissions.appendTo(row);
-
-        // Insert
-        $(this).before(row);
-
-        $("select").material_select();
+    // Add problem to edit assignment
+    $("#edit-assignment-form .btn-floating").on("click", function () {
+        newProblemEntry($(this));
     });
 
     // Remove problem from new assignment
@@ -272,9 +386,53 @@
         });
     });
 
+    // Edit assignment form
+    $("#edit-assignment-modal-edit-button").on("click", function (e) {
+
+        var problems = [];
+        $("#edit-assignment-form .new-assignment-problemEntry").each(function () {
+            var problemId = $(this).find("select").val();
+            var weight = $(this).find("input[type='number']:first").val();
+            var maxSubmissions = $(this).find("input[type='number']:last").val();
+
+            problems.push({ "ProblemId": problemId, "Weight": weight, "MaxSubmissions": maxSubmissions });
+        });
+
+        var formData = {
+            "Id": $("#edit-assignment-id").val(),
+            "CourseInstanceId": $("#edit-assignment-course").val(),
+            "Name": $("#edit-assignment-name").val(),
+            "Description": $("#edit-assignment-description").val(),
+            "MaxCollaborators": $("#edit-assignment-collaborators").val(),
+            "StartTime": $("#edit-assignment-start-date").val(),
+            "EndTime": $("#edit-assignment-end-date").val(),
+            "Problems": problems
+        };
+
+        $.ajax({
+            url: $("#edit-assignment-form").attr("action"),
+            data: JSON.stringify(formData),
+            method: "POST",
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (responseData) {
+                if (responseData) {
+                    Materialize.toast("Assignment edited", 4000);
+                }
+                else {
+                    Materialize.toast("An error occurred editing an assignment", 4000);
+                }
+
+            },
+            error: function () {
+                Materialize.toast("Something awful happened :(", 4000);
+            }
+        });
+    });
+
     // Set problem and assignment ID when dropdown is clicked
     $(".problem-dropdown").on("click", function() {
-        var idSplit = $(this).attr("id").split("-");
+        var idSplit = $(this).attr("data-activates").split("-");
 
         DROPDOWN_ASSIGNMENT_ID = idSplit[1];
         DROPDOWN_PROBLEM_ID = idSplit[2];
@@ -282,8 +440,8 @@
 
     // Set assignment ID when dropdown is clicked
     $(".assignment-dropdown").on("click", function () {
-        var idSplit = $(this).attr("id").split("-");
-
+        var idSplit = $(this).attr("data-activates").split("-");
+        
         DROPDOWN_ASSIGNMENT_ID = idSplit[1];
     });
 
@@ -360,6 +518,67 @@
                 }
                 else {
                     Materialize.toast("An error occurred removing the problem", 4000);
+                }
+
+            },
+            error: function () {
+                Materialize.toast("Something awful happened :(", 4000);
+            }
+        });
+    });
+
+    // Delete problem
+    $(".delete-problem").on("click", function () {
+        DROPDOWN_PROBLEM_ID = $(this).closest(".problem-list-entry").find(".hiddendiv").text();
+    });
+
+    // Edit assignment dropdown button
+    $(".edit-assignment-button").on("click", function () {
+        var formData = {
+            "assignmentId": DROPDOWN_ASSIGNMENT_ID
+        };
+        
+        $.ajax({
+            url: "/Teacher/GetAssignmentForEdit",
+            data: JSON.stringify(formData),
+            method: "POST",
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (responseData) {
+                if (responseData) {
+                    fillInAssignmentEdit(responseData);
+                }
+                else {
+                    Materialize.toast("An error occurred retrieving the assignment", 4000);
+                }
+
+            },
+            error: function () {
+                Materialize.toast("Something awful happened :(", 4000);
+            }
+        });
+    });
+
+    // Click problem entry in problem list
+    $(".problem-list-entry").on("click", function () {
+        $("#edit-problem-modal").openModal();
+
+        var formData = {
+            "problemId": $(this).find(".hiddendiv").text()
+        };
+
+        $.ajax({
+            url: "/Teacher/GetProblemForEdit",
+            data: JSON.stringify(formData),
+            method: "POST",
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (responseData) {
+                if (responseData) {
+                    fillInProblemEdit(responseData);
+                }
+                else {
+                    Materialize.toast("An error occurred retrieving the problem", 4000);
                 }
 
             },

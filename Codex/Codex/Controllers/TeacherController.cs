@@ -137,6 +137,34 @@ namespace Codex.Controllers
             return Json(_teacherService.DeleteProblemById(problemId));
         }
 
+        /// <summary>
+        /// Edit an assignment's information and linked problems
+        /// </summary>
+        public ActionResult EditAssignmentInformation(TeacherCreateAssignmentViewModel assignment) {
+            return Json(_teacherService.UpdateAssignment(assignment));
+        }
+
+        /// <summary>
+        /// Retrieve assignment information for editing
+        /// </summary>
+        public ActionResult GetAssignmentForEdit(int assignmentId) {
+            return Json(_teacherService.GetAssignmentById(assignmentId));
+        }
+
+        /// <summary>
+        /// Edit problem's information and test cases
+        /// </summary>
+        public ActionResult EditProblemInformation(TeacherProblemUpdateViewModel problem) {
+            return Json(_teacherService.UpdateProblem(problem));
+        }
+
+        /// <summary>
+        /// Retrieve problem information for editing
+        /// </summary>
+        public ActionResult GetProblemForEdit(int problemId) {
+            return Json(_teacherService.GetProblemById(problemId));
+        }
+
         /* Creating a new problem requires 3 methods due to AJAX and model binding being weird when uploading a file, with data and a list of data */
 
         public ActionResult NewProblem(TeacherNewProblemViewModel problem) {
