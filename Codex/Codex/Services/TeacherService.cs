@@ -503,7 +503,30 @@ namespace Codex.Services
         /// <returns></returns>
         public bool RemoveSubmissionFromAssignmentById(int assignmentId)
         {
+            // Remove all testResults from submission
+            foreach(var testResult in _db.TestResults.Where(x => x.Submission.AssignmentId == assignmentId)) {
+                RemoveTestResultFromSubmissionById(testResult.SubmissionId);
+            }
+
             _db.Submissions.RemoveRange(_db.Submissions.Where(x => x.AssignmentId == assignmentId));
+
+            try {
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Deletes all Test results connected to a submission. Used when deleting submission from the database
+        /// </summary>
+        /// <param name="submissionId"></param>
+        /// <returns></returns>
+        public bool RemoveTestResultFromSubmissionById(int submissionId)
+        {
+            _db.TestResults.RemoveRange(_db.TestResults.Where(x => x.SubmissionId == submissionId));
 
             try {
                 _db.SaveChanges();
