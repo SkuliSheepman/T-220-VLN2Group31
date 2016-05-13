@@ -690,7 +690,7 @@ namespace Codex.Services
                 {
                     foreach (var problem in problemsInAssignemnt)
                     {
-                        var problemWeight = problem.Weight;
+                        var problemWeight = problem.Weight/100;
                         var problemGrade = 0.0;
                         foreach (var student in collaborators)
                         {
