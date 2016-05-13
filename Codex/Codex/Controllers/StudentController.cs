@@ -80,6 +80,7 @@ namespace Codex.Controllers
                 assignment.NumberOfProblems = assignment.Problems.Count + " " + (assignment.Problems.Count == 1 ? "problem" : "problems");
 
                 ViewBag.UserName = User.Identity.Name;
+                ViewBag.UserId = _userService.GetUserIdByName(User.Identity.Name);
                 return View(assignment);
 
             }
@@ -118,6 +119,16 @@ namespace Codex.Controllers
             }
 
             return Json(false);
+        }
+
+        // GET: File
+        public void DownloadAttachmentFile(int? problemid, int? assignmentid)
+        {
+            var name = User.Identity.Name;
+            if (problemid.HasValue && assignmentid.HasValue)
+            {
+                _fileService.DownloadAttachment(_userService.GetUserIdByName(User.Identity.Name), problemid.Value, assignmentid.Value);
+            }
         }
     }
 }

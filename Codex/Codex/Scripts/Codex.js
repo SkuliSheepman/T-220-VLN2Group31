@@ -66,13 +66,12 @@ $(document).ready(function () {
         });
     });
 
-    // Download submission
-    $(".submission-download-button").on('click', function (e) {
+    // Download submission & attachment events
+    $(".submission-download-button, .attachment-download-button").on('click', function (e) {
         e.preventDefault();
         var link = $(this).attr("data-action");
         window.location = link;
     });
-
 
     // Account Settings, update name and password
     $("#birkir").on("click", function () {

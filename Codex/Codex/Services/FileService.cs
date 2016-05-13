@@ -244,7 +244,7 @@ namespace Codex.Services
         /// Download an attachment
         /// Unfinished
         /// </summary>
-        public void DownloadAttachment(string userid, int problemid)
+        public void DownloadAttachment(string userid, int problemid, int assignmentid)
         {
             var user = _db.AspNetUsers.SingleOrDefault(x => x.Id == userid);
             if (user != null)
@@ -252,11 +252,7 @@ namespace Codex.Services
                 var problem = _db.Problems.SingleOrDefault(x => x.Id == problemid);
                 if (problem != null)
                 {
-                    var assignment = (from assign in _db.Assignments
-                                      join relation in _db.AssignmentProblems
-                                      on assign.Id equals relation.AssignmentId
-                                      where relation.ProblemId == problemid
-                                      select assign).SingleOrDefault();
+                    var assignment = _db.Assignments.SingleOrDefault(x => x.Id == assignmentid);
 
                     if (assignment != null)
                     {
@@ -284,7 +280,7 @@ namespace Codex.Services
         {
             string filePath = path;
             FileInfo file = new FileInfo(filePath);
-            if (file.Exists)
+            if (File.Exists(filePath))
             {
                 WebClient req = new WebClient();
                 HttpResponse response = HttpContext.Current.Response;
