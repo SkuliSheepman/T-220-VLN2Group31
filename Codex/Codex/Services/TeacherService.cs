@@ -807,8 +807,18 @@ namespace Codex.Services
             var submission = _db.Submissions.SingleOrDefault(x => x.Id == submissionId);
             if(submission != null)
             {
-                submission.SubmissionGrade.Grade = grade;
-
+                if(submission.SubmissionGrade != null)
+                {
+                    submission.SubmissionGrade.Grade = grade;
+                }
+                else
+                {
+                    _db.SubmissionGrades.Add(new SubmissionGrade
+                    {
+                        SubmissionId = submission.Id,
+                        Grade = grade
+                    });
+                }
                 try {
                     _db.SaveChanges();
                     return true;
@@ -850,7 +860,7 @@ namespace Codex.Services
                         {
                             var submission = _db.Submissions.Where(x => x.StudentId == student.Id && x.AssignmentId == initialSubmission.AssignmentId && x.ProblemId == initialSubmission.ProblemId).OrderByDescending(y => y.SubmissionGrade.Grade).FirstOrDefault();
                             // Checks if the best submission from the student is the best amongst his collaborators. If it is it is assigned to the problemGrade variable
-                            if (submission != null && submission.SubmissionGrade.Grade.Value * problemWeight > problemGrade)
+                            if (submission != null && submission.SubmissionGrade != null && submission.SubmissionGrade.Grade.Value * problemWeight > problemGrade)
                             {
                                 problemGrade = submission.SubmissionGrade.Grade.Value * problemWeight;
                             }

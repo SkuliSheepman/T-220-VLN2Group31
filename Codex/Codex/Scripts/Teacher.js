@@ -588,4 +588,40 @@
         });
     });
 
+
+    $(".grade-button").on("click", function () {
+        $(this).closest("form").submit();
+    });
+
+    // Submit grade to solution
+    $(".grade-form").on("submit", function (e) {
+        e.preventDefault();
+        var form = $(this);
+        var input = form.find("input");
+
+        var subGrade = input.val();
+        var subId = input.attr("id").split("-")[1];
+
+        if (subGrade.length == 0) {
+            Materialize.toast("Grade missing!", 2000);
+        }
+        else {
+            var formData = { gradeString: subGrade, submissionId: subId }
+            console.log(formData);
+            $.ajax({
+                url: form.attr("action"),
+                data: formData,
+                method: "POST",
+                success: function (responseData) {
+                    if (responseData) {
+                        Materialize.toast("Grade has been updated", 4000);
+                    }
+                    else {
+                        Materialize.toast("Something went wrong when trying to submit grade", 4000);
+                    }
+                }
+            });
+        }
+    });
+
 });

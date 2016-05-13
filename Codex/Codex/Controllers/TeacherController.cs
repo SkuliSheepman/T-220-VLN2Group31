@@ -108,11 +108,16 @@ namespace Codex.Controllers
             return Json(false);
         }
 
-        public ActionResult GradeSubmission(double grade, int submissionId) {
-            var gradeSubmission = _teacherService.GradeSubmissionById(submissionId, grade);
+        public ActionResult GradeSubmission(string gradeString, int? submissionId) {
+            if (String.IsNullOrEmpty(gradeString) || !submissionId.HasValue) {
+                return Json(false);
+            }
+            var grade = Convert.ToDouble(gradeString);
+            var gradeSubmission = _teacherService.GradeSubmissionById(submissionId.Value, grade);
+            
             if (gradeSubmission)
             {
-                return Json(_teacherService.UpdateAssignmentGradeBySubmissionId(submissionId));
+                return Json(_teacherService.UpdateAssignmentGradeBySubmissionId(submissionId.Value));
             }
             return Json(gradeSubmission);
         }

@@ -148,7 +148,15 @@
 
                                                             <!-- Last submission -->
                                                             <div class="col s2 m3 grey-text truncate hide-on-small-and-down">
-                                                                <span></span>
+                                                                <span>
+                                                                    @if (group.Submissions.Any()){
+                                                                        @group.Submissions.First().SubmissionTime;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @:No submissions
+                                                                    }
+                                                                </span>
                                                             </div>
 
                                                             <!-- Download best -->
@@ -160,17 +168,22 @@
 
                                                             <!-- Grading -->
                                                             <div class="col s5 m3 center-align">
-                                                                <form class="row clear-margin">
-                                                                    <div class="input-field col s6 clear-margin">
-                                                                        <input type="number" id="grade-@group.BestSubmission.Id" name="grade-@group.BestSubmission.Id" class="grade-input" placeholder="Grade"/>
-                                                                    </div>
-
-                                                                    <div class="col s6 clear-margin">
-                                                                        <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 submission-download-button center-align center-icon fill-width tooltipped" data-position="top" data-delay="30" data-tooltip="Grade">
-                                                                            <span class="material-icons">send</span>
-                                                                        </span>
-                                                                    </div>
-                                                                </form>
+                                                                @if (assignment.EndTime > DateTime.Now && 0 < group.BestSubmission.Id){
+                                                                    <form class="row clear-margin grade-form" action="@Url.Action("GradeSubmission","Teacher")" method="post" role="form">
+                                                                        <div class="input-field col s6 clear-margin">
+                                                                            <input type="number" id="grade-@group.BestSubmission.Id" name="grade-@group.BestSubmission.Id" class="grade-input stop-propagation" placeholder="Grade" value="@group.BestSubmission.SubmissionGrade.Value" />
+                                                                        </div>
+                                                                        <div class="col s6 clear-margin">
+                                                                            <span class="waves-effect waves-light-blue btn-flat narrow-button blue-text light-blue lighten-5 grade-button center-align center-icon fill-width tooltipped stop-propagation" data-position="top" data-delay="30" data-tooltip="Grade">
+                                                                                <span class="material-icons">send</span>
+                                                                            </span>
+                                                                        </div>
+                                                                    </form>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="grey-text">-</span>
+                                                                }
                                                             </div>
 
                                                             <!-- Best submission status -->

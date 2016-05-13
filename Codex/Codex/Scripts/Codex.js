@@ -74,9 +74,6 @@ $(document).ready(function () {
     });
 
     // Account Settings, update name and password
-    $("#birkir").on("click", function () {
-        Materialize.toast("Birkir Birkir!", 2000);
-    });
     $("#change-name-form").on("submit", function (e) {
         e.preventDefault();
         
@@ -86,7 +83,6 @@ $(document).ready(function () {
             Materialize.toast("Name missing!", 2000);
         }
         else {
-            console.log(formData);
             $.ajax({
                 url: form.attr("action"),
                 data: { newName: formData },
